@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import { Button } from "./button";
 
 /** Destructive-action guard using the native <dialog> (focus trap + Esc handled by the browser). */
@@ -24,14 +24,15 @@ export function ConfirmButton({
   disabled?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
   return (
     <>
       <Button type="button" variant={variant === "danger" ? "secondary" : variant} size={size} disabled={disabled} className={variant === "danger" ? "text-danger" : ""} onClick={() => ref.current?.showModal()}>
         {label}
       </Button>
-      <dialog ref={ref} aria-labelledby="confirm-title">
+      <dialog ref={ref} aria-labelledby={titleId}>
         <div className="p-6">
-          <h2 id="confirm-title" className="text-lg font-semibold">
+          <h2 id={titleId} className="text-lg font-semibold">
             {title}
           </h2>
           <p className="mt-2 text-ink2">{message}</p>

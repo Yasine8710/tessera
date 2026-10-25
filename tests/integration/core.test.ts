@@ -73,7 +73,7 @@ describe("authentication", () => {
     await expect(auth.requestPasswordReset({ email: uniq("ghost") }, randomUUID())).resolves.toBeUndefined();
     await auth.requestPasswordReset({ email: p.email }, randomUUID());
     // Plant a known token (the real one only exists in the email).
-    const token = "known-reset-token-for-test-0123456789";
+    const token = `known-reset-token-${randomUUID()}`;
     await db.authToken.create({ data: { userId: p.userId, purpose: "PASSWORD_RESET", tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 60_000) } });
     await auth.resetPassword({ token, password: "brand-new-password-9" });
     expect(await auth.actorFromSession(s.token)).toBeNull();

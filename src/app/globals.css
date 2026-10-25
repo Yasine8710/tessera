@@ -9,7 +9,7 @@
   --c-surface-2: #f3f0e9;
   --c-ink: #0f2a33;
   --c-ink-2: #3d5159;
-  --c-muted: #62747a;
+  --c-muted: #55686e;
   --c-border: #e4dfd5;
   --c-border-strong: #cfc8ba;
   --c-accent: #0d7673;
@@ -52,6 +52,7 @@
   --color-accent-hover: var(--c-accent-hover);
   --color-accent-soft: var(--c-accent-soft);
   --color-nav: var(--c-nav);
+  --color-nav-ink: var(--c-nav-ink);
   --color-danger: var(--c-danger);
   --color-danger-soft: var(--c-danger-soft);
   --color-warn: var(--c-warn);

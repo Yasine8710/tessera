@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 // ---------- Medication intake ----------
 export type IntakeStatus = "SCHEDULED" | "TAKEN" | "SKIPPED" | "MISSED";
 
@@ -51,7 +49,7 @@ export type AppointmentStatus =
 
 const APPT_TRANSITIONS: Record<AppointmentStatus, AppointmentStatus[]> = {
   REQUESTED: ["CONFIRMED", "CANCELLED"],
-  CONFIRMED: ["RESCHEDULE_REQUESTED", "CANCEL_REQUESTED", "CANCELLED", "COMPLETED", "NO_SHOW"],
+  CONFIRMED: ["CONFIRMED", "RESCHEDULE_REQUESTED", "CANCEL_REQUESTED", "CANCELLED", "COMPLETED", "NO_SHOW"],
   RESCHEDULE_REQUESTED: ["CONFIRMED", "CANCELLED"],
   CANCEL_REQUESTED: ["CANCELLED", "CONFIRMED"],
   CANCELLED: [],
@@ -99,8 +97,7 @@ export function planChanged(a: PlanSnapshot, b: PlanSnapshot): boolean {
 // ---------- Notifications ----------
 /** Deterministic key: retried jobs produce the same key, so a unique index dedupes them. */
 export function dedupeKey(type: string, ...parts: (string | number | Date)[]): string {
-  const raw = [type, ...parts.map((p) => (p instanceof Date ? p.toISOString() : String(p)))].join("|");
-  return createHash("sha256").update(raw).digest("hex").slice(0, 32);
+  return [type, ...parts.map((p) => (p instanceof Date ? p.toISOString() : String(p)))].join("|");
 }
 
 // ---------- Measurements ----------

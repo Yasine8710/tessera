@@ -120,8 +120,10 @@ export async function listTasks(actor: Actor, opts: { patientId?: string } = {})
 
 export type MonitoringFlag = { patientId: string; patientName: string; kind: "dose_exceptions" | "routines_incomplete" | "overdue_task" | "new_symptoms" | "stale"; detail: string };
 
-export async function monitoring(actor: Actor, now = new Date(), staleDays = STALE_DAYS_DEFAULT) {
+export async function monitoring(actor: Actor, now = new Date(), staleDaysArg?: number) {
   const professionalId = requireProfessional(actor);
+  const setting = await db.appSetting.findUnique({ where: { key: "staleDays" } });
+  const staleDays = staleDaysArg ?? (typeof setting?.value === "number" ? setting.value : STALE_DAYS_DEFAULT);
   const rels = await db.careRelationship.findMany({
     where: { professionalId, status: "ACTIVE" },
     include: { consents: true, patient: { include: { user: { select: { name: true, timezone: true } } } } },
