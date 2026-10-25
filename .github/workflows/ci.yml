@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: caresync
+          POSTGRES_PASSWORD: ci_only_password
+          POSTGRES_DB: caresync
+        ports: ["5433:5432"]
+        options: >-
+          --health-cmd "pg_isready -U caresync"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Throwaway CI-only values for a service container that exists only for this job.
+      DATABASE_URL: postgresql://caresync:ci_only_password@localhost:5433/caresync
+      TEST_DATABASE_URL: postgresql://caresync:ci_only_password@localhost:5433/caresync_test
+      APP_URL: http://localhost:3000
+      APP_SECRET: ci-only-secret-ci-only-secret-ci-only-00
+      CRON_SECRET: ci-only-cron-secret
+      DEMO_MODE: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run db:deploy
+      - run: npm test
+      - run: npm run build
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: End-to-end tests
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
