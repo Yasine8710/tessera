@@ -72,3 +72,14 @@ export async function demoLoginAction(kind: "patient" | "staff"): Promise<Action
     redirect(homeFor(s.role));
   });
 }
+
+/** First run of the desktop app: creates the administrator, then signs them in. */
+export async function setupAdminAction(input: { name: string; email: string; password: string }): Promise<ActionResult> {
+  return actPublic(async () => {
+    if (process.env.CARESYNC_DESKTOP !== "1") throw new AppError("FORBIDDEN", "Setup is only available in the desktop app.");
+    await auth.setupFirstAdmin(input);
+    const s = await auth.login({ email: input.email, password: input.password }, await clientIp());
+    await setSessionCookie(s.token, s.expiresAt);
+    redirect("/admin");
+  });
+}

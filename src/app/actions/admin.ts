@@ -15,6 +15,10 @@ export async function setUserStatusAction(userId: string, status: "ACTIVE" | "SU
   return act((s) => admin.setUserStatus(s, userId, status));
 }
 
+export async function issueResetLinkAction(userId: string): Promise<ActionResult<{ path: string; minutes: number }>> {
+  return act((s) => admin.issueUserResetLink(s, userId));
+}
+
 export async function createOrganizationAction(name: string): Promise<ActionResult> {
   return act(async (s) => {
     await admin.createOrganization(s, name);

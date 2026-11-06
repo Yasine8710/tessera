@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Public_Sans } from "next/font/google";
+import { DesktopBridge } from "@/components/desktop-bridge";
+import { isDesktop } from "@/server/desktop";
 import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
@@ -30,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <ToastProvider>{children}</ToastProvider>
+        {isDesktop() && <DesktopBridge />}
       </body>
     </html>
   );

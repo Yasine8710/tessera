@@ -29,3 +29,7 @@ export async function deleteAccountAction(password: string): Promise<ActionResul
   await clearSessionCookie();
   redirect("/");
 }
+
+export async function unreadSinceAction(sinceIso: string): Promise<ActionResult<number>> {
+  return act((s) => notifications.unreadSince(s, new Date(sinceIso)));
+}

@@ -18,7 +18,10 @@
     "db:seed": "tsx scripts/seed.ts",
     "db:reset": "prisma migrate reset --force && npm run db:seed",
     "admin:create": "tsx scripts/create-admin.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "desktop:prepare": "node desktop/build.mjs",
+    "desktop": "electron .",
+    "desktop:dist": "node desktop/build.mjs && electron-builder --win --publish never"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
@@ -50,6 +53,8 @@
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^3.2.7",
     "dotenv": "^18.0.9",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.28",
     "prettier": "^3.9.10",
@@ -61,5 +66,59 @@
   "license": "Apache-2.0",
   "engines": {
     "node": ">=20"
+  },
+  "main": "desktop/main.js",
+  "description": "CareSync healthcare coordination - Windows desktop app",
+  "author": "Yassine",
+  "build": {
+    "appId": "com.caresync.desktop",
+    "productName": "CareSync",
+    "directories": {
+      "output": "dist-desktop",
+      "buildResources": "build"
+    },
+    "files": [
+      "desktop/**",
+      "package.json",
+      "!node_modules/**"
+    ],
+    "extraResources": [
+      {
+        "from": ".next/standalone",
+        "to": "server"
+      },
+      {
+        "from": "prisma/migrations",
+        "to": "migrations"
+      },
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "CareSync",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "asar": true
+  },
+  "overrides": {
+    "better-sqlite3": "$better-sqlite3"
   }
 }

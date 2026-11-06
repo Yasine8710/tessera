@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>CareSync</title>
+<style>
+  body { font: 14px "Segoe UI", sans-serif; margin: 0; padding: 20px; background: #f6f8f9; color: #0f2a33; }
+  label { display: block; margin-bottom: 8px; line-height: 1.4; }
+  input { width: 100%; box-sizing: border-box; padding: 8px 10px; font: inherit; border: 1px solid #9db0b6; border-radius: 6px; }
+  .row { margin-top: 16px; text-align: right; }
+  button { font: inherit; padding: 7px 18px; border-radius: 6px; border: 1px solid #9db0b6; background: #fff; cursor: pointer; margin-left: 8px; }
+  button.ok { background: #0f2a33; color: #fff; border-color: #0f2a33; }
+</style>
+</head>
+<body>
+  <form id="f">
+    <label id="l" for="v"></label>
+    <input id="v" autocomplete="off" spellcheck="false" autofocus>
+    <div class="row"><button type="button" id="c">Cancel</button><button class="ok" type="submit">OK</button></div>
+  </form>
+  <script>
+    promptApi.init().then((o) => { document.getElementById("l").textContent = o.label; document.title = o.title; });
+    document.getElementById("f").addEventListener("submit", (e) => { e.preventDefault(); promptApi.done(document.getElementById("v").value); });
+    document.getElementById("c").addEventListener("click", () => promptApi.done(null));
+  </script>
+</body>
+</html>

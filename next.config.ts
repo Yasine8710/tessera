@@ -16,8 +16,13 @@ const csp = [
   "object-src 'none'",
 ].join("; ");
 
+const desktop = process.env.CARESYNC_DESKTOP_BUILD === "1";
+
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: __dirname,
   poweredByHeader: false,
+  ...(desktop ? { output: "standalone" as const, images: { unoptimized: true } } : {}),
+  serverExternalPackages: ["better-sqlite3", "@prisma/client", "@prisma/adapter-better-sqlite3"],
   async headers() {
     return [
       {
@@ -28,7 +33,7 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
-          ...(isProd ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }] : []),
+          ...(isProd && !desktop ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }] : []),
         ],
       },
       {

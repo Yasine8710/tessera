@@ -11,7 +11,7 @@ export async function setSessionCookie(token: string, expiresAt: Date) {
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production" && process.env.CARESYNC_DESKTOP !== "1",
     path: "/",
     expires: expiresAt,
   });

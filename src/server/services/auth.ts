@@ -10,8 +10,9 @@ import {
 import type { Actor } from "../access";
 import { audit } from "../audit";
 import { db } from "../db";
-import { AppError, conflict, invalid } from "../errors";
+import { AppError, conflict, invalid, notFound } from "../errors";
 import { appUrl, sendMail } from "../mail";
+import { isDesktop } from "../desktop";
 import { hashPassword, hashToken, newToken, rateLimit, verifyPassword } from "../security";
 
 const SESSION_DAYS = 14;
@@ -33,6 +34,11 @@ async function issueToken(userId: string, purpose: "EMAIL_VERIFY" | "PASSWORD_RE
 }
 
 async function sendVerification(user: { id: string; email: string }) {
+  if (isDesktop()) {
+    // No mail server on a single PC: the account is local, so there is nothing to verify.
+    await db.user.update({ where: { id: user.id }, data: { emailVerifiedAt: new Date() } });
+    return;
+  }
   const token = await issueToken(user.id, "EMAIL_VERIFY", VERIFY_HOURS * 3600_000);
   await sendMail(
     user.email,
@@ -197,4 +203,34 @@ export async function resetPassword(raw: unknown) {
     db.session.deleteMany({ where: { userId: row.userId } }), // sign out everywhere
   ]);
   await audit(row.userId, "auth.password_reset", "User", row.userId);
+}
+
+export async function adminExists() {
+  return (await db.user.count({ where: { role: "ADMIN", deletedAt: null } })) > 0;
+}
+
+/** First-run only: creates the initial administrator. Refuses once any administrator exists. */
+export async function setupFirstAdmin(raw: { name?: string; email?: string; password?: string }) {
+  const name = raw.name?.trim() ?? "";
+  const email = raw.email?.trim().toLowerCase() ?? "";
+  const password = raw.password ?? "";
+  if (!name) throw invalid("Enter your name.");
+  if (!/^\S+@\S+\.\S+$/.test(email)) throw invalid("Enter a valid email address.");
+  if (password.length < 14) throw invalid("Use a password of at least 14 characters.");
+  const user = await db.$transaction(async (tx) => {
+    if ((await tx.user.count({ where: { role: "ADMIN" } })) > 0) throw new AppError("FORBIDDEN", "Setup is already complete.");
+    return tx.user.create({
+      data: { email, name, passwordHash: await hashPassword(password), role: "ADMIN", status: "ACTIVE", emailVerifiedAt: new Date(), notificationPref: { create: {} } },
+    });
+  });
+  await audit(user.id, "admin.bootstrap", "User", user.id);
+  return user;
+}
+
+/** Offline replacement for the reset email: returns a single-use link path to hand to the user. */
+export async function issueResetLink(userId: string) {
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || user.deletedAt) throw notFound("User not found.");
+  const token = await issueToken(user.id, "PASSWORD_RESET", RESET_MINUTES * 60_000);
+  return { path: `/reset-password?token=${token}`, minutes: RESET_MINUTES, user };
 }

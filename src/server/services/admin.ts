@@ -2,7 +2,8 @@ import type { AccountStatus } from "@prisma/client";
 import { type Actor, requireAdmin } from "../access";
 import { audit } from "../audit";
 import { db } from "../db";
-import { conflict, invalid, notFound } from "../errors";
+import { conflict, forbidden, invalid, notFound } from "../errors";
+import { issueResetLink } from "./auth";
 import { notify } from "./notifications";
 import { dedupeKey } from "@/domain/rules";
 
@@ -137,4 +138,15 @@ export async function addOrgMember(actor: Actor, orgId: string, userEmail: strin
 export async function listOrganizations(actor: Actor) {
   requireAdmin(actor);
   return db.organization.findMany({ include: { members: { include: { user: { select: { name: true, email: true } } } } }, orderBy: { name: "asc" } });
+}
+
+/** Desktop (no email): lets an administrator hand a user a one-time reset link. Never for other admins. */
+export async function issueUserResetLink(actor: Actor, userId: string) {
+  requireAdmin(actor);
+  const target = await db.user.findUnique({ where: { id: userId } });
+  if (!target || target.deletedAt) throw notFound("User not found.");
+  if (target.role === "ADMIN") throw forbidden("Administrator passwords cannot be reset from here.");
+  const r = await issueResetLink(userId);
+  await audit(actor.userId, "admin.reset_link_issued", "User", userId);
+  return { path: r.path, minutes: r.minutes };
 }

@@ -189,3 +189,8 @@ export async function runReminderJob(now = new Date()) {
   }
   return { created };
 }
+
+/** Desktop toast trigger: how many unread notifications arrived after `since`. */
+export async function unreadSince(actor: Actor, since: Date) {
+  return db.notification.count({ where: { userId: actor.userId, readAt: null, createdAt: { gt: since } } });
+}

@@ -3,11 +3,14 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { LoginForm } from "@/components/auth/login-form";
+import { isDesktop } from "@/server/desktop";
+import { adminExists } from "@/server/services/auth";
 import { getSession, homeFor } from "@/server/session";
 
 export const metadata: Metadata = { title: "Sign in" };
 
 export default async function LoginPage() {
+  if (isDesktop() && !(await adminExists())) redirect("/setup");
   const session = await getSession();
   if (session) redirect(homeFor(session.role));
   const demo = process.env.DEMO_MODE === "true";

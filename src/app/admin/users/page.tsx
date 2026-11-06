@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Search, Users } from "lucide-react";
 import { Pager } from "@/components/admin/pagination";
+import { ResetLinkButton } from "@/components/admin/reset-link-button";
+import { isDesktop } from "@/server/desktop";
 import { UserStatusButton } from "@/components/admin/user-status-button";
 import { formatDateTime } from "@/components/account/format";
 import { Button, LinkButton } from "@/components/ui/button";
@@ -78,7 +80,10 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                       <td className="whitespace-nowrap px-3 py-3 text-muted">{formatDateTime(u.createdAt, session.timezone)}</td>
                       <td className="px-5 py-3 text-right">
                         {canToggle ? (
-                          <UserStatusButton userId={u.id} name={u.name} status={u.status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"} />
+                          <div className="flex flex-col items-end gap-1">
+                            <UserStatusButton userId={u.id} name={u.name} status={u.status === "SUSPENDED" ? "SUSPENDED" : "ACTIVE"} />
+                            {isDesktop() && u.role !== "ADMIN" && <ResetLinkButton userId={u.id} name={u.name} />}
+                          </div>
                         ) : u.status === "PENDING_APPROVAL" ? (
                           <LinkButton href="/admin/approvals" variant="ghost" size="sm">Review</LinkButton>
                         ) : (
