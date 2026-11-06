@@ -12,7 +12,6 @@
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
-    "db:up": "docker compose up -d",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx scripts/seed.ts",
@@ -63,7 +62,7 @@
     "typescript": "^5",
     "vitest": "^3.2.7"
   },
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=20"
   },

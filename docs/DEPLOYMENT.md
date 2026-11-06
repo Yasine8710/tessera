@@ -1,6 +1,6 @@
 # Deployment
 
-Tessera is a standard Node 20+ Next.js app plus PostgreSQL 14+. **Costs are yours:** hosting, database,
+Tessera is a Node 20+ Next.js app with a local SQLite database. The supported way to run it is the Windows desktop app (see README); this page covers running the web build on one machine. **Costs are yours:** hosting, database,
 backups, email and monitoring are paid by whoever operates the instance. Tessera itself charges nothing and
 has no billing system. Provider free tiers (if any) are limited and change; do not assume unlimited capacity.
 
@@ -8,7 +8,7 @@ has no billing system. Provider free tiers (if any) are limited and change; do n
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `DATABASE_URL` | yes | PostgreSQL connection string. |
+| `DATABASE_URL` | yes | SQLite file URL, for example `file:./dev.db` (relative paths resolve against `prisma/`). |
 | `APP_URL` | yes | Public https origin (used in emailed links, metadata). |
 | `APP_SECRET` | yes | Random 32+ bytes (`openssl rand -hex 32`). Reserved for token HMAC. |
 | `CRON_SECRET` | yes | Bearer secret for `POST /api/cron/reminders`. |
@@ -43,18 +43,17 @@ curl -fsS -X POST https://your.host/api/cron/reminders -H "Authorization: Bearer
 Options: system cron, a GitHub Actions `schedule`, Vercel Cron, Render/Fly cron, or Kubernetes `CronJob`.
 Retries are safe: notifications are deduplicated by deterministic keys.
 
-## 4. Docker (self-hosted example)
+## 4. Running the web build
 
-Use `docker-compose.yml` for the database in development. For production, run Postgres on a managed service or a
-hardened host, put the app behind a TLS-terminating reverse proxy that sets `X-Forwarded-For`, and restrict
-database access to the app's network.
+The web build is a single Node process with one SQLite file, so run exactly one instance and keep the file on local
+disk (not a network share). Put it behind a TLS-terminating reverse proxy that sets `X-Forwarded-For`, and keep the
+database file readable only by the service account. For a clinic, the Windows desktop app is the supported setup.
 
 ## 5. Backups and recovery
 
-```bash
-pg_dump --format=custom "$DATABASE_URL" > caresync-$(date +%F).dump
-pg_restore --clean --dbname "$NEW_DATABASE_URL" caresync-YYYY-MM-DD.dump
-```
+Desktop: File, Back up data. Web: stop writes, then copy the database file (`prisma/*.db`, or the path in
+`DATABASE_URL`) after a `PRAGMA wal_checkpoint(TRUNCATE)`. A backup of an encrypted database stays encrypted and is
+useless without its key, so store the key separately.
 
 Automate daily dumps, encrypt and store them off-host, and rehearse a restore. See
 [PRIVACY_AND_SECURITY.md](PRIVACY_AND_SECURITY.md) for the full production checklist.

@@ -1,5 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: Report a security vulnerability
-    url: https://github.com/Yasine8710/tessera-healthcare-platform/security/advisories/new
-    about: Please report vulnerabilities privately, not in a public issue.

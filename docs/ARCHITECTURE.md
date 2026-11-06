@@ -10,7 +10,7 @@ src/server/services/  Business operations. EVERY function takes an Actor and enf
 src/server/access.ts  Central authorization: roles, care relationships, per-category consent.
 src/domain/**         Pure rules (schedule expansion, intake status, appointment transitions...). No I/O.
 src/lib/schemas.ts    Zod validation shared by forms and services.
-prisma/               Schema + migrations (PostgreSQL).
+prisma/               Schema + migrations (SQLite; SQLCipher-encrypted in the desktop app).
 ```
 
 Rule of thumb: **the UI can be replaced (a mobile app, a CLI) without touching business rules**, because
@@ -42,7 +42,7 @@ random CUIDs; there are no public profile URLs.
   revoked server-side. Tessera stores a SHA-256 hash of a random opaque token in `Session`, so sign-out,
   password reset and suspension take effect immediately, and the same tokens can authenticate a future mobile client.
 - **scrypt** (Node built-in, N=2^15) for password hashing: no native dependency to compile.
-- **Postgres-backed rate limiting** works across multiple app instances without Redis.
+- **Database-backed rate limiting** (one `RateLimit` table) needs no Redis; the app is a single local process.
 - **Dose records are materialized rows** (`MedicationIntake`, unique on plan + scheduled instant). Schedules are
   expanded in the patient's IANA time zone (`@date-fns/tz`), so DST changes neither shift nor duplicate doses and
   repeated job runs are idempotent. A scheduled dose with no report becomes *Missed* only after a grace period,

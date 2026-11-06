@@ -13,7 +13,7 @@
 | CSRF | `SameSite=Lax` cookie plus Next.js server-action origin checks; state changes are never GET. |
 | Authorization | Enforced in the service layer on every operation: role, active care relationship, per-category consent. Admins have no clinical access. |
 | Enumeration | Login error is identical for unknown email and wrong password; password-reset response is identical; unauthorized patient lookups return not-found. |
-| Rate limiting | Postgres-backed fixed windows on login (per IP and per email), registration and password reset. |
+| Rate limiting | Database-backed fixed windows on login (per IP and per email), registration and password reset. |
 | Invitations | 256-bit random token, only the hash is stored, 7-day expiry, bound to the invited email, atomically single-use (tested under concurrency), revocable. |
 | Staff verification | Professionals register as `PENDING_APPROVAL` and have no staff access until an administrator approves. The role is never read from client input. There is no public admin route; admins are created with `npm run admin:create`. |
 | Audit | Who / what / when for sign-in, registration, invitations, relationship and consent changes, care-plan and medication changes, dose reports, exports, admin actions. Message bodies, notes, passwords and tokens are never logged. |
@@ -31,12 +31,12 @@
 
 1. Serve over HTTPS only (terminate TLS at the proxy or platform); set `APP_URL` to the https origin.
 2. Generate fresh `APP_SECRET` and `CRON_SECRET`; never reuse the example values. Set `DEMO_MODE=false`.
-3. Use a managed or hardened PostgreSQL with encryption at rest, restricted network access and a least-privilege role.
+3. Keep the database encrypted at rest (the desktop app uses SQLCipher with a key held in Windows DPAPI) and restrict access to the data folder.
 4. **Backups:** daily `pg_dump` (or provider snapshots) with point-in-time recovery if available; encrypt backups; **test a restore** regularly; document RPO/RTO.
 5. Configure a real mail transport (see [DEPLOYMENT.md](DEPLOYMENT.md)); until then the UI states that email was not delivered.
 6. Run the reminder job on a schedule (see DEPLOYMENT.md).
 7. Centralize logs without sensitive content; alert on repeated `auth.login_failed` audit events.
-8. Run dependency audits (`npm audit`) in CI and keep Node, Next.js and Postgres patched.
+8. Run dependency audits (`npm audit`) in CI and keep Node, Next.js and Electron patched.
 9. Obtain legal review (data-protection law, medical-records retention, consent wording, terms, privacy policy) and an independent penetration test before onboarding real patients.
 
 ## Known limitations

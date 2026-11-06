@@ -2,9 +2,9 @@
 
 All notable changes are documented here. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [0.1.0] - 2026-11-06
 
-### Desktop (branch `desktop`)
+### Desktop
 - Windows desktop app (Electron): local SQLCipher-encrypted SQLite replaces PostgreSQL, first-run administrator setup, no-email flows (auto-verified accounts, admin-issued reset links), backup/restore, tray, reminder scheduler, generic Windows toasts, idle/lock sign-out, NSIS installer with desktop shortcut.
 
 ### Added
