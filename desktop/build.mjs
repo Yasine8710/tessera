@@ -8,7 +8,7 @@ const run = (cmd, env = {}) => execSync(cmd, { cwd: root, stdio: "inherit", env:
 
 rmSync(path.join(root, ".next"), { recursive: true, force: true });
 run("npx prisma generate");
-run("npx next build", { CARESYNC_DESKTOP_BUILD: "1", NODE_ENV: "production" });
+run("npx next build", { TESSERA_DESKTOP_BUILD: "1", NODE_ENV: "production" });
 
 const out = path.join(root, ".next", "standalone");
 if (!existsSync(path.join(out, "server.js"))) throw new Error("standalone/server.js missing (check outputFileTracingRoot)");

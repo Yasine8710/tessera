@@ -33,7 +33,7 @@ export function AuthShell({
         </div>
       </main>
       <footer className="border-t border-line px-4 py-5 text-center text-xs text-muted">
-        CareSync is not an emergency service. In an emergency, contact your local emergency number.
+        Tessera is not an emergency service. In an emergency, contact your local emergency number.
       </footer>
     </div>
   );

@@ -15,7 +15,7 @@ export default async function ApprovalsPage() {
     <div className="max-w-4xl">
       <PageHeader title="Professional approvals" description="Professionals who registered and are waiting for access to the staff portal." />
       <Alert tone="warn" title="Verify the licence yourself" className="mb-5">
-        CareSync does not check licences automatically. Before approving, confirm the licence number and region with the issuing regulator or register. Approval grants access to patient data once a patient consents.
+        Tessera does not check licences automatically. Before approving, confirm the licence number and region with the issuing regulator or register. Approval grants access to patient data once a patient consents.
       </Alert>
       {rows.length === 0 ? (
         <Card>

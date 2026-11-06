@@ -1,7 +1,7 @@
 # Deployment
 
-CareSync is a standard Node 20+ Next.js app plus PostgreSQL 14+. **Costs are yours:** hosting, database,
-backups, email and monitoring are paid by whoever operates the instance. CareSync itself charges nothing and
+Tessera is a standard Node 20+ Next.js app plus PostgreSQL 14+. **Costs are yours:** hosting, database,
+backups, email and monitoring are paid by whoever operates the instance. Tessera itself charges nothing and
 has no billing system. Provider free tiers (if any) are limited and change; do not assume unlimited capacity.
 
 ## 1. Environment variables

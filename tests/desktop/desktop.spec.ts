@@ -15,7 +15,7 @@ let app: ElectronApplication;
 let page: Page;
 
 async function launch() {
-  app = await electron.launch({ ...(exe ? { executablePath: exe } : { args: ["."] }), env: { ...process.env, CARESYNC_DATA_DIR: dataDir } });
+  app = await electron.launch({ ...(exe ? { executablePath: exe } : { args: ["."] }), env: { ...process.env, TESSERA_DATA_DIR: dataDir } });
   page = await app.firstWindow();
   await page.waitForURL(/127\.0\.0\.1:\d+\/(setup|login)/, { timeout: 90_000 });
 }
@@ -92,7 +92,7 @@ test("setup cannot run twice and the landing page goes to sign-in", async () => 
 });
 
 test("database file is encrypted at rest and the local server rejects foreign callers", async () => {
-  const file = path.join(dataDir, "caresync.db");
+  const file = path.join(dataDir, "tessera.db");
   expect(existsSync(file)).toBe(true);
   expect(statSync(file).size).toBeGreaterThan(4096);
   expect(readFileSync(file).subarray(0, 15).toString()).not.toBe("SQLite format 3");
@@ -102,7 +102,7 @@ test("database file is encrypted at rest and the local server rejects foreign ca
 
 test("renderer is isolated: only the notify/lock bridge is exposed", async () => {
   const seen = await page.evaluate(() => ({
-    bridge: Object.keys((window as unknown as { caresyncDesktop: object }).caresyncDesktop).sort(),
+    bridge: Object.keys((window as unknown as { tesseraDesktop: object }).tesseraDesktop).sort(),
     nodeRequire: typeof (window as unknown as { require?: unknown }).require,
     nodeProcess: typeof (window as unknown as { process?: unknown }).process,
   }));

@@ -25,9 +25,9 @@ describe("encrypted database", () => {
   });
 
   it("the Prisma client works against it with the key and fails without", async () => {
-    const prev = { url: process.env.DATABASE_URL, key: process.env.CARESYNC_DB_KEY };
+    const prev = { url: process.env.DATABASE_URL, key: process.env.TESSERA_DB_KEY };
     process.env.DATABASE_URL = "file:" + file.split(path.sep).join("/");
-    process.env.CARESYNC_DB_KEY = KEY;
+    process.env.TESSERA_DB_KEY = KEY;
     vi.resetModules();
     const g = globalThis as { prisma?: unknown };
     delete g.prisma;
@@ -35,7 +35,7 @@ describe("encrypted database", () => {
     expect(await db.user.count()).toBe(0);
     await db.$disconnect();
 
-    delete process.env.CARESYNC_DB_KEY;
+    delete process.env.TESSERA_DB_KEY;
     vi.resetModules();
     delete g.prisma;
     const { db: bare } = await import("@/server/db");
@@ -43,7 +43,7 @@ describe("encrypted database", () => {
     await bare.$disconnect().catch(() => {});
 
     process.env.DATABASE_URL = prev.url;
-    if (prev.key) process.env.CARESYNC_DB_KEY = prev.key;
+    if (prev.key) process.env.TESSERA_DB_KEY = prev.key;
     vi.resetModules();
     delete g.prisma;
   });

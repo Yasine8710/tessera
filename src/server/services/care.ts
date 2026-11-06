@@ -74,8 +74,8 @@ export async function createInvitation(actor: Actor, raw: unknown) {
   const sender = await db.user.findUniqueOrThrow({ where: { id: actor.userId }, select: { name: true } });
   const mail = await sendMail(
     patientEmail,
-    `${sender.name} invited you to CareSync`,
-    `${sender.name} invited you to connect on CareSync. You choose what to share.\n${acceptUrl}\nThis link expires in ${INVITATION_TTL_DAYS} days and works once.`,
+    `${sender.name} invited you to Tessera`,
+    `${sender.name} invited you to connect on Tessera. You choose what to share.\n${acceptUrl}\nThis link expires in ${INVITATION_TTL_DAYS} days and works once.`,
   );
   if (patientUser?.role === "PATIENT") {
     await notify(patientUser.id, "INVITATION", {

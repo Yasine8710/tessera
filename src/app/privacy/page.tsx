@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage, LegalSection } from "@/components/legal/legal-page";
 
-export const metadata: Metadata = { title: "Privacy notice", description: "What CareSync collects, why, how long it is kept, and who can see it." };
+export const metadata: Metadata = { title: "Privacy notice", description: "What Tessera collects, why, how long it is kept, and who can see it." };
 
 export default function PrivacyPage() {
   const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <LegalPage
       title="Privacy notice"
       updated="October 2026"
-      intro="This notice explains in plain language what this CareSync service collects, why, and who can see it. CareSync is self-hosted software: the organisation or person running this instance (the operator) is responsible for the data stored here."
+      intro="This notice explains in plain language what this Tessera service collects, why, and who can see it. Tessera is self-hosted software: the organisation or person running this instance (the operator) is responsible for the data stored here."
     >
       <LegalSection title="What is collected">
         <ul>
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
         </ul>
       </LegalSection>
       <LegalSection title="No sale of data">
-        <p>CareSync does not sell personal data, show advertising, or share data with advertisers or data brokers.</p>
+        <p>Tessera does not sell personal data, show advertising, or share data with advertisers or data brokers.</p>
       </LegalSection>
       <LegalSection title="Retention and deletion">
         <p>Data is kept while your account is active. When an account is deleted, identifiers such as name and email are anonymised. Clinical records that a care team may be required to keep can be retained in de-identified form where required. Sessions expire automatically and password-reset and verification links are single-use and time-limited.</p>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
       </LegalSection>
       <LegalSection title="Important limits">
         <ul>
-          <li>CareSync is not an emergency service. In an emergency, contact your local emergency number.</li>
+          <li>Tessera is not an emergency service. In an emergency, contact your local emergency number.</li>
           <li>Patient-entered information is self-reported. It is not verified clinical fact.</li>
           <li>This notice is a template-style description of the software&apos;s behaviour. It does not claim compliance with any specific law or standard. Operators must obtain legal review for their own jurisdiction before handling real patient data.</li>
         </ul>

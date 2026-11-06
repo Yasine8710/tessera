@@ -42,7 +42,7 @@ async function sendVerification(user: { id: string; email: string }) {
   const token = await issueToken(user.id, "EMAIL_VERIFY", VERIFY_HOURS * 3600_000);
   await sendMail(
     user.email,
-    "Verify your CareSync email",
+    "Verify your Tessera email",
     `Open this link to verify your email (valid ${VERIFY_HOURS}h):\n${appUrl(`/verify-email?token=${token}`)}`,
   );
 }
@@ -185,7 +185,7 @@ export async function requestPasswordReset(raw: unknown, ip = "unknown") {
   const token = await issueToken(user.id, "PASSWORD_RESET", RESET_MINUTES * 60_000);
   await sendMail(
     user.email,
-    "Reset your CareSync password",
+    "Reset your Tessera password",
     `Open this link to choose a new password (valid ${RESET_MINUTES} minutes):\n${appUrl(`/reset-password?token=${token}`)}\nIf you did not request this, ignore this message.`,
   );
   await audit(user.id, "auth.reset_requested", "User", user.id);

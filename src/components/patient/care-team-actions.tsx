@@ -58,7 +58,7 @@ export function ConnectForm() {
   return (
     <form onSubmit={submit} className="space-y-4 px-5 py-4">
       <p className="text-sm text-muted">
-        Enter the work email of a verified professional on CareSync. They are not connected until they accept your request, and they only see what you choose below.
+        Enter the work email of a verified professional on Tessera. They are not connected until they accept your request, and they only see what you choose below.
       </p>
       <Field label="Professional's email" error={fieldError} className="max-w-md">
         {(p) => <Input type="email" autoComplete="off" value={email} onChange={(e) => setEmail(e.target.value)} {...p} />}

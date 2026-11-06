@@ -12,4 +12,4 @@ Who is affected (patient, professional, administrator) and what is hard today?
 
 ## Safety and privacy considerations
 
-Does this touch clinical data, consent, or messaging? CareSync does not provide diagnosis or automatic dosage changes.
+Does this touch clinical data, consent, or messaging? Tessera does not provide diagnosis or automatic dosage changes.

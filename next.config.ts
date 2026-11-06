@@ -16,7 +16,7 @@ const csp = [
   "object-src 'none'",
 ].join("; ");
 
-const desktop = process.env.CARESYNC_DESKTOP_BUILD === "1";
+const desktop = process.env.TESSERA_DESKTOP_BUILD === "1";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,

@@ -20,7 +20,7 @@ const WEEK = [
 
 export function ProductPreview() {
   return (
-    <figure aria-label="Illustrative preview of the CareSync interface" className="relative">
+    <figure aria-label="Illustrative preview of the Tessera interface" className="relative">
       <div className="grid gap-4 sm:grid-cols-2">
         <Card className="sm:col-span-2">
           <CardHeader title="Today" description="Sample Patient · patient view" action={<Badge tone="accent">Your entries</Badge>} />

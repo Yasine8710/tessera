@@ -1,10 +1,10 @@
-# CareSync
+# Tessera
 
 **Connected care. Better everyday health.**
 
-CareSync is a free healthcare coordination web platform for patient medication tracking, daily routines, and authorized clinical follow-up.
+Tessera is a free healthcare coordination web platform for patient medication tracking, daily routines, and authorized clinical follow-up.
 
-> **CareSync is not an emergency service and is not a substitute for professional medical judgment.** If you may be in danger or having a medical emergency, contact your local emergency services. CareSync does not diagnose, prescribe, or change doses.
+> **Tessera is not an emergency service and is not a substitute for professional medical judgment.** If you may be in danger or having a medical emergency, contact your local emergency services. Tessera does not diagnose, prescribe, or change doses.
 
 ## Status
 
@@ -64,12 +64,12 @@ UI (`src/app`, `src/components`) → server actions / REST v1 → **services** (
 
 ## Desktop app (Windows)
 
-The `desktop` branch ships CareSync as a self-contained Windows app: no Docker, no PostgreSQL, no browser.
+The `desktop` branch ships Tessera as a self-contained Windows app: no Docker, no PostgreSQL, no browser.
 
-- **Install:** run `CareSync Setup 0.1.0.exe` (per-user, no admin rights). It adds a **CareSync** icon to the desktop and Start menu.
+- **Install:** run `Tessera Setup 0.1.0.exe` (per-user, no admin rights). It adds a **Tessera** icon to the desktop and Start menu.
 - **First run:** create the administrator for that computer. Patients and staff then register or are approved inside the same app (sign out to switch accounts).
-- **Data:** one SQLite file, `%APPDATA%\CareSync\caresync.db`, encrypted with SQLCipher (AES-256). The key is generated at first run and kept with Windows DPAPI, bound to the Windows user. **File, Show recovery key** reveals it; store it offline. Without that key a backup cannot be opened on another PC or Windows account.
-- **Backup / restore:** File menu. A pre-update or pre-restore copy is kept in `%APPDATA%\CareSyncackups`.
+- **Data:** one SQLite file, `%APPDATA%\Tessera\tessera.db`, encrypted with SQLCipher (AES-256). The key is generated at first run and kept with Windows DPAPI, bound to the Windows user. **File, Show recovery key** reveals it; store it offline. Without that key a backup cannot be opened on another PC or Windows account.
+- **Backup / restore:** File menu. A pre-update or pre-restore copy is kept in `%APPDATA%\Tesseraackups`.
 - **No email:** accounts are verified automatically, and administrators create one-time password reset links (Administration, Users, Reset password). An administrator who forgot their password uses Help, Reset administrator password.
 - **Reminders:** the app checks every 5 minutes while it runs (closing the window keeps it in the tray). Windows toasts are generic ("You have a new notification") so nothing clinical shows on a lock screen. The app signs out after 15 minutes idle and when Windows locks.
 - **Scope:** local only. Several PCs do not share data; one install is one clinic.
@@ -79,7 +79,7 @@ Developing it:
 ```bash
 npm run desktop:prepare   # build the Next.js standalone engine
 npm run desktop           # run in Electron
-npm run desktop:dist      # build dist-desktop/CareSync Setup <version>.exe
+npm run desktop:dist      # build dist-desktop/Tessera Setup <version>.exe
 npx playwright test -c playwright.desktop.config.ts   # drives the real Electron app (CS_EXE=path to test a packaged exe)
 ```
 
@@ -88,8 +88,8 @@ The installer is **not code-signed**, so Windows SmartScreen shows "unknown publ
 ## Setup (web)
 
 ```bash
-git clone https://github.com/Yasine8710/caresync-healthcare-platform.git
-cd caresync-healthcare-platform
+git clone https://github.com/Yasine8710/tessera-healthcare-platform.git
+cd tessera-healthcare-platform
 npm install
 cp .env.example .env          # review the values; see below
 npm run db:up                 # PostgreSQL on localhost:5433 via docker compose
@@ -108,8 +108,8 @@ Copy `.env.example` to `.env`. The defaults work for local development with `doc
 
 | Role | Email | Password |
 |---|---|---|
-| Patient | `demo.patient@caresync.invalid` | `DemoPassw0rd!` |
-| Clinician | `demo.clinician@caresync.invalid` | `DemoPassw0rd!` |
+| Patient | `demo.patient@tessera.invalid` | `DemoPassw0rd!` |
+| Clinician | `demo.clinician@tessera.invalid` | `DemoPassw0rd!` |
 
 These public credentials are for synthetic data only. Set `DEMO_MODE=false` and never seed demo data in production.
 
@@ -140,7 +140,7 @@ curl -X POST http://localhost:3000/api/cron/reminders -H "Authorization: Bearer 
 ```bash
 npm run lint           # ESLint
 npm run typecheck      # tsc --noEmit
-npm test               # unit + integration (uses database caresync_test on the same server)
+npm test               # unit + integration (uses database tessera_test on the same server)
 npm run test:unit
 npm run test:integration
 npm run test:e2e       # Playwright; run `npm run build` first. Starts the app on E2E_PORT (default 4317), uses the dev database
@@ -189,4 +189,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.
 
 ## Disclaimer
 
-CareSync is a coordination and tracking tool. It is **not** an emergency service, does not provide medical advice, diagnosis or treatment, and does not replace the judgment of qualified healthcare professionals.
+Tessera is a coordination and tracking tool. It is **not** an emergency service, does not provide medical advice, diagnosis or treatment, and does not replace the judgment of qualified healthcare professionals.

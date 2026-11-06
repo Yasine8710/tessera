@@ -5,8 +5,8 @@ import { NextResponse, type NextRequest } from "next/server";
  * main process injects, so other local programs or browsers cannot talk to the loopback server.
  */
 export function middleware(req: NextRequest) {
-  const expected = process.env.CARESYNC_LAUNCH_TOKEN;
-  if (expected && req.headers.get("x-caresync-token") !== expected) return new NextResponse("Forbidden", { status: 403 });
+  const expected = process.env.TESSERA_LAUNCH_TOKEN;
+  if (expected && req.headers.get("x-tessera-token") !== expected) return new NextResponse("Forbidden", { status: 403 });
   return NextResponse.next();
 }
 

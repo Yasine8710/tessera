@@ -1,11 +1,11 @@
 # Security Policy
 
-CareSync handles health-related information. We take vulnerability reports seriously.
+Tessera handles health-related information. We take vulnerability reports seriously.
 
 ## Reporting a vulnerability
 
 **Do not open a public issue.** Report privately through GitHub:
-<https://github.com/Yasine8710/caresync-healthcare-platform/security/advisories/new>
+<https://github.com/Yasine8710/tessera-healthcare-platform/security/advisories/new>
 
 Include the affected route or operation, steps to reproduce, and impact. Never include real patient data
 in a report; use the synthetic demo data.
@@ -29,6 +29,6 @@ implemented controls and production requirements.
 
 ## Operator responsibilities
 
-Anyone deploying CareSync with real patient data is responsible for jurisdiction-specific legal
+Anyone deploying Tessera with real patient data is responsible for jurisdiction-specific legal
 compliance (for example HIPAA, GDPR or national health-data law), a qualified security review, HTTPS,
 backups, and incident response. This repository makes no compliance claims.

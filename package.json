@@ -1,5 +1,5 @@
 {
-  "name": "caresync-healthcare-platform",
+  "name": "tessera",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -68,11 +68,11 @@
     "node": ">=20"
   },
   "main": "desktop/main.js",
-  "description": "CareSync healthcare coordination - Windows desktop app",
+  "description": "Tessera healthcare coordination - Windows desktop app",
   "author": "Yassine",
   "build": {
-    "appId": "com.caresync.desktop",
-    "productName": "CareSync",
+    "appId": "com.tessera.desktop",
+    "productName": "Tessera",
     "directories": {
       "output": "dist-desktop",
       "buildResources": "build"
@@ -108,7 +108,7 @@
       "perMachine": false,
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "shortcutName": "CareSync",
+      "shortcutName": "Tessera",
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false
     },

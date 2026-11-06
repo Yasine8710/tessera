@@ -24,7 +24,7 @@ export async function MessagesView({ session, basePath, selectedId }: { session:
       <Alert tone="warn" className="mb-4">
         <span className="inline-flex items-start gap-2">
           <ShieldAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
-          CareSync messaging is not an emergency service. If you may be in danger, call your local emergency number.
+          Tessera messaging is not an emergency service. If you may be in danger, call your local emergency number.
         </span>
       </Alert>
       {selectedId && !active && (

@@ -20,7 +20,7 @@ export default async function LoginPage() {
       description="Welcome back. Sign in to continue."
       footer={
         <p>
-          New to CareSync?{" "}
+          New to Tessera?{" "}
           <Link href="/register" className="font-medium text-accent hover:underline">
             Create an account
           </Link>

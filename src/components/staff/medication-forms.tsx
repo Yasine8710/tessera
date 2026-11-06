@@ -46,7 +46,7 @@ export function AddMedicationForm({ planId, today }: { planId: string; today: st
       noValidate
     >
       <p className="text-sm text-muted">
-        This records the schedule you decide. CareSync does not suggest or change doses automatically. The patient is notified.
+        This records the schedule you decide. Tessera does not suggest or change doses automatically. The patient is notified.
       </p>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Medication name" error={errors.medicationName?.message}>{(a) => <Input {...a} {...register("medicationName")} />}</Field>

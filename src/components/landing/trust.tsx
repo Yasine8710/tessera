@@ -56,7 +56,7 @@ export function Trust() {
           </Reveal>
           <Reveal delay={0.08}>
             <p className="text-ink2">
-              CareSync is self-hosted. Whoever runs this instance, the operator, pays for hosting, email delivery and the database. That cost is theirs to carry and is the only cost in the system; nothing is charged to users and nothing in your data is monetised to cover it.
+              Tessera is self-hosted. Whoever runs this instance, the operator, pays for hosting, email delivery and the database. That cost is theirs to carry and is the only cost in the system; nothing is charged to users and nothing in your data is monetised to cover it.
             </p>
           </Reveal>
         </div>

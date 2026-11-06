@@ -80,7 +80,7 @@ export async function sendMessage(actor: Actor, raw: unknown) {
   const sender = actor.role === "PATIENT" ? c.patient.user.name : c.professional.user.name;
   await notify(recipient, "MESSAGE", {
     title: `New message from ${sender}`,
-    body: "Open CareSync to read it.", // never put message content in notifications
+    body: "Open Tessera to read it.", // never put message content in notifications
     link: actor.role === "PATIENT" ? "/staff/messages" : "/patient/messages",
     key: dedupeKey("MSG", m.id),
   });

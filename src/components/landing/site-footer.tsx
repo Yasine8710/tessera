@@ -23,7 +23,7 @@ export function SiteFooter() {
           <Logo light />
           <p className="mt-3 max-w-xs text-sm text-white/70">Connected care. Better everyday health.</p>
           <p className="mt-4 max-w-xs text-sm text-white/70">
-            CareSync is not an emergency service. If you may be having a medical emergency, contact your local emergency number now.
+            Tessera is not an emergency service. If you may be having a medical emergency, contact your local emergency number now.
           </p>
         </div>
         <FooterList title="Product" items={PRODUCT} />

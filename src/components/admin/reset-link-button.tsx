@@ -26,7 +26,7 @@ export function ResetLinkButton({ userId, name }: { userId: string; name: string
       </Button>
       {link && (
         <div className="max-w-64 text-left text-xs">
-          <p className="text-muted">One-time link, valid 60 minutes. Open it in CareSync on this PC.</p>
+          <p className="text-muted">One-time link, valid 60 minutes. Open it in Tessera on this PC.</p>
           <code className="block break-all rounded bg-surface2 p-1.5">{link}</code>
           <Button
             variant="secondary"

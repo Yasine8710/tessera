@@ -14,7 +14,7 @@ export default function ForgotPasswordPage() {
     return (
       <AuthShell
         title="Forgot your password?"
-        description="CareSync on this computer has no email. Ask your administrator to create a one-time reset link for you (Administration, Users, Reset password)."
+        description="Tessera on this computer has no email. Ask your administrator to create a one-time reset link for you (Administration, Users, Reset password)."
         footer={
           <Link href="/login" className="font-medium text-accent hover:underline">
             Back to sign in

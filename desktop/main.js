@@ -9,10 +9,10 @@ const path = require("node:path");
 const secrets = require("./secrets");
 const store = require("./db");
 
-app.setName("CareSync");
+app.setName("Tessera");
 // Lets automated tests use a throwaway data folder instead of the real one.
-if (process.env.CARESYNC_DATA_DIR) app.setPath("userData", process.env.CARESYNC_DATA_DIR);
-app.setAppUserModelId("com.caresync.desktop");
+if (process.env.TESSERA_DATA_DIR) app.setPath("userData", process.env.TESSERA_DATA_DIR);
+app.setAppUserModelId("com.tessera.desktop");
 
 const packaged = app.isPackaged;
 const serverDir = packaged ? path.join(process.resourcesPath, "server") : path.join(__dirname, "..", ".next", "standalone");
@@ -20,7 +20,7 @@ const migrationsDir = packaged ? path.join(process.resourcesPath, "migrations") 
 const iconPath = packaged ? path.join(process.resourcesPath, "icon.png") : path.join(__dirname, "..", "build", "icon.png");
 
 const dataDir = app.getPath("userData");
-const dbFile = path.join(dataDir, "caresync.db");
+const dbFile = path.join(dataDir, "tessera.db");
 const backupDir = path.join(dataDir, "backups");
 
 const launchToken = crypto.randomBytes(24).toString("hex");
@@ -60,21 +60,21 @@ function freePort() {
 async function api(pathname, init = {}) {
   return fetch(base() + pathname, {
     ...init,
-    headers: { "x-caresync-token": launchToken, ...(init.headers || {}) },
+    headers: { "x-tessera-token": launchToken, ...(init.headers || {}) },
   });
 }
 
 async function waitForServer(timeoutMs = 60_000) {
   const end = Date.now() + timeoutMs;
   while (Date.now() < end) {
-    if (!child) throw new Error("The CareSync engine stopped while starting.");
+    if (!child) throw new Error("The Tessera engine stopped while starting.");
     try {
       const r = await api("/api/health");
       if (r.ok) return;
     } catch {}
     await new Promise((r) => setTimeout(r, 250));
   }
-  throw new Error("The CareSync engine did not start in time.");
+  throw new Error("The Tessera engine did not start in time.");
 }
 
 function promptText(parent, title, label) {
@@ -121,7 +121,7 @@ async function prepareData() {
   if (!secrets.exists(dataDir)) {
     if (hasDb) {
       // Database exists but its key is gone (e.g. new Windows profile). Only the recovery key can open it.
-      const entered = await promptText(null, "Recovery key needed", "This data file was locked with a key that is not on this Windows account. Paste your CareSync recovery key:");
+      const entered = await promptText(null, "Recovery key needed", "This data file was locked with a key that is not on this Windows account. Paste your Tessera recovery key:");
       if (!entered || !store.validKey(entered)) throw new Error("A valid recovery key is required to open the existing data.");
       store.open(serverDir, dbFile, entered).close();
       keys = secrets.create(dataDir, entered.toLowerCase());
@@ -136,7 +136,7 @@ async function prepareData() {
   try {
     db = store.open(serverDir, dbFile, keys.dbKey);
   } catch {
-    throw new Error("The CareSync database could not be opened with its key. It may be damaged. Restore a backup from File, Restore from backup.");
+    throw new Error("The Tessera database could not be opened with its key. It may be damaged. Restore a backup from File, Restore from backup.");
   }
   try {
     if (hasDb && store.pendingCount(db, migrationsDir) > 0) {
@@ -157,7 +157,7 @@ const stamp = () => new Date().toISOString().replace(/[:.]/g, "-");
 async function startServer() {
   port = await freePort();
   const serverJs = path.join(serverDir, "server.js");
-  if (!fs.existsSync(serverJs)) throw new Error("The CareSync engine is missing. Reinstall the application.");
+  if (!fs.existsSync(serverJs)) throw new Error("The Tessera engine is missing. Reinstall the application.");
   child = spawn(process.execPath, [serverJs], {
     cwd: serverDir,
     windowsHide: true,
@@ -169,9 +169,9 @@ async function startServer() {
       PORT: String(port),
       HOSTNAME: "127.0.0.1",
       DATABASE_URL: "file:" + dbFile.split(path.sep).join("/"),
-      CARESYNC_DB_KEY: keys.dbKey,
-      CARESYNC_DESKTOP: "1",
-      CARESYNC_LAUNCH_TOKEN: launchToken,
+      TESSERA_DB_KEY: keys.dbKey,
+      TESSERA_DESKTOP: "1",
+      TESSERA_LAUNCH_TOKEN: launchToken,
       APP_SECRET: keys.appSecret,
       CRON_SECRET: keys.cronSecret,
       APP_URL: base(),
@@ -206,14 +206,14 @@ function stopServer() {
 let crashes = 0;
 async function onEngineCrash(code) {
   if (++crashes > 2) {
-    dialog.showErrorBox("CareSync", `The CareSync engine stopped (code ${code}). Details are in engine.log in the data folder.`);
+    dialog.showErrorBox("Tessera", `The Tessera engine stopped (code ${code}). Details are in engine.log in the data folder.`);
     return app.quit();
   }
   try {
     await startServer();
     if (win) win.loadURL(base());
   } catch (e) {
-    dialog.showErrorBox("CareSync", String(e.message || e));
+    dialog.showErrorBox("Tessera", String(e.message || e));
     app.quit();
   }
 }
@@ -222,7 +222,7 @@ async function onEngineCrash(code) {
 const LOADING =
   "data:text/html;charset=utf-8," +
   encodeURIComponent(
-    `<meta charset=utf-8><style>html,body{height:100%;margin:0;background:#0f2a33;color:#e6f6f5;font:16px 'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center}</style><div>Starting CareSync...</div>`,
+    `<meta charset=utf-8><style>html,body{height:100%;margin:0;background:#0f2a33;color:#e6f6f5;font:16px 'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center}</style><div>Starting Tessera...</div>`,
   );
 
 function createWindow() {
@@ -233,7 +233,7 @@ function createWindow() {
     minHeight: 640,
     show: false,
     backgroundColor: "#0f2a33",
-    title: "CareSync",
+    title: "Tessera",
     icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -264,7 +264,7 @@ function createWindow() {
     e.preventDefault();
     win.hide();
     if (hideHintShown++ < 3) {
-      new Notification({ title: "CareSync is still running", body: "Reminders keep working. Use the tray icon to open or quit." }).show();
+      new Notification({ title: "Tessera is still running", body: "Reminders keep working. Use the tray icon to open or quit." }).show();
     }
   });
   win.on("closed", () => (win = null));
@@ -287,10 +287,10 @@ function showWindow() {
 function createTray() {
   const img = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
   tray = new Tray(img);
-  tray.setToolTip("CareSync");
+  tray.setToolTip("Tessera");
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: "Open CareSync", click: showWindow },
+      { label: "Open Tessera", click: showWindow },
       { type: "separator" },
       { label: "Quit", click: () => app.quit() },
     ]),
@@ -321,14 +321,14 @@ function buildMenu() {
           { label: "Reset administrator password...", click: () => resetAdmin() },
           { type: "separator" },
           {
-            label: "About CareSync",
+            label: "About Tessera",
             click: () =>
               dialog.showMessageBox(win, {
                 type: "info",
-                title: "About CareSync",
-                message: `CareSync ${app.getVersion()}`,
+                title: "About Tessera",
+                message: `Tessera ${app.getVersion()}`,
                 detail:
-                  "Data is stored encrypted on this computer only.\n\nCareSync is not an emergency service and is not a substitute for professional medical judgment. It has not had an independent security audit and makes no regulatory compliance claims.",
+                  "Data is stored encrypted on this computer only.\n\nTessera is not an emergency service and is not a substitute for professional medical judgment. It has not had an independent security audit and makes no regulatory compliance claims.",
               }),
           },
         ],
@@ -339,9 +339,9 @@ function buildMenu() {
 
 async function backupData() {
   const r = await dialog.showSaveDialog(win, {
-    title: "Back up CareSync data",
-    defaultPath: path.join(app.getPath("documents"), `CareSync-backup-${new Date().toISOString().slice(0, 10)}.db`),
-    filters: [{ name: "CareSync backup (encrypted)", extensions: ["db"] }],
+    title: "Back up Tessera data",
+    defaultPath: path.join(app.getPath("documents"), `Tessera-backup-${new Date().toISOString().slice(0, 10)}.db`),
+    filters: [{ name: "Tessera backup (encrypted)", extensions: ["db"] }],
   });
   if (r.canceled || !r.filePath) return;
   try {
@@ -360,7 +360,7 @@ async function backupData() {
 }
 
 async function restoreData() {
-  const r = await dialog.showOpenDialog(win, { title: "Restore CareSync backup", properties: ["openFile"], filters: [{ name: "CareSync backup", extensions: ["db"] }] });
+  const r = await dialog.showOpenDialog(win, { title: "Restore Tessera backup", properties: ["openFile"], filters: [{ name: "Tessera backup", extensions: ["db"] }] });
   if (r.canceled || !r.filePaths[0]) return;
   const src = r.filePaths[0];
   const confirm = await dialog.showMessageBox(win, {
@@ -391,7 +391,7 @@ async function restoreData() {
     probe.prepare("select count(*) from user").get();
   } catch {
     probe.close();
-    return dialog.showErrorBox("Restore failed", "That file is not a CareSync backup.");
+    return dialog.showErrorBox("Restore failed", "That file is not a Tessera backup.");
   }
   probe.close();
 
@@ -427,7 +427,7 @@ async function showRecoveryKey() {
     buttons: ["Close", "Copy to clipboard"],
     defaultId: 0,
     cancelId: 0,
-    message: "CareSync recovery key",
+    message: "Tessera recovery key",
     detail: `${keys.dbKey}\n\nAnyone with this key and a backup file can read your data. Store it offline, away from the backup.`,
   });
   if (r.response === 1) {
@@ -465,7 +465,7 @@ ipcMain.on("cs:notify", (e, count) => {
   if (!win || e.sender !== win.webContents || !e.senderFrame.url.startsWith(base() + "/")) return;
   if (!Notification.isSupported() || !(count > 0)) return;
   const n = new Notification({
-    title: "CareSync",
+    title: "Tessera",
     // Deliberately generic: toasts can appear on a locked screen and must not reveal health details.
     body: count === 1 ? "You have a new notification." : `You have ${count} new notifications.`,
   });
@@ -493,7 +493,7 @@ app.whenReady().then(async () => {
 
     // The port changes whenever the engine restarts, so match any loopback port and only add the token for the live engine.
     session.defaultSession.webRequest.onBeforeSendHeaders({ urls: ["http://127.0.0.1/*"] }, (details, cb) => {
-      if (port && details.url.startsWith(base() + "/")) details.requestHeaders["x-caresync-token"] = launchToken;
+      if (port && details.url.startsWith(base() + "/")) details.requestHeaders["x-tessera-token"] = launchToken;
       cb({ requestHeaders: details.requestHeaders });
     });
 
@@ -507,7 +507,7 @@ app.whenReady().then(async () => {
     startScheduler();
     powerMonitor.on("lock-screen", () => win && !win.isDestroyed() && win.webContents.send("cs:lock"));
   } catch (e) {
-    dialog.showErrorBox("CareSync could not start", String(e.message || e));
+    dialog.showErrorBox("Tessera could not start", String(e.message || e));
     quitting = true;
     app.quit();
   }

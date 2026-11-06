@@ -172,7 +172,7 @@ export default async function PatientOverview() {
 
         <div className="space-y-6">
           <Alert tone="warn" title="Not for emergencies">
-            CareSync is not an emergency service and messages are not monitored around the clock. If you may be in danger or feel seriously unwell, call your local emergency number.
+            Tessera is not an emergency service and messages are not monitored around the clock. If you may be in danger or feel seriously unwell, call your local emergency number.
           </Alert>
 
           <Card>

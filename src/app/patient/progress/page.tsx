@@ -65,7 +65,7 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Progress" description="Trends from what you recorded in CareSync." action={<PeriodTabs current={days} options={PERIODS} />} />
+      <PageHeader title="Progress" description="Trends from what you recorded in Tessera." action={<PeriodTabs current={days} options={PERIODS} />} />
       <SelfReportNote>
         {SELF_REPORT_NOTE} These charts are not a clinical assessment. Talk to your care team about what they mean for you.
       </SelfReportNote>

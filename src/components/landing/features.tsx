@@ -16,7 +16,7 @@ export function Features() {
     <section id="features" className="border-b border-line">
       <div className="mx-auto max-w-6xl px-4 py-[var(--space-section)] sm:px-6">
         <Reveal>
-          <h2 className="text-3xl font-semibold sm:text-4xl">What CareSync does</h2>
+          <h2 className="text-3xl font-semibold sm:text-4xl">What Tessera does</h2>
           <p className="mt-3 max-w-2xl text-lg text-ink2">Seven practical tools, no extras.</p>
         </Reveal>
         <ul className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">

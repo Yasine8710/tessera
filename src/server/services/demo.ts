@@ -8,8 +8,8 @@ import { hashPassword } from "../security";
  */
 export const DEMO_PASSWORD = "DemoPassw0rd!";
 export const DEMO_ACCOUNTS = {
-  patient: { email: "demo.patient@caresync.invalid", password: DEMO_PASSWORD },
-  staff: { email: "demo.clinician@caresync.invalid", password: DEMO_PASSWORD },
+  patient: { email: "demo.patient@tessera.invalid", password: DEMO_PASSWORD },
+  staff: { email: "demo.clinician@tessera.invalid", password: DEMO_PASSWORD },
 };
 
 const TZ = "Europe/Paris";
@@ -27,10 +27,10 @@ const PATIENTS: PatientSeed[] = [
     { name: "Metformin", dose: "500 mg", route: "Oral", times: ["08:00", "20:00"], instr: "Take with food." },
     { name: "Lisinopril", dose: "10 mg", route: "Oral", times: ["08:00"], instr: "Take in the morning." },
   ] },
-  { email: "demo.patient2@caresync.invalid", name: "Sam Bernard (demo)", dob: "1975-09-03", adherence: 0.55, share: true, meds: [
+  { email: "demo.patient2@tessera.invalid", name: "Sam Bernard (demo)", dob: "1975-09-03", adherence: 0.55, share: true, meds: [
     { name: "Atorvastatin", dose: "20 mg", route: "Oral", times: ["21:00"], instr: "Take in the evening." },
   ] },
-  { email: "demo.patient3@caresync.invalid", name: "Jo Laurent (demo)", dob: "1982-01-27", adherence: 0.95, share: false, meds: [
+  { email: "demo.patient3@tessera.invalid", name: "Jo Laurent (demo)", dob: "1982-01-27", adherence: 0.95, share: false, meds: [
     { name: "Levothyroxine", dose: "50 mcg", route: "Oral", times: ["07:00"], instr: "Empty stomach, 30 minutes before breakfast." },
   ] },
 ];
@@ -62,7 +62,7 @@ export async function ensureDemoData(now = new Date()) {
       await db.consent.create({ data: { relationshipId: rel.id, type, granted: ps.share } });
     const convo = await db.conversation.create({ data: { patientId: pid, professionalId: proId } });
     await db.conversationParticipant.createMany({ data: [{ conversationId: convo.id, userId: u.id }, { conversationId: convo.id, userId: proUser.id }] });
-    await db.message.create({ data: { conversationId: convo.id, senderId: proUser.id, body: "Welcome to CareSync. Message me here about your plan. For emergencies, call your local emergency number.", createdAt: new Date(now.getTime() - 3 * 86400_000) } });
+    await db.message.create({ data: { conversationId: convo.id, senderId: proUser.id, body: "Welcome to Tessera. Message me here about your plan. For emergencies, call your local emergency number.", createdAt: new Date(now.getTime() - 3 * 86400_000) } });
 
     const startDate = addDaysToLocalDate(today, -30);
     const plan = await db.carePlan.create({

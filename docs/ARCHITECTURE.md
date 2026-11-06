@@ -39,7 +39,7 @@ random CUIDs; there are no public profile URLs.
 ## Key design decisions
 
 - **Own session layer instead of Auth.js.** Auth.js credentials login only supports JWT sessions, which cannot be
-  revoked server-side. CareSync stores a SHA-256 hash of a random opaque token in `Session`, so sign-out,
+  revoked server-side. Tessera stores a SHA-256 hash of a random opaque token in `Session`, so sign-out,
   password reset and suspension take effect immediately, and the same tokens can authenticate a future mobile client.
 - **scrypt** (Node built-in, N=2^15) for password hashing: no native dependency to compile.
 - **Postgres-backed rate limiting** works across multiple app instances without Redis.

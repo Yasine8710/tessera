@@ -47,7 +47,7 @@ export async function SettingsView({ session }: { session: Session }) {
       </Card>
 
       <Card>
-        <CardHeader title="Your data" description="Download a copy of the data CareSync holds about you as a JSON file." />
+        <CardHeader title="Your data" description="Download a copy of the data Tessera holds about you as a JSON file." />
         <div className="px-5 py-4">
           <a href="/api/account/export" download className={buttonClass({ variant: "secondary" })}>
             <Download className="size-4" aria-hidden /> Download my data

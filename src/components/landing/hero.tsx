@@ -11,7 +11,7 @@ export function Hero() {
           <p className="text-sm font-semibold uppercase tracking-wide text-accent-hover">Connected care. Better everyday health.</p>
           <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">Better care starts with staying connected.</h1>
           <p className="mt-5 max-w-xl text-lg text-ink2">
-            CareSync helps patients stay on top of their medications and daily routines while giving healthcare professionals a clearer picture of patient progress and follow-up needs.
+            Tessera helps patients stay on top of their medications and daily routines while giving healthcare professionals a clearer picture of patient progress and follow-up needs.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <LinkButton href="/register" size="lg">
@@ -25,7 +25,7 @@ export function Hero() {
           <p className="mt-6 flex items-start gap-2 text-sm text-muted">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
             <span>
-              CareSync is not an emergency service. If you may be having a medical emergency, contact your local emergency number immediately.
+              Tessera is not an emergency service. If you may be having a medical emergency, contact your local emergency number immediately.
             </span>
           </p>
         </Reveal>

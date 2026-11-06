@@ -1,6 +1,6 @@
-# Contributing to CareSync
+# Contributing to Tessera
 
-Thanks for helping. CareSync is a coordination tool, not a diagnostic or prescribing tool; contributions
+Thanks for helping. Tessera is a coordination tool, not a diagnostic or prescribing tool; contributions
 must keep it that way.
 
 ## Setup

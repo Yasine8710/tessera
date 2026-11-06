@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage, LegalSection } from "@/components/legal/legal-page";
 
-export const metadata: Metadata = { title: "Accessibility", description: "CareSync accessibility target, features and known limitations." };
+export const metadata: Metadata = { title: "Accessibility", description: "Tessera accessibility target, features and known limitations." };
 
 export default function AccessibilityPage() {
   const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
@@ -9,7 +9,7 @@ export default function AccessibilityPage() {
     <LegalPage
       title="Accessibility"
       updated="October 2026"
-      intro="CareSync aims to be usable by as many people as possible, including people who use keyboards, screen readers, zoom or reduced motion."
+      intro="Tessera aims to be usable by as many people as possible, including people who use keyboards, screen readers, zoom or reduced motion."
     >
       <LegalSection title="Our target">
         <p>We design toward WCAG 2.2 level AA. This is a goal, not a certification: we have not had an independent audit, and we do not claim full conformance.</p>

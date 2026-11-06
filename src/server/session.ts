@@ -5,13 +5,13 @@ import { redirect } from "next/navigation";
 import { cache } from "react";
 import { actorFromSession } from "./services/auth";
 
-export const SESSION_COOKIE = "caresync_session";
+export const SESSION_COOKIE = "tessera_session";
 
 export async function setSessionCookie(token: string, expiresAt: Date) {
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production" && process.env.CARESYNC_DESKTOP !== "1",
+    secure: process.env.NODE_ENV === "production" && process.env.TESSERA_DESKTOP !== "1",
     path: "/",
     expires: expiresAt,
   });

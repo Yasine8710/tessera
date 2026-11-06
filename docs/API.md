@@ -1,6 +1,6 @@
 # API
 
-CareSync exposes its operations in two ways, both backed by the same service layer (`src/server/services/*`)
+Tessera exposes its operations in two ways, both backed by the same service layer (`src/server/services/*`)
 and the same authorization rules.
 
 1. **Web (server actions)** in `src/app/actions/*`, used by the Next.js UI. Cookie session, origin-checked.
@@ -45,7 +45,7 @@ Operational endpoints: `GET /api/health`, `POST /api/cron/reminders` (Bearer `CR
 
 ```bash
 TOKEN=$(curl -s localhost:3000/api/v1/auth/login -H 'content-type: application/json' \
-  -d '{"email":"demo.patient@caresync.invalid","password":"DemoPassw0rd!"}' | jq -r .data.token)
+  -d '{"email":"demo.patient@tessera.invalid","password":"DemoPassw0rd!"}' | jq -r .data.token)
 curl -s localhost:3000/api/v1/doses -H "authorization: Bearer $TOKEN"
 ```
 

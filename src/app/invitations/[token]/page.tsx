@@ -36,7 +36,7 @@ export default async function InvitationPage({ params }: { params: Promise<{ tok
       title="You have been invited to connect"
       description={
         <>
-          {who} invited you to share health information with them on CareSync. This link expires on {expires}.
+          {who} invited you to share health information with them on Tessera. This link expires on {expires}.
         </>
       }
       wide
@@ -71,7 +71,7 @@ export default async function InvitationPage({ params }: { params: Promise<{ tok
             </Alert>
           )}
           <p className="text-sm text-muted">
-            Connecting lets {inv.professionalName} message you and see only the data categories you switch on below. Information you record yourself is self-reported and may be incomplete; it is not a clinical record. CareSync is not an emergency service.
+            Connecting lets {inv.professionalName} message you and see only the data categories you switch on below. Information you record yourself is self-reported and may be incomplete; it is not a clinical record. Tessera is not an emergency service.
           </p>
           <InvitationResponse token={token} invitationId={inv.id} professionalName={inv.professionalName} />
         </div>

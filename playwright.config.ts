@@ -4,7 +4,7 @@ import { config } from "dotenv";
 config({ path: ".env" });
 // Web e2e runs on its own unencrypted SQLite file, shared by the server and the test helpers.
 process.env.DATABASE_URL = "file:./e2e.db";
-process.env.CARESYNC_DB_KEY = "";
+process.env.TESSERA_DB_KEY = "";
 const port = Number(process.env.E2E_PORT ?? 4317);
 const baseURL = `http://localhost:${port}`;
 
@@ -27,6 +27,6 @@ export default defineConfig({
     url: `${baseURL}/api/health`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
-    env: { APP_URL: baseURL, DEMO_MODE: "true", DATABASE_URL: "file:./e2e.db", CARESYNC_DB_KEY: "", NODE_ENV: "production" },
+    env: { APP_URL: baseURL, DEMO_MODE: "true", DATABASE_URL: "file:./e2e.db", TESSERA_DB_KEY: "", NODE_ENV: "production" },
   },
 });

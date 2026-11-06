@@ -6,7 +6,7 @@ import { logoutAction } from "@/app/actions/auth";
 
 declare global {
   interface Window {
-    caresyncDesktop?: { notify(count: number): void; onLock(cb: () => void): void };
+    tesseraDesktop?: { notify(count: number): void; onLock(cb: () => void): void };
   }
 }
 
@@ -18,7 +18,7 @@ export function DesktopBridge() {
   const since = useRef(new Date().toISOString());
 
   useEffect(() => {
-    const bridge = window.caresyncDesktop;
+    const bridge = window.tesseraDesktop;
     let idle: ReturnType<typeof setTimeout>;
     const lock = () => {
       void logoutAction().catch(() => {});

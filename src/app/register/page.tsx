@@ -28,7 +28,7 @@ export default async function RegisterPage() {
   return (
     <AuthShell
       title="Create your account"
-      description="CareSync is free for everyone. Choose the account type that fits you."
+      description="Tessera is free for everyone. Choose the account type that fits you."
       wide
       footer={
         <p>

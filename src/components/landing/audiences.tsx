@@ -63,7 +63,7 @@ export function Audiences() {
               <ul className="mt-3 space-y-2 text-white/80">
                 <li>Staff accounts are verified by an administrator from your licence details before access is enabled.</li>
                 <li>Patient entries are self-reported and may be incomplete. They support, not replace, your clinical judgement.</li>
-                <li>CareSync does not diagnose or suggest doses.</li>
+                <li>Tessera does not diagnose or suggest doses.</li>
               </ul>
               <LinkButton href="/register/professional" variant="secondary" className="mt-6">
                 Register as a professional

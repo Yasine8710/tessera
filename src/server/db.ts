@@ -6,10 +6,10 @@ import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3";
 class EncryptedFactory extends PrismaBetterSQLite3 {
   async connect() {
     const adapter = await super.connect();
-    const key = process.env.CARESYNC_DB_KEY;
+    const key = process.env.TESSERA_DB_KEY;
     const client = (adapter as unknown as { client: { pragma(s: string): unknown } }).client;
     if (key) {
-      if (!/^[0-9a-f]{64}$/i.test(key)) throw new Error("CARESYNC_DB_KEY must be 64 hex chars");
+      if (!/^[0-9a-f]{64}$/i.test(key)) throw new Error("TESSERA_DB_KEY must be 64 hex chars");
       client.pragma(`key = "x'${key}'"`);
     }
     client.pragma("journal_mode = WAL");

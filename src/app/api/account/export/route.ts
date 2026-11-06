@@ -13,7 +13,7 @@ export async function GET() {
     status: 200,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Content-Disposition": `attachment; filename="caresync-data-${stamp}.json"`,
+      "Content-Disposition": `attachment; filename="tessera-data-${stamp}.json"`,
       "Cache-Control": "no-store",
     },
   });

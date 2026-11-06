@@ -1,6 +1,6 @@
 # Privacy and Security
 
-> CareSync makes **no claim of HIPAA, GDPR or any other regulatory compliance**. Implemented controls help,
+> Tessera makes **no claim of HIPAA, GDPR or any other regulatory compliance**. Implemented controls help,
 > but compliance depends on how and where it is operated. Obtain qualified legal and security review for your
 > jurisdiction before handling real patient data.
 
