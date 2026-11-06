@@ -82,7 +82,7 @@ Captured from the built app with the synthetic demo data only (fictional people,
 
 Requirements: Windows 10 or 11 (64-bit). Nothing else.
 
-1. Download `Tessera Setup 0.1.0.exe` from the [latest release](../../releases/latest).
+1. Download `Tessera.Setup.0.1.0.exe` from the [latest release](../../releases/latest).
 2. Run it. It installs for the current user (no administrator rights) and adds a **Tessera** icon to the desktop and Start menu.
 3. Open Tessera. On first run, create the administrator account for that computer.
 
