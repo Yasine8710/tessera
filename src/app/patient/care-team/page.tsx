@@ -1,10 +1,11 @@
-import { MailPlus, Users } from "lucide-react";
+import { EditorialHeader } from "@/components/patient/editorial";
+import { MailPlus } from "lucide-react";
 import type { Metadata } from "next";
 import { ConnectForm, EndRelationshipButton, InvitationResponse } from "@/components/patient/care-team-actions";
 import { ConsentSwitches } from "@/components/patient/consent-switches";
 import type { ConsentState } from "@/components/patient/consent-fields";
 import { fmtPlainDate } from "@/components/patient/format";
-import { Badge, Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
+import { Badge, Card, CardHeader, EmptyState } from "@/components/ui/card";
 import { requireSession } from "@/server/session";
 import { listCareTeam, listInvitationsForPatient } from "@/server/services/care";
 
@@ -24,7 +25,7 @@ export default async function CareTeamPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Care team" description="The professionals connected to you and exactly what each can see. You are in control and can change this at any time." />
+      <EditorialHeader eyebrow="People" title="Care team" description="The professionals connected to you and exactly what each can see. You are in control and can change this at any time." />
 
       {invitations.length > 0 && (
         <Card className="border-accent/40">
@@ -50,8 +51,8 @@ export default async function CareTeamPage() {
           Your care team
         </h2>
         {active.length === 0 ? (
-          <Card>
-            <EmptyState icon={Users} title="No one is connected yet">
+          <Card className="overflow-hidden">
+            <EmptyState photo="consult-smile" title="No one is connected yet">
               Accept an invitation or send a connection request below.
             </EmptyState>
           </Card>

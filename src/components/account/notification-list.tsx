@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Check, CheckCheck } from "lucide-react";
+import { Check, CheckCheck } from "lucide-react";
 import { markNotificationReadAction } from "@/app/actions/account";
 import { Button } from "@/components/ui/button";
 import { Card, EmptyState } from "@/components/ui/card";
@@ -28,13 +28,13 @@ export function NotificationList({ items, timezone }: { items: NotificationRow[]
       {error && <p role="alert" className="mb-3 text-sm text-danger">{error}</p>}
       <Card>
         {items.length === 0 ? (
-          <EmptyState icon={Bell} title="No notifications yet">
+          <EmptyState photo="walk-coat" title="No notifications yet">
             Reminders, approvals and message alerts will appear here.
           </EmptyState>
         ) : (
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {items.map((n) => (
-              <li key={n.id} className={cn("flex items-start gap-3 px-5 py-4", !n.readAt && "bg-accent-soft/50")}>
+              <li key={n.id} className={cn("flex items-start gap-3 border-l-2 px-5 py-4", n.readAt ? "border-l-transparent" : "border-l-accent bg-accent-soft/50")}>
                 <span className={cn("mt-2 size-2 shrink-0 rounded-full", n.readAt ? "bg-transparent" : "bg-accent")} aria-hidden />
                 <div className="min-w-0 flex-1">
                   <p className={cn(!n.readAt && "font-semibold")}>

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Privacy notice", description: "What 
 export default function PrivacyPage() {
   const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
   return (
-    <LegalPage
+    <LegalPage photo="clinician-portrait" focal="50% 30%"
       title="Privacy notice"
       updated="October 2026"
       intro="This notice explains in plain language what this Tessera service collects, why, and who can see it. Tessera is self-hosted software: the organisation or person running this instance (the operator) is responsible for the data stored here."

@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { useEffect, useState } from "react";
 import { CalendarClock, Droplets, Pill } from "lucide-react";
 import { Badge } from "@/components/ui/card";

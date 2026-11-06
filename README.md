@@ -73,6 +73,7 @@ The `desktop` branch ships Tessera as a self-contained Windows app: no Docker, n
 - **No email:** accounts are verified automatically, and administrators create one-time password reset links (Administration, Users, Reset password). An administrator who forgot their password uses Help, Reset administrator password.
 - **Reminders:** the app checks every 5 minutes while it runs (closing the window keeps it in the tray). Windows toasts are generic ("You have a new notification") so nothing clinical shows on a lock screen. The app signs out after 15 minutes idle and when Windows locks.
 - **Demo accounts:** the sign-in screen has Demo as patient, medical staff and administrator buttons (synthetic data). The demo administrator is read-only and sees demo accounts only. An administrator can hide them in Administration, Settings.
+- **Window:** opens maximised in a kiosk style: an animated splash, then a slim title bar drawn by the app (Windows keeps only the small minimise / maximise / close buttons, themed to match). The File and Help items are under the **...** button in that bar. F11 toggles full screen.
 - **Scope:** local only. Several PCs do not share data; one install is one clinic.
 
 Developing it:
@@ -191,3 +192,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.
 ## Disclaimer
 
 Tessera is a coordination and tracking tool. It is **not** an emergency service, does not provide medical advice, diagnosis or treatment, and does not replace the judgment of qualified healthcare professionals.
+
+## Photo credits
+
+Stock photos in `public/photos` come from [Pexels](https://www.pexels.com) under the Pexels licence (free to use, no attribution required). Pexels photo IDs are listed in `src/lib/photos.ts`; `node scripts/photos.mjs` re-downloads and re-encodes them.

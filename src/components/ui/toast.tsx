@@ -35,7 +35,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.15 } }}
               transition={{ duration: 0.24, ease: [0.2, 0.7, 0.2, 1] }}
               className={cn(
-                "pointer-events-auto flex items-center gap-2 rounded-md border px-3.5 py-2.5 text-sm font-medium shadow-md",
+                "pointer-events-auto flex items-center gap-2 rounded-sm border px-4 py-3 text-sm font-medium shadow-md",
                 t.tone === "ok" ? "border-line2 bg-surface text-ink" : "border-danger/40 bg-danger-soft text-danger",
               )}
             >

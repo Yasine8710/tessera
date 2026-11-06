@@ -16,7 +16,7 @@ async function violations(page: Page) {
 
 async function check(page: Page, theme: string, path: string, name: string) {
   await page.goto(path);
-  await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+  await expect(page.locator("html"), `${path} theme`).toHaveAttribute("data-theme", theme);
   await page.waitForTimeout(500);
   await page.screenshot({ path: `results/design/${theme}-${name}.png`, fullPage: false });
   expect(await violations(page), `${theme} ${path}`).toEqual([]);
@@ -24,9 +24,16 @@ async function check(page: Page, theme: string, path: string, name: string) {
 
 for (const theme of THEMES) {
   test.describe(`${theme} theme`, () => {
+    // Hydration mismatches (React #418) re-render the page and have wiped the theme attribute before.
+    const errors: string[] = [];
     test.beforeEach(async ({ page, isMobile }) => {
       test.skip(isMobile, "desktop only");
+      errors.length = 0;
+      page.on("pageerror", (e) => errors.push(String(e).slice(0, 200)));
       await page.addInitScript((t) => localStorage.setItem("tessera-theme", t), theme);
+    });
+    test.afterEach(() => {
+      expect(errors, "uncaught page errors").toEqual([]);
     });
 
     test("public pages", async ({ page }) => {

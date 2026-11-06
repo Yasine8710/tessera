@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Search, Users } from "lucide-react";
+import { Search } from "lucide-react";
 import { Pager } from "@/components/admin/pagination";
 import { ResetLinkButton } from "@/components/admin/reset-link-button";
 import { isDesktop } from "@/server/desktop";
@@ -29,7 +29,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
 
   return (
     <div>
-      <PageHeader title="Users" description="Accounts on the platform. Suspending an account signs the person out immediately." />
+      <PageHeader eyebrow="Administration" photo="care-team" focal="center 30%" title="Users" description="Accounts on the platform. Suspending an account signs the person out immediately." />
       <Card>
         <form method="get" action="/admin/users" role="search" className="flex flex-wrap items-end gap-3 border-b border-line px-5 py-4">
           <div className="min-w-48 flex-1">
@@ -49,21 +49,21 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
           {(q || status) && <LinkButton href="/admin/users" variant="ghost">Clear</LinkButton>}
         </form>
         {rows.length === 0 ? (
-          <EmptyState icon={Users} title="No users found">Try a different search or status.</EmptyState>
+          <EmptyState photo="colleagues" title="No users found">Try a different search or status.</EmptyState>
         ) : (
           <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Scrollable table">
             <table className="w-full min-w-[44rem] text-left text-sm">
               <caption className="sr-only">Users</caption>
-              <thead className="border-b border-line bg-surface2 text-muted">
+              <thead className="border-b border-line2 text-muted [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-[0.12em]">
                 <tr>
-                  <th scope="col" className="px-5 py-2.5 font-medium">User</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Role</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Status</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Joined</th>
-                  <th scope="col" className="px-5 py-2.5 font-medium"><span className="sr-only">Actions</span></th>
+                  <th scope="col" className="px-5 py-3 font-medium">User</th>
+                  <th scope="col" className="px-3 py-3 font-medium">Role</th>
+                  <th scope="col" className="px-3 py-3 font-medium">Status</th>
+                  <th scope="col" className="px-3 py-3 font-medium">Joined</th>
+                  <th scope="col" className="px-5 py-3 font-medium"><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line">
+              <tbody className="stagger divide-y divide-line">
                 {rows.map((u) => {
                   const canToggle = !session.isDemo && u.role !== "ADMIN" && u.id !== session.userId && u.status !== "PENDING_APPROVAL";
                   return (

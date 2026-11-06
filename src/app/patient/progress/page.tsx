@@ -1,3 +1,4 @@
+import { EditorialHeader, Numeral } from "@/components/patient/editorial";
 import type { Metadata } from "next";
 import { AdherenceChart, TrendChart } from "@/components/patient/charts";
 import { ChartTable } from "@/components/patient/chart-table";
@@ -7,7 +8,7 @@ import { CountUp } from "@/components/patient/motion";
 import { PeriodTabs } from "@/components/patient/period-tabs";
 import { SelfReportNote } from "@/components/patient/self-report-note";
 import { AppointmentStatusBadge, DoseStatusBadge, type ApptStatus } from "@/components/patient/status";
-import { Card, CardHeader, EmptyState, PageHeader, Stat } from "@/components/ui/card";
+import { Card, CardHeader, EmptyState } from "@/components/ui/card";
 import { addDaysToLocalDate, localDateString } from "@/domain/schedule";
 import { requireSession } from "@/server/session";
 import * as clinical from "@/server/services/clinical";
@@ -66,7 +67,7 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="stagger space-y-6">
-      <PageHeader title="Progress" description="Trends from what you recorded in Tessera." action={<PeriodTabs current={days} options={PERIODS} />} />
+      <EditorialHeader eyebrow="Trends" title="Progress" description="Trends from what you recorded in Tessera." action={<PeriodTabs current={days} options={PERIODS} />} />
       <SelfReportNote>
         {SELF_REPORT_NOTE} These charts are not a clinical assessment. Talk to your care team about what they mean for you.
       </SelfReportNote>
@@ -75,14 +76,20 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
         <Card>
           <CardHeader title="Medication reports" description={`Last ${days} days. A dose with no report counts as missed after a grace period.`} />
           <div className="space-y-4 p-5">
-            <div className="stagger grid gap-3 sm:grid-cols-4">
-              <Stat label="Taken rate" value={t.rate === null ? "-" : <CountUp value={t.rate} suffix="%" />} hint={t.rate === null ? "No doses were due" : undefined} />
-              <Stat label="Taken" value={<CountUp value={t.taken} />} />
-              <Stat label="Skipped" value={<CountUp value={t.skipped} />} />
-              <Stat label="Missed" value={<CountUp value={t.missed} />} />
+            <div className="stagger grid grid-cols-2 gap-x-6 gap-y-6 border-b border-line pb-6 sm:grid-cols-4">
+              <Numeral label={t.rate === null ? "Taken rate - no doses were due" : "Taken rate"}>{t.rate === null ? "-" : <CountUp value={t.rate} suffix="%" />}</Numeral>
+              <Numeral label="Taken">
+                <CountUp value={t.taken} />
+              </Numeral>
+              <Numeral label="Skipped">
+                <CountUp value={t.skipped} />
+              </Numeral>
+              <Numeral label="Missed">
+                <CountUp value={t.missed} />
+              </Numeral>
             </div>
             {adherenceData.length === 0 ? (
-              <EmptyState title="No doses in this period">Once doses are scheduled by your care team, daily counts appear here.</EmptyState>
+              <EmptyState photo="walk-autumn" title="No doses in this period">Once doses are scheduled by your care team, daily counts appear here.</EmptyState>
             ) : (
               <>
                 <AdherenceChart data={adherenceData} summary={adherenceSummary} />

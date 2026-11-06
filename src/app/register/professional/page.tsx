@@ -16,6 +16,8 @@ export default async function RegisterProfessionalPage() {
       title="Register as a medical professional"
       description="Your licence details are reviewed by an administrator before you can connect with patients."
       wide
+      photo="clinician-portrait"
+      focal="50% 30%"
       footer={
         <p>
           Patient?{" "}

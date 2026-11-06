@@ -1,6 +1,6 @@
-import { ListChecks } from "lucide-react";
+import { EditorialHeader, Plate } from "@/components/patient/editorial";
 import type { Metadata } from "next";
-import { Alert, Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
+import { Alert, Card, CardHeader, EmptyState } from "@/components/ui/card";
 import { localDateString } from "@/domain/schedule";
 import { isScheduledOn } from "@/components/patient/format";
 import { RoutineForm } from "@/components/patient/routine-form";
@@ -35,13 +35,15 @@ export default async function RoutinesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Routines" description="Daily habits you and your care team track. Tick a routine when you have done it today." />
+      <EditorialHeader eyebrow="Habits" title="Routines" description="Daily habits you and your care team track. Tick a routine when you have done it today." />
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_17rem] 2xl:grid-cols-[minmax(0,1fr)_22rem] [&>*]:min-w-0">
+      <div className="space-y-6">
       <Alert tone="info">Wellness routines you add yourself are suggestions you set for yourself, not medical instructions. Follow your care team&apos;s guidance for anything clinical.</Alert>
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader title="Today" description={dueCount ? `${doneCount} of ${dueCount} planned routines marked done.` : undefined} />
         {active.length === 0 ? (
-          <EmptyState icon={ListChecks} title="No active routines">
+          <EmptyState photo="walk-coat" title="No active routines">
             Add your own routine below. Routines from your care team will appear here too.
           </EmptyState>
         ) : (
@@ -68,6 +70,13 @@ export default async function RoutinesPage() {
         <CardHeader title="Add your own routine" description="Care team routines cannot be paused or removed here." />
         <RoutineForm />
       </Card>
+      </div>
+      <aside className="hidden xl:block" aria-hidden>
+        <div className="sticky top-0">
+          <Plate name="walk-autumn" focal="50% 50%" caption="Small steps, most days" className="[&>div]:h-[28rem] 2xl:[&>div]:h-[34rem]" />
+        </div>
+      </aside>
+    </div>
     </div>
   );
 }

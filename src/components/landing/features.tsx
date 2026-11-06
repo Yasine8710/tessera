@@ -1,39 +1,53 @@
-import { Activity, BarChart3, BellRing, CalendarCheck, MessagesSquare, Pill, Repeat } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
+import { Figure, Rule, SectionLabel, Words } from "./editorial";
+import { wrap } from "./layout";
 
 const FEATURES = [
-  { icon: Pill, title: "Medication tracking", text: "Scheduled doses with taken or skipped status, from the plan your care team sets." },
-  { icon: Repeat, title: "Daily routines", text: "Hydration, activity, sleep and wellness routines you can tick off." },
-  { icon: CalendarCheck, title: "Appointments", text: "Request a time with a connected professional. Staff confirm or reschedule." },
-  { icon: Activity, title: "Patient monitoring", text: "Staff see only the shared data categories for patients connected to them." },
-  { icon: BarChart3, title: "Progress reporting", text: "Adherence and measurement trends over time, labelled as self-reported." },
-  { icon: MessagesSquare, title: "Communication", text: "Messages between a patient and their connected professionals. Not for emergencies." },
-  { icon: BellRing, title: "Reminders", text: "In-app notifications and email reminders where the operator has set up email." },
+  { title: "Medication tracking", text: "Scheduled doses with taken or skipped status, from the plan your care team sets." },
+  { title: "Daily routines", text: "Hydration, activity, sleep and wellness routines you can tick off." },
+  { title: "Appointments", text: "Request a time with a connected professional. Staff confirm or reschedule." },
+  { title: "Patient monitoring", text: "Staff see only the shared data categories for patients connected to them." },
+  { title: "Progress reporting", text: "Adherence and measurement trends over time, labelled as self-reported." },
+  { title: "Communication", text: "Messages between a patient and their connected professionals. Not for emergencies." },
+  { title: "Reminders", text: "In-app notifications and email reminders where the operator has set up email." },
 ];
 
 export function Features() {
   return (
     <section id="features" className="border-b border-line">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-[var(--space-section)] sm:px-6 lg:grid-cols-[1fr_1.7fr] lg:gap-16">
-        <Reveal className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className="text-3xl font-semibold sm:text-4xl">What Tessera does</h2>
-          <p className="mt-3 max-w-md text-lg text-ink2">Seven practical tools, no extras.</p>
-        </Reveal>
-        <ul className="border-t border-line2">
-          {FEATURES.map((f, i) => (
-            <li key={f.title} className="border-b border-line">
-              <Reveal delay={0.03 * (i % 4)} className="group grid gap-1 py-5 transition-colors duration-200 hover:bg-surface2 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-3">
-                <h3 className="flex items-center gap-3 text-base font-semibold">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-md bg-accent-soft text-accent transition-colors duration-200 group-hover:bg-accent group-hover:text-onaccent">
-                    <f.icon className="size-4" aria-hidden />
+      <div className={`${wrap} py-[var(--space-section)]`}>
+        <SectionLabel n="05">Features</SectionLabel>
+        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
+            <Words as="h2" className="display-lg" text="What Tessera does" />
+            <Reveal delay={0.1}>
+              <p className="lede mt-4 max-w-md">Seven practical tools, no extras.</p>
+            </Reveal>
+            <Figure
+              name="clinician-tablet"
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              focal="55% 50%"
+              className="mt-8 aspect-[4/3] w-full max-w-md lg:max-w-none"
+            />
+          </div>
+          <ul className="lg:col-span-8">
+            {FEATURES.map((f, i) => (
+              <li key={f.title}>
+                <Rule />
+                <Reveal delay={0.03 * (i % 3)} className="group grid gap-x-6 gap-y-1 py-6 sm:grid-cols-[3rem_15rem_1fr] sm:py-7">
+                  <span className="text-sm font-semibold tabular-nums text-muted transition-colors duration-300 group-hover:text-accent" aria-hidden>
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  {f.title}
-                </h3>
-                <p className="text-ink2">{f.text}</p>
-              </Reveal>
+                  <h3 className="text-xl font-semibold tracking-tight transition-transform duration-300 ease-[var(--ease)] group-hover:translate-x-1">{f.title}</h3>
+                  <p className="text-ink2">{f.text}</p>
+                </Reveal>
+              </li>
+            ))}
+            <li aria-hidden>
+              <Rule />
             </li>
-          ))}
-        </ul>
+          </ul>
+        </div>
       </div>
     </section>
   );

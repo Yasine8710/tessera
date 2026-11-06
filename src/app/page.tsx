@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { isDesktop } from "@/server/desktop";
 import { getSession, homeFor } from "@/server/session";
 import { Audiences } from "@/components/landing/audiences";
+import { DaySection, StatementBand } from "@/components/landing/day-section";
 import { Faq } from "@/components/landing/faq";
 import { Features } from "@/components/landing/features";
 import { Hero } from "@/components/landing/hero";
@@ -24,6 +25,8 @@ export default async function LandingPage() {
       <main id="main">
         <Hero />
         <HowItWorks />
+        <DaySection />
+        <StatementBand />
         <Audiences />
         <Features />
         <Trust />

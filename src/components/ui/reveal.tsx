@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -15,7 +16,11 @@ export function Reveal({ children, delay = 0, className }: { children: React.Rea
 
   useEffect(() => {
     const el = ref.current;
-    if (reduce || !el || typeof IntersectionObserver === "undefined") return;
+    if (reduce || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setState("visible"); // the preference is only known after hydration: undo anything armed before it
+      return;
+    }
+    if (!el || typeof IntersectionObserver === "undefined") return;
     if (el.getBoundingClientRect().top <= window.innerHeight) return; // already on screen
     setState("hidden");
     const io = new IntersectionObserver(

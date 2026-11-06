@@ -1,7 +1,7 @@
-import { ClipboardList } from "lucide-react";
+import { EditorialHeader } from "@/components/patient/editorial";
 import type { Metadata } from "next";
 import { describeDays, fmtDateTimeYear, fmtPlainDate } from "@/components/patient/format";
-import { Alert, Badge, Card, EmptyState, PageHeader } from "@/components/ui/card";
+import { Alert, Badge, Card, EmptyState } from "@/components/ui/card";
 import { requireSession } from "@/server/session";
 import { listCarePlans } from "@/server/services/clinical";
 
@@ -14,11 +14,11 @@ export default async function CarePlanPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Care plan" description="The plan your care team wrote for you. You can read it here; only your care team can change it." />
+      <EditorialHeader eyebrow="Plan" title="Care plan" description="The plan your care team wrote for you. You can read it here; only your care team can change it." />
 
       {plans.length === 0 ? (
-        <Card>
-          <EmptyState icon={ClipboardList} title="No care plan yet">
+        <Card className="overflow-hidden">
+          <EmptyState photo="pill-organizer" title="No care plan yet">
             When a professional on your care team shares a plan, it will appear here.
           </EmptyState>
         </Card>

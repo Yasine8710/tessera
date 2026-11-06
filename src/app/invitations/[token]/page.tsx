@@ -15,7 +15,7 @@ export default async function InvitationPage({ params }: { params: Promise<{ tok
 
   if (!inv) {
     return (
-      <AuthShell title="Invitation unavailable">
+      <AuthShell title="Invitation unavailable" photo="waiting-room" focal="50% 50%">
         <div className="space-y-4">
           <Alert tone="danger" title="This invitation cannot be used">
             It may have expired, been withdrawn, or already been used. Ask the professional to send a new invitation.
@@ -34,6 +34,8 @@ export default async function InvitationPage({ params }: { params: Promise<{ tok
   return (
     <AuthShell
       title="You have been invited to connect"
+      photo="care-team"
+      focal="50% 30%"
       description={
         <>
           {who} invited you to share health information with them on Tessera. This link expires on {expires}.

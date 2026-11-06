@@ -16,6 +16,8 @@ export default async function SetupPage() {
   return (
     <AuthShell
       title="Welcome to Tessera"
+      photo="clinician-tablet"
+      focal="55% 50%"
       description="Create the administrator account for this computer. Everything is stored encrypted on this PC only."
     >
       <SetupForm />

@@ -1,52 +1,73 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { LinkButton } from "@/components/ui/button";
-import { ProductPreview } from "./product-preview";
+import { CountUp, Figure, Rule, Words } from "./editorial";
+import { wrap } from "./layout";
 
-const FACTS = [
-  { k: "Cost", v: "Free, no ads" },
-  { k: "Sharing", v: "Off until you allow it" },
-  { k: "Access", v: "Only connected staff" },
-  { k: "Record", v: "Audit trail kept" },
+const STATS = [
+  { n: 3, label: "Roles: patient, professional, administrator" },
+  { n: 4, label: "Data categories a patient controls" },
+  { n: 5, label: "Steps from sign-up to shared follow-up" },
+  { n: 7, label: "Practical tools, no extras" },
 ];
 
 export function Hero() {
   return (
     <section className="border-b border-line">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 pb-12 pt-12 sm:px-6 lg:grid-cols-[1fr_1.08fr] lg:items-center lg:gap-14 lg:pb-16 lg:pt-16">
-        <div className="stagger">
-          <p className="text-sm font-medium text-accent">Medication, routines and follow-up in one place</p>
-          <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">Better care starts with staying connected.</h1>
-          <p className="mt-5 max-w-xl text-lg text-ink2">
-            Tessera helps patients stay on top of their medications and daily routines while giving healthcare professionals a clearer picture of patient progress and follow-up needs.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <LinkButton href="/register" size="lg" className="group press">
-              Get Started — Free
-              <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
-            </LinkButton>
-            <Link
-              href="#how-it-works"
-              className="relative py-1 font-medium text-ink after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-[0.35]"
-            >
-              Explore How It Works
-            </Link>
-          </div>
-          <p className="mt-8 flex max-w-xl items-start gap-2.5 border-t border-line pt-5 text-sm text-muted">
-            <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
-            <span>Tessera is not an emergency service. If you may be having a medical emergency, contact your local emergency number immediately.</span>
-          </p>
+      <div className={`${wrap} pt-10 sm:pt-14 lg:pt-20`}>
+        <div className="anim-fade flex items-center gap-4">
+          <Rule className="w-12 sm:w-20" />
+          <p className="eyebrow">Medication, routines and follow-up in one place</p>
         </div>
-        <div className="anim-right" style={{ animationDelay: "160ms" }}>
-          <ProductPreview />
+        <Words
+          as="h1"
+          immediate
+          text="Better care starts with staying connected."
+          className="mt-6 max-w-5xl text-[clamp(2.6rem,8.2vw,7rem)] font-semibold leading-[0.98] tracking-[-0.035em]"
+        />
+
+        <div className="mt-10 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-4 lg:pt-1">
+            <p className="lede anim-up" style={{ animationDelay: "500ms" }}>
+              Tessera helps patients stay on top of their medications and daily routines while giving healthcare professionals a clearer picture of patient progress and follow-up needs.
+            </p>
+            <div className="anim-up mt-8 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ animationDelay: "600ms" }}>
+              <LinkButton href="/register" size="lg" className="group">
+                Get Started — Free
+                <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+              </LinkButton>
+              <Link
+                href="#how-it-works"
+                className="relative py-1 font-medium text-ink after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-[0.35]"
+              >
+                Explore How It Works
+              </Link>
+            </div>
+            <p className="anim-up mt-10 border-t border-line pt-5 text-sm text-muted" style={{ animationDelay: "700ms" }}>
+              Tessera is not an emergency service. If you may be having a medical emergency, contact your local emergency number immediately.
+            </p>
+          </div>
+          <div className="lg:col-span-8">
+            <Figure
+              name="hero-consultation"
+              alt="A doctor sits with an older patient and talks through a plan, both looking at a document together."
+              immediate
+              priority
+              sizes="(min-width: 1280px) 800px, (min-width: 1024px) 62vw, 100vw"
+              focal="50% 40%"
+              className="aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9]"
+            />
+          </div>
         </div>
       </div>
 
-      <dl className="mx-auto grid max-w-6xl grid-cols-2 border-t border-line sm:grid-cols-4">
-        {FACTS.map((f, i) => (
-          <div key={f.k} className={`anim-up px-4 py-4 sm:px-6 ${i % 2 === 1 ? "border-l border-line" : ""} ${i > 0 ? "sm:border-l sm:border-line" : ""} ${i > 1 ? "border-t border-line sm:border-t-0" : ""}`} style={{ animationDelay: `${300 + i * 70}ms` }}>
-            <dt className="text-xs text-muted">{f.k}</dt>
-            <dd className="mt-0.5 text-sm font-medium">{f.v}</dd>
+      <dl className={`${wrap} mt-12 grid grid-cols-2 border-t border-line sm:grid-cols-4 lg:mt-16`}>
+        {STATS.map((s, i) => (
+          <div key={s.label} className={`flex flex-col-reverse justify-end py-6 pr-4 sm:py-8 ${i % 2 === 1 ? "border-l border-line pl-4 sm:pl-6" : ""} ${i > 0 ? "sm:border-l sm:border-line sm:pl-6" : ""} ${i > 1 ? "border-t border-line sm:border-t-0" : ""}`}>
+            <dt className="mt-2 max-w-[16rem] text-sm text-muted">{s.label}</dt>
+            <dd className="text-5xl font-light tracking-tight text-ink sm:text-6xl">
+              <CountUp to={s.n} />
+            </dd>
           </div>
         ))}
       </dl>

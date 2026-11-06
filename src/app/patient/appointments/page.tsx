@@ -1,11 +1,12 @@
-import { CalendarDays, MapPin, User } from "lucide-react";
+import { EditorialHeader, Plate } from "@/components/patient/editorial";
+import { MapPin, User } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AppointmentActions } from "@/components/patient/appointment-actions";
 import { AppointmentForm } from "@/components/patient/appointment-form";
 import { fmtDateTimeYear, fmtTime } from "@/components/patient/format";
 import { AppointmentStatusBadge, type ApptStatus } from "@/components/patient/status";
-import { Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
+import { Card, CardHeader, EmptyState } from "@/components/ui/card";
 import { requireSession } from "@/server/session";
 import { listCareTeam } from "@/server/services/care";
 import { listMyAppointments, type PatientAppointment } from "@/components/patient/appointments-data";
@@ -63,12 +64,14 @@ export default async function AppointmentsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Appointments" description="Requests stay as requested until your care team confirms them." />
+      <EditorialHeader eyebrow="Schedule" title="Appointments" description="Requests stay as requested until your care team confirms them." />
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_17rem] 2xl:grid-cols-[minmax(0,1fr)_22rem] [&>*]:min-w-0">
+      <div className="space-y-6">
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader title="Upcoming" />
         {upcoming.length === 0 ? (
-          <EmptyState icon={CalendarDays} title="No upcoming appointments">
+          <EmptyState photo="waiting-room" title="No upcoming appointments">
             Request one below.
           </EmptyState>
         ) : (
@@ -104,6 +107,13 @@ export default async function AppointmentsPage() {
           </ul>
         </Card>
       )}
+      </div>
+      <aside className="hidden xl:block" aria-hidden>
+        <div className="sticky top-0">
+          <Plate name="clinician-tablet" focal="50% 40%" caption="Ahead of your visit" className="[&>div]:h-[28rem] 2xl:[&>div]:h-[34rem]" />
+        </div>
+      </aside>
+    </div>
     </div>
   );
 }

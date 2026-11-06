@@ -32,25 +32,29 @@ export const FLAG_META: Record<MonitoringFlag["kind"], { title: string; tone: To
 
 export const FLAG_ORDER: MonitoringFlag["kind"][] = ["dose_exceptions", "new_symptoms", "routines_incomplete", "overdue_task", "stale"];
 
-const EDGE: Record<Tone, string> = {
-  neutral: "border-l-line2",
-  accent: "border-l-accent",
-  ok: "border-l-ok",
-  warn: "border-l-warn",
-  danger: "border-l-danger",
-  info: "border-l-info",
+export const BAR: Record<Tone, string> = {
+  neutral: "bg-line2",
+  accent: "bg-accent",
+  ok: "bg-ok",
+  warn: "bg-warn",
+  danger: "bg-danger",
+  info: "bg-info",
 };
 
+/** The coloured edge grows in; rows enter in severity order (FLAG_ORDER) so the most urgent land first. */
 export function FlagRow({ flag }: { flag: MonitoringFlag }) {
+  const meta = FLAG_META[flag.kind];
+  const rank = FLAG_ORDER.indexOf(flag.kind);
   return (
-    <li className={`flex flex-wrap items-center justify-between gap-2 border-l-[3px] px-5 py-3 transition-colors hover:bg-surface2 ${EDGE[FLAG_META[flag.kind].tone]}`}>
+    <li className="relative flex flex-wrap items-center justify-between gap-2 py-3.5 pl-5 pr-3 transition-colors hover:bg-surface2">
+      <span aria-hidden className={`anim-grow-y absolute inset-y-2.5 left-0 w-[3px] rounded-sm ${BAR[meta.tone]}`} style={{ animationDelay: `${160 + rank * 90}ms` }} />
       <div className="min-w-0">
-        <Link href={`/staff/patients/${flag.patientId}`} className="font-medium text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">
+        <Link href={`/staff/patients/${flag.patientId}`} className="text-base font-medium text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">
           {flag.patientName}
         </Link>
         <p className="text-sm text-ink2">{flag.detail}</p>
       </div>
-      <Badge tone={FLAG_META[flag.kind].tone}>{FLAG_META[flag.kind].title}</Badge>
+      <Badge tone={meta.tone}>{meta.title}</Badge>
     </li>
   );
 }

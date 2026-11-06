@@ -19,6 +19,8 @@ export default async function LoginPage() {
   return (
     <AuthShell
       title="Sign in"
+      photo="hero-consultation"
+      focal="55% 40%"
       description="Welcome back. Sign in to continue."
       footer={
         <p>

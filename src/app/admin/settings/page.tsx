@@ -15,13 +15,14 @@ export default async function AdminSettingsPage() {
   const supportEmail = typeof s.supportEmail === "string" ? s.supportEmail : "";
   const demoEnabled = isDesktop() && !session.isDemo ? s.demoEnabled !== false : undefined;
   return (
-    <div className="max-w-4xl space-y-6">
-      <PageHeader title="Settings" description="Platform settings and the fixed role model." />
+    <div>
+      <PageHeader eyebrow="Administration" photo="clinician-tablet" focal="center 70%" title="Settings" description="Platform settings and the fixed role model." />
+      <div className="stagger grid items-start gap-6 xl:grid-cols-2">
       <Card>
         <CardHeader title="Platform settings" />
         <SettingsForm staleDays={staleDays} supportEmail={supportEmail} demoEnabled={demoEnabled} />
       </Card>
-      <Card>
+      <Card className="xl:col-span-2 xl:row-start-2">
         <CardHeader title="Roles and permissions" description="Roles are fixed and cannot be edited here." />
         <RolesTable />
       </Card>
@@ -32,6 +33,7 @@ export default async function AdminSettingsPage() {
           <pre tabIndex={0} className="overflow-x-auto rounded-md bg-surface2 px-3 py-2 font-mono text-sm text-ink"><code>npm run admin:create</code></pre>
         </div>
       </Card>
+      </div>
     </div>
   );
 }

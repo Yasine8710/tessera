@@ -13,7 +13,7 @@ import { RoutinesTab } from "@/components/staff/tab-routines";
 import { TABS, TabNav, type TabId } from "@/components/staff/tab-shared";
 import { SummaryTab } from "@/components/staff/tab-summary";
 import { TasksTab } from "@/components/staff/tab-tasks";
-import { PageHeader } from "@/components/ui/card";
+import { Masthead } from "@/components/staff/editorial";
 import { AppError } from "@/server/errors";
 import { requireSession } from "@/server/session";
 import { patientProfileForStaff } from "@/server/services/staff";
@@ -57,7 +57,8 @@ export default async function PatientProfilePage({ params, searchParams }: Props
       <Link href="/staff/patients" className="mb-3 inline-flex items-center gap-1.5 text-sm text-ink2 hover:text-ink">
         <ArrowLeft className="size-4" aria-hidden /> All patients
       </Link>
-      <PageHeader
+      <Masthead
+        eyebrow="Patient profile"
         title={patient.user.name}
         description={[
           years !== null ? `Age ${years}` : "Age not provided",

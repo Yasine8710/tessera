@@ -1,5 +1,7 @@
 import { Lock } from "lucide-react";
-import { Alert, Card, CardHeader, EmptyState, Stat } from "@/components/ui/card";
+import { Alert, Card, EmptyState } from "@/components/ui/card";
+import { CountUp } from "./count-up";
+import { Figure, Panel } from "./editorial";
 import { adherenceReport } from "@/server/services/staff";
 import { AdherenceChart } from "./adherence-chart";
 import { PeriodLinks } from "./tab-nav";
@@ -25,23 +27,19 @@ export async function AdherenceTab({ session, patientId, consents, days }: TabPr
         Doses are what the patient recorded in the app. An unreported dose counts as missed after a 2 hour grace period, which may not reflect what happened.
       </Alert>
       <PeriodLinks items={PERIODS.map((p) => ({ label: `${p} days`, href: `/staff/patients/${patientId}?tab=adherence&days=${p}`, active: p === days }))} />
-      <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="px-5 py-4">
-          <p className="text-sm text-muted">Reported adherence</p>
-          <p className="mt-1 text-3xl font-semibold tabular-nums">{t.rate === null ? "n/a" : `${t.rate}%`}</p>
-          {t.rate !== null && <RateBar value={t.rate} className="mt-2" />}
-          <p className="mt-1.5 text-sm text-muted">Taken of doses due</p>
-        </Card>
-        <Stat label="Taken" value={t.taken} />
-        <Stat label="Skipped" value={t.skipped} />
-        <Stat label="Missed or unreported" value={t.missed} />
+      <div className="stagger grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Figure label="Reported adherence" value={t.rate === null ? "n/a" : <CountUp value={t.rate} suffix="%" />} hint="Taken of doses due">
+          {t.rate !== null && <RateBar value={t.rate} className="mt-3" />}
+        </Figure>
+        <Figure label="Taken" value={t.taken} tone="ok" />
+        <Figure label="Skipped" value={t.skipped} />
+        <Figure label="Missed or unreported" value={t.missed} />
       </div>
-      <Card>
-        <CardHeader title={`Doses per day, last ${days} days`} description={`${r.exceptions} exception${r.exceptions === 1 ? "" : "s"} (skipped or missed) in this period.`} />
-        <div className="p-5">
+      <Panel title={`Doses per day, last ${days} days`} description={`${r.exceptions} exception${r.exceptions === 1 ? "" : "s"} (skipped or missed) in this period.`}>
+        <div className="pt-2">
           {r.series.length === 0 ? <p className="text-sm text-muted">No scheduled doses in this period.</p> : <AdherenceChart series={r.series} />}
         </div>
-      </Card>
+      </Panel>
     </div>
   );
 }

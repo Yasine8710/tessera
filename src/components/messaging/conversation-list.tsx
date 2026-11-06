@@ -15,13 +15,13 @@ export function ConversationList({ items, activeId, basePath, timezone, emptyHin
     );
   }
   return (
-    <ul aria-label="Conversations" className="divide-y divide-line">
+    <ul aria-label="Conversations" className="stagger divide-y divide-line">
       {items.map((c) => (
-        <li key={c.id} className="anim-fade">
+        <li key={c.id}>
           <Link
             href={`${basePath}?c=${encodeURIComponent(c.id)}`}
             aria-current={c.id === activeId ? "page" : undefined}
-            className={cn("block px-4 py-3 hover:bg-surface2 transition-colors", c.id === activeId && "bg-accent-soft")}
+            className={cn("block border-l-2 px-4 py-3.5 transition-colors hover:bg-surface2", c.id === activeId ? "border-l-accent bg-accent-soft" : "border-l-transparent")}
           >
             <span className="flex items-baseline justify-between gap-2">
               <span className={cn("truncate", c.unread > 0 ? "font-semibold" : "font-medium")}>{c.withName}</span>

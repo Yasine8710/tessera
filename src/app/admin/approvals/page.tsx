@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { UserCheck } from "lucide-react";
 import { ApprovalActions } from "@/components/admin/approval-actions";
 import { formatDateTime } from "@/components/account/format";
 import { Alert, Badge, Card, EmptyState, PageHeader } from "@/components/ui/card";
@@ -12,19 +11,19 @@ export default async function ApprovalsPage() {
   const session = await requireSession("ADMIN");
   const rows = await pendingProfessionals(session);
   return (
-    <div className="max-w-4xl">
-      <PageHeader title="Professional approvals" description="Professionals who registered and are waiting for access to the staff portal." />
+    <div>
+      <PageHeader eyebrow="Administration" photo="clinician-portrait" focal="center 25%" title="Professional approvals" description="Professionals who registered and are waiting for access to the staff portal." />
       <Alert tone="warn" title="Verify the licence yourself" className="mb-5">
         Tessera does not check licences automatically. Before approving, confirm the licence number and region with the issuing regulator or register. Approval grants access to patient data once a patient consents.
       </Alert>
       {rows.length === 0 ? (
         <Card>
-          <EmptyState icon={UserCheck} title="No pending approvals">
+          <EmptyState photo="consult-smile" title="No pending approvals">
             New professional registrations will appear here.
           </EmptyState>
         </Card>
       ) : (
-        <ul className="space-y-4">
+        <ul className="stagger grid items-start gap-5 xl:grid-cols-2">
           {rows.map((u) => {
             const p = u.professionalProfile;
             return (

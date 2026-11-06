@@ -65,7 +65,7 @@ export function MessageThread({ conversationId, withName, initial, timezone }: {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4" role="log" aria-label={`Conversation with ${withName}`} tabIndex={0}>
-        {messages.length === 0 && <p className="py-10 text-center text-sm text-muted">No messages yet. Say hello to {withName}.</p>}
+        {messages.length === 0 && <p className="anim-up py-12 text-center text-sm text-muted">No messages yet. Say hello to {withName}.</p>}
         {messages.map((m) => {
           const k = dayKey(m.createdAt, timezone);
           const header = k !== lastDay;
@@ -74,7 +74,7 @@ export function MessageThread({ conversationId, withName, initial, timezone }: {
             <div key={m.id}>
               {header && <p className="my-2 text-center text-xs font-medium text-muted">{formatDay(m.createdAt, timezone)}</p>}
               <div className={cn("flex", m.mine ? "justify-end" : "justify-start")}>
-                <div className={cn("anim-scale max-w-[85%] rounded-lg px-3.5 py-2 sm:max-w-[70%]", m.mine ? "bg-accent text-onaccent" : "border border-line bg-surface2 text-ink")}>
+                <div className={cn("anim-up max-w-[85%] rounded-lg px-3.5 py-2 sm:max-w-[70%]", m.mine ? "rounded-br-sm bg-accent text-onaccent" : "rounded-bl-sm border border-line bg-surface2 text-ink")}>
                   <p className={cn("text-xs font-semibold", m.mine ? "text-onaccent/85" : "text-ink2")}>{m.mine ? "You" : m.senderName}</p>
                   <p className="whitespace-pre-wrap break-words text-[0.95rem]">{m.body}</p>
                   <time dateTime={m.createdAt} className={cn("mt-0.5 block text-right text-xs", m.mine ? "text-onaccent/80" : "text-muted")}>

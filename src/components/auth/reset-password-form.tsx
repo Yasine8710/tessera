@@ -38,7 +38,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit((v) => run(() => resetPasswordAction(v), "Password updated", () => setDone(true)))} className="space-y-4" noValidate>
+    <form onSubmit={handleSubmit((v) => run(() => resetPasswordAction(v), "Password updated", () => setDone(true)))} className="space-y-5 [&_label]:transition-colors [&_div:focus-within>label]:text-accent" noValidate>
       {error && (
         <Alert tone="danger" className="anim-up">
           {error}{" "}

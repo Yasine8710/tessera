@@ -10,8 +10,13 @@ test.use({ reducedMotion: "reduce" });
 const PUBLIC = ["/", "/login", "/register", "/register/patient", "/privacy", "/accessibility"];
 
 async function noHorizontalScroll(page: import("@playwright/test").Page) {
+  const where = page.url();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(overflow, "page scrolls horizontally").toBeLessThanOrEqual(1);
+  const wide = overflow > 1 ? await page.evaluate(() => {
+    const w = document.documentElement.clientWidth;
+    return [...document.querySelectorAll("body *")].filter((el) => el.getBoundingClientRect().right > w + 1 && ![...el.children].some((c) => c.getBoundingClientRect().right > w + 1)).slice(0, 5).map((el) => `${el.tagName}.${String(el.className).slice(0, 80)}`);
+  }) : [];
+  expect(overflow, `page scrolls horizontally: ${where} ${wide.join(" | ")}`).toBeLessThanOrEqual(1);
 }
 
 async function seriousViolations(page: import("@playwright/test").Page) {

@@ -22,18 +22,21 @@ export default async function PendingApprovalPage() {
   if (session.professionalId) redirect("/staff");
 
   return (
-    <AuthShell title="Your account is awaiting approval" description={<>Signed in as {session.email}.</>}>
+    <AuthShell title="Your account is awaiting approval" photo="waiting-room" focal="50% 50%" description={<>Signed in as {session.email}.</>}>
       <div className="space-y-6">
-        <ol aria-label="Approval progress" className="stagger rounded-lg border border-line bg-surface">
-          {STAGES.map((s) => (
-            <li key={s.label} className="flex items-center gap-3 border-b border-line px-4 py-3 last:border-b-0" aria-current={s.state === "current" ? "step" : undefined}>
+        <ol aria-label="Approval progress" className="stagger">
+          {STAGES.map((s, i) => (
+            <li key={s.label} className="relative flex items-center gap-4 border-t border-line py-4 last:border-b" aria-current={s.state === "current" ? "step" : undefined}>
+              <span className="w-6 text-sm font-semibold tabular-nums text-muted" aria-hidden>
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <span
                 className={
                   s.state === "done"
-                    ? "grid size-6 shrink-0 place-items-center rounded-full bg-ok text-bg"
+                    ? "grid size-5 shrink-0 place-items-center rounded-[3px] bg-ok text-bg"
                     : s.state === "current"
-                      ? "anim-pulse size-6 shrink-0 rounded-full border-2 border-accent bg-accent-soft"
-                      : "size-6 shrink-0 rounded-full border-2 border-line2"
+                      ? "anim-pulse size-5 shrink-0 rounded-[3px] border-2 border-accent bg-accent-soft"
+                      : "size-5 shrink-0 rounded-[3px] border-2 border-line2"
                 }
                 aria-hidden
               >

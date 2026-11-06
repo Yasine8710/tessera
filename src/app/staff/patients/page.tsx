@@ -1,9 +1,10 @@
 import { ChevronLeft, ChevronRight, Search, Users } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Card, EmptyState, PageHeader } from "@/components/ui/card";
+import { Badge, EmptyState } from "@/components/ui/card";
 import { Button, buttonClass } from "@/components/ui/button";
 import { Input } from "@/components/ui/form";
+import { Figure, Masthead } from "@/components/staff/editorial";
 import { first, fmtDay } from "@/components/staff/format";
 import { cn } from "@/lib/cn";
 import { listPatients } from "@/server/services/care";
@@ -31,40 +32,49 @@ export default async function PatientsPage({ searchParams }: { searchParams: SP 
   };
   return (
     <>
-      <PageHeader title="Patients" description="Patients with an active care relationship with you. You only see what each patient has chosen to share." />
-      <Card className="anim-fade mb-4 p-4">
-        <form role="search" className="flex flex-wrap items-center gap-2">
-          <label htmlFor="q" className="sr-only">Search by name or email</label>
-          <div className="relative min-w-56 flex-1">
-            <Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted" aria-hidden />
-            <Input id="q" name="q" defaultValue={q} placeholder="Search by name or email" className="pl-9" />
-          </div>
-          {sort !== "name" && <input type="hidden" name="sort" value={sort} />}
-          <Button type="submit">Search</Button>
-          {q && <Link href="/staff/patients" className={buttonClass({ variant: "ghost" })}>Clear</Link>}
-        </form>
-        <p className="mt-3 flex items-center gap-2 text-sm text-muted">
-          Sort:
-          {(["name", "recent"] as const).map((s) => (
-            <Link key={s} href={href(1, s)} aria-current={sort === s ? "true" : undefined} className={cn("rounded-md px-2 py-1 transition-colors hover:bg-surface2", sort === s && "bg-accent-soft font-medium text-accent-hover")}>
-              {s === "name" ? "Name" : "Most recently connected"}
-            </Link>
-          ))}
-        </p>
-      </Card>
+      <Masthead
+        eyebrow="Directory"
+        title="Patients"
+        description="Patients with an active care relationship with you. You only see what each patient has chosen to share."
+        photo="care-team"
+        focal="50% 30%"
+      />
+      <div className="anim-fade mb-6 grid items-end gap-x-10 gap-y-5 lg:grid-cols-[14rem_minmax(0,1fr)]">
+        <Figure size="sm" label="In your care" value={total} hint={q ? "Matching this search" : "Active relationships"} />
+        <div>
+          <form role="search" className="flex flex-wrap items-center gap-2">
+            <label htmlFor="q" className="sr-only">Search by name or email</label>
+            <div className="relative min-w-56 flex-1">
+              <Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted" aria-hidden />
+              <Input id="q" name="q" defaultValue={q} placeholder="Search by name or email" className="pl-9" />
+            </div>
+            {sort !== "name" && <input type="hidden" name="sort" value={sort} />}
+            <Button type="submit">Search</Button>
+            {q && <Link href="/staff/patients" className={buttonClass({ variant: "ghost" })}>Clear</Link>}
+          </form>
+          <p className="mt-3 flex items-center gap-2 text-sm text-muted">
+            Sort:
+            {(["name", "recent"] as const).map((s) => (
+              <Link key={s} href={href(1, s)} aria-current={sort === s ? "true" : undefined} className={cn("rounded-md px-2 py-1 transition-colors hover:bg-surface2", sort === s && "bg-accent-soft font-medium text-accent-hover")}>
+                {s === "name" ? "Name" : "Most recently connected"}
+              </Link>
+            ))}
+          </p>
+        </div>
+      </div>
 
-      <Card>
+      <div className="border-t-2 border-ink">
         {rows.length === 0 ? (
-          <EmptyState icon={Users} title={q ? "No patients match your search" : "No patients yet"} action={!q ? <Link href="/staff/invitations" className={buttonClass({})}>Invite a patient</Link> : undefined}>
+          <EmptyState icon={Users} photo={q ? undefined : "care-team"} title={q ? "No patients match your search" : "No patients yet"} action={!q ? <Link href="/staff/invitations" className={buttonClass({})}>Invite a patient</Link> : undefined}>
             {q ? "Check the spelling or clear the search." : "Invite a patient, or accept a connection request, to see them here."}
           </EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <caption className="sr-only">Patients with an active care relationship</caption>
-              <thead className="border-b border-line bg-surface2 text-xs uppercase tracking-wide text-muted">
+              <thead className="border-b border-line eyebrow">
                 <tr>
-                  <th scope="col" className="px-5 py-2.5 font-semibold">Patient</th>
+                  <th scope="col" className="py-2.5 pl-2 pr-3 font-semibold">Patient</th>
                   <th scope="col" className="hidden px-3 py-2.5 font-semibold sm:table-cell">Email</th>
                   <th scope="col" className="px-3 py-2.5 font-semibold">Status</th>
                   <th scope="col" className="hidden px-3 py-2.5 font-semibold md:table-cell">Connected</th>
@@ -74,8 +84,8 @@ export default async function PatientsPage({ searchParams }: { searchParams: SP 
               <tbody className="stagger divide-y divide-line">
                 {rows.map((r) => (
                   <tr key={r.id} className="group transition-colors hover:bg-surface2">
-                    <td className="px-5 py-3">
-                      <Link href={`/staff/patients/${r.patientId}`} className="font-medium text-ink group-hover:text-accent-hover">{r.patient.user.name}</Link>
+                    <td className="py-4 pl-2 pr-3">
+                      <Link href={`/staff/patients/${r.patientId}`} className="text-base font-medium text-ink underline decoration-line2 underline-offset-4 group-hover:text-accent-hover group-hover:decoration-accent">{r.patient.user.name}</Link>
                       <span className="block truncate text-muted sm:hidden">{r.patient.user.email}</span>
                     </td>
                     <td className="hidden max-w-64 truncate px-3 py-3 text-muted sm:table-cell">{r.patient.user.email}</td>
@@ -88,7 +98,7 @@ export default async function PatientsPage({ searchParams }: { searchParams: SP 
             </table>
           </div>
         )}
-      </Card>
+      </div>
 
       {pages > 1 && (
         <nav aria-label="Pagination" className="mt-4 flex items-center justify-between text-sm">

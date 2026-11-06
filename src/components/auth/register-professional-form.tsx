@@ -23,7 +23,7 @@ export function RegisterProfessionalForm() {
   } = useForm<RegisterProfessionalInput>({ resolver: zodResolver(registerProfessionalSchema), defaultValues: { timezone: "UTC", specialty: "" } });
 
   return (
-    <form onSubmit={handleSubmit((v) => run(() => registerProfessionalAction(v)))} className="stagger space-y-4" noValidate>
+    <form onSubmit={handleSubmit((v) => run(() => registerProfessionalAction(v)))} className="stagger space-y-5 [&_label]:transition-colors [&_div:focus-within>label]:text-accent" noValidate>
       {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
       <Field label="Full name" error={errors.name?.message}>
         {(a) => <Input autoComplete="name" {...a} {...register("name")} />}

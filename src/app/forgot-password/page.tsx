@@ -15,6 +15,8 @@ export default function ForgotPasswordPage() {
     return (
       <AuthShell
         title="Forgot your password?"
+        photo="blossom"
+        focal="50% 35%"
         description="Tessera on this computer has no email. Ask your administrator to create a one-time reset link for you (Administration, Users, Reset password)."
         footer={
           <Link href="/login" className={inlineLink}>
@@ -29,6 +31,8 @@ export default function ForgotPasswordPage() {
   return (
     <AuthShell
       title="Reset your password"
+      photo="blossom"
+      focal="50% 35%"
       description="Enter the email you registered with. If an account exists, we will send a link to choose a new password."
       footer={
         <Link href="/login" className={inlineLink}>

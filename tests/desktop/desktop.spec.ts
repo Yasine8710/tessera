@@ -100,13 +100,13 @@ test("database file is encrypted at rest and the local server rejects foreign ca
   expect(res.status).toBe(403);
 });
 
-test("renderer is isolated: only the notify/lock bridge is exposed", async () => {
+test("renderer is isolated: only the small app bridge is exposed", async () => {
   const seen = await page.evaluate(() => ({
     bridge: Object.keys((window as unknown as { tesseraDesktop: object }).tesseraDesktop).sort(),
     nodeRequire: typeof (window as unknown as { require?: unknown }).require,
     nodeProcess: typeof (window as unknown as { process?: unknown }).process,
   }));
-  expect(seen).toEqual({ bridge: ["notify", "onLock"], nodeRequire: "undefined", nodeProcess: "undefined" });
+  expect(seen).toEqual({ bridge: ["notify", "onLock", "setTheme", "showMenu"], nodeRequire: "undefined", nodeProcess: "undefined" });
 });
 
 test("patient registers without email verification", async () => {
@@ -231,6 +231,22 @@ test("backup, change data, restore brings the backup back", async () => {
   await expect(page.getByRole("alert").first()).toBeVisible();
   await signIn("pat@desk.invalid", NEW_PW);
   await page.waitForURL(PATIENT_HOME);
+  await signOut();
+});
+
+test("kiosk window: opens maximised with the page-drawn title bar and no Windows menu bar", async () => {
+  await signIn(ADMIN.email, ADMIN.password);
+  await page.waitForURL("**/admin");
+  const win = await app.evaluate(({ BrowserWindow }) => {
+    const w = BrowserWindow.getAllWindows()[0];
+    return { maximized: w.isMaximized(), menuBar: w.isMenuBarVisible(), title: w.getTitle() };
+  });
+  expect({ maximized: win.maximized, menuBar: win.menuBar }).toEqual({ maximized: true, menuBar: false });
+  expect(win.title).toContain("Tessera");
+  await expect(page.locator(".desktop-titlebar")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Application menu" })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-desktop", "");
+  await page.screenshot({ path: "results/design/desktop-kiosk-admin.png" });
   await signOut();
 });
 

@@ -6,10 +6,10 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap press select-none disabled:cursor-not-allowed disabled:opacity-55 disabled:active:scale-100";
 
 const variants = {
-  primary: "bg-accent text-onaccent shadow-sm hover:bg-accent-hover",
-  secondary: "bg-surface text-ink border border-line2 hover:bg-surface2 hover:border-ink/30",
+  primary: "bg-accent text-onaccent hover:bg-accent-hover",
+  secondary: "bg-transparent text-ink border border-line2 hover:bg-surface2 hover:border-ink/40",
   ghost: "text-ink2 hover:bg-surface2 hover:text-ink",
-  danger: "bg-danger text-onaccent shadow-sm hover:brightness-110",
+  danger: "bg-danger text-onaccent hover:brightness-110",
   dark: "bg-nav text-nav-ink hover:brightness-125",
 } as const;
 

@@ -23,7 +23,7 @@ export function SetupForm() {
   }
 
   return (
-    <form onSubmit={submit} className="stagger space-y-4" noValidate>
+    <form onSubmit={submit} className="stagger space-y-5 [&_label]:transition-colors [&_div:focus-within>label]:text-accent" noValidate>
       {(local || error) && <Alert tone="danger" className="anim-up">{local ?? error}</Alert>}
       <Field label="Your name">{(a) => <Input autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} {...a} />}</Field>
       <Field label="Email">{(a) => <Input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} {...a} />}</Field>

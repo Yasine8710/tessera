@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { Rule, Words } from "./editorial";
+import { wrap } from "./layout";
 
 const PRODUCT = [
   { href: "/#features", label: "Features" },
@@ -20,11 +22,16 @@ export function SiteFooter() {
   const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
   const github = process.env.NEXT_PUBLIC_GITHUB_URL;
   return (
-    <footer className="border-t border-line bg-surface">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <footer className="bg-surface">
+      <div className={`${wrap} pt-14 sm:pt-20`}>
+        <Words as="p" className="display-lg max-w-3xl" text="Connected care. Better everyday health." />
+        <div className="mt-10">
+          <Rule />
+        </div>
+      </div>
+      <div className={`${wrap} grid gap-10 py-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]`}>
         <div>
           <Logo />
-          <p className="mt-3 max-w-xs text-sm text-ink2">Connected care. Better everyday health.</p>
           <p className="mt-4 max-w-xs text-sm text-muted">
             Tessera is not an emergency service. If you may be having a medical emergency, contact your local emergency number now.
           </p>

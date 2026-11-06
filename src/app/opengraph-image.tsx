@@ -14,7 +14,7 @@ const LINE = "#dde1e8";
 export default function OpengraphImage() {
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: 96, background: BG, color: INK, borderLeft: `16px solid ${ACCENT}` }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: 96, background: BG, color: INK, borderTop: `12px solid ${ACCENT}` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <svg width="88" height="88" viewBox="0 0 64 64">
             <g fill={INK}>
@@ -27,7 +27,7 @@ export default function OpengraphImage() {
           </svg>
           <div style={{ fontSize: 64, fontWeight: 700 }}>Tessera</div>
         </div>
-        <div style={{ marginTop: 56, fontSize: 60, lineHeight: 1.15, maxWidth: 900, fontWeight: 600 }}>Better care starts with staying connected.</div>
+        <div style={{ marginTop: 56, fontSize: 76, lineHeight: 1.05, maxWidth: 1000, fontWeight: 600, letterSpacing: -2 }}>Better care starts with staying connected.</div>
         <div style={{ marginTop: 36, paddingTop: 28, borderTop: `2px solid ${LINE}`, fontSize: 30, color: MUTED }}>Medication, routines and follow-up in one place.</div>
       </div>
     ),

@@ -21,14 +21,14 @@ export function RolesTable() {
     <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Scrollable table">
       <table className="w-full min-w-[40rem] text-left text-sm">
         <caption className="sr-only">What each role can and cannot do</caption>
-        <thead className="border-b border-line bg-surface2 text-muted">
+        <thead className="border-b border-line2 text-muted [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-[0.12em]">
           <tr>
-            <th scope="col" className="px-5 py-2.5 font-medium">Role</th>
-            <th scope="col" className="px-5 py-2.5 font-medium">Can</th>
-            <th scope="col" className="px-5 py-2.5 font-medium">Cannot</th>
+            <th scope="col" className="px-5 py-3 font-medium">Role</th>
+            <th scope="col" className="px-5 py-3 font-medium">Can</th>
+            <th scope="col" className="px-5 py-3 font-medium">Cannot</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-line align-top">
+        <tbody className="stagger divide-y divide-line align-top">
           {ROLES.map((r) => (
             <tr key={r.role} className="transition-colors hover:bg-surface2/60">
               <th scope="row" className="px-5 py-3 font-semibold">{r.role}</th>

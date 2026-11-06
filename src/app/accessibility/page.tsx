@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Accessibility", description: "Tesser
 export default function AccessibilityPage() {
   const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
   return (
-    <LegalPage
+    <LegalPage photo="walk-coat" focal="50% 40%"
       title="Accessibility"
       updated="October 2026"
       intro="Tessera aims to be usable by as many people as possible, including people who use keyboards, screen readers, zoom or reduced motion."

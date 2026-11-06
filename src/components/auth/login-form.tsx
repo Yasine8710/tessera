@@ -25,7 +25,7 @@ export function LoginForm({ demo }: { demo: boolean }) {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit((v) => run(() => loginAction(v)))} className="stagger space-y-4" noValidate>
+      <form onSubmit={handleSubmit((v) => run(() => loginAction(v)))} className="stagger space-y-5 [&_label]:transition-colors [&_div:focus-within>label]:text-accent" noValidate>
         {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
         <Field label="Email" error={errors.email?.message}>
           {(a) => <Input type="email" autoComplete="email" inputMode="email" {...a} {...register("email")} />}

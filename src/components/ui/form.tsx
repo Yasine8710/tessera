@@ -34,7 +34,7 @@ export function Field({
   const desc = error ? `${id}-e` : hint ? `${id}-h` : undefined;
   return (
     <div className={cn("space-y-1.5", className)}>
-      <label htmlFor={id} className="block text-sm font-medium text-ink">
+      <label htmlFor={id} className="block text-[0.8rem] font-semibold tracking-wide text-ink2">
         {label}
       </label>
       {children({ id, "aria-describedby": desc, "aria-invalid": error ? true : undefined })}

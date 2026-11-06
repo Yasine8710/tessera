@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Building2 } from "lucide-react";
 import { AddMemberForm, CreateOrgForm } from "@/components/admin/org-forms";
 import { Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
 import { listOrganizations } from "@/server/services/admin";
@@ -11,15 +10,16 @@ export default async function OrganizationsPage() {
   const session = await requireSession("ADMIN");
   const orgs = await listOrganizations(session);
   return (
-    <div className="max-w-4xl space-y-6">
-      <PageHeader title="Organizations" description="Group professionals by clinic or practice. Add members by the email they registered with." />
-      <Card>
+    <div>
+      <PageHeader eyebrow="Administration" photo="waiting-room" focal="center 55%" title="Organizations" description="Group professionals by clinic or practice. Add members by the email they registered with." />
+      <Card className="mb-6">
         <CardHeader title="New organization" />
         <CreateOrgForm />
       </Card>
+      <div className="stagger grid items-start gap-6 xl:grid-cols-2">
       {orgs.length === 0 ? (
-        <Card>
-          <EmptyState icon={Building2} title="No organizations yet">Create the first one above.</EmptyState>
+        <Card className="xl:col-span-2">
+          <EmptyState photo="clinician-tablet" title="No organizations yet">Create the first one above.</EmptyState>
         </Card>
       ) : (
         orgs.map((o) => (
@@ -41,6 +41,7 @@ export default async function OrganizationsPage() {
           </Card>
         ))
       )}
+      </div>
     </div>
   );
 }

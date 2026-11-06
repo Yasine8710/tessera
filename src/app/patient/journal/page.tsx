@@ -1,11 +1,12 @@
-import { BookOpen, Eye, EyeOff } from "lucide-react";
+import { EditorialHeader, Plate } from "@/components/patient/editorial";
+import { Eye, EyeOff } from "lucide-react";
 import type { Metadata } from "next";
 import { fmtDateTimeYear, fmtMeasurement, MEASUREMENT_NAMES } from "@/components/patient/format";
 import { JournalForm } from "@/components/patient/journal-form";
 import { MeasurementForm, type Limits } from "@/components/patient/measurement-form";
 import { Pagination } from "@/components/patient/pagination";
 import { SelfReportNote } from "@/components/patient/self-report-note";
-import { Badge, Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
+import { Badge, Card, CardHeader, EmptyState } from "@/components/ui/card";
 import { MEASUREMENT_LIMITS } from "@/domain/rules";
 import { requireSession } from "@/server/session";
 import { listJournal, listMeasurements } from "@/server/services/patient";
@@ -25,7 +26,9 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Health journal" description="Keep notes and readings between visits. You choose what to share with your care team." />
+      <EditorialHeader eyebrow="Journal" title="Health journal" description="Keep notes and readings between visits. You choose what to share with your care team." />
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_17rem] 2xl:grid-cols-[minmax(0,1fr)_22rem] [&>*]:min-w-0">
+      <div className="space-y-6">
       <SelfReportNote />
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -74,10 +77,10 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
         )}
       </Card>
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader title="Journal history" description={journal.total ? `${journal.total} ${journal.total === 1 ? "entry" : "entries"}` : undefined} />
         {journal.rows.length === 0 ? (
-          <EmptyState icon={BookOpen} title="No journal entries yet">
+          <EmptyState photo="blossom" title="No journal entries yet">
             Your entries will be listed here, newest first.
           </EmptyState>
         ) : (
@@ -114,6 +117,13 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
         )}
         <Pagination page={journal.page} pageSize={journal.pageSize} total={journal.total} href={(p) => `/patient/journal?page=${p}`} />
       </Card>
+      </div>
+      <aside className="hidden xl:block" aria-hidden>
+        <div className="sticky top-0">
+          <Plate name="blossom" focal="50% 40%" caption="Notes for yourself" className="[&>div]:h-[28rem] 2xl:[&>div]:h-[34rem]" />
+        </div>
+      </aside>
+    </div>
     </div>
   );
 }

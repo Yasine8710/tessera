@@ -15,8 +15,8 @@ export async function NotificationsView({ session }: { session: Session }) {
     createdAt: n.createdAt.toISOString(),
   }));
   return (
-    <div className="max-w-3xl">
-      <PageHeader title="Notifications" description="Your most recent in-app notifications." />
+    <div className="max-w-4xl">
+      <PageHeader eyebrow="Account" title="Notifications" description="Your most recent in-app notifications." />
       <Alert className="mb-5">
         <span className="inline-flex items-center gap-1.5">
           <Info className="size-4" aria-hidden />

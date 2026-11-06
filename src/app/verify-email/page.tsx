@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Verify your email", robots: { index:
 export default async function VerifyEmailPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const { token } = await searchParams;
   return (
-    <AuthShell title="Verify your email" description="Confirm that this address belongs to you.">
+    <AuthShell title="Verify your email" photo="colleagues" focal="50% 40%" description="Confirm that this address belongs to you.">
       {token ? (
         <VerifyEmailButton token={token} />
       ) : (

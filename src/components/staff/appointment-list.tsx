@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Badge, Card, EmptyState, type Tone } from "@/components/ui/card";
+import { Badge, EmptyState, type Tone } from "@/components/ui/card";
+import type { PhotoName } from "@/lib/photos";
 import { canTransitionAppointment, type AppointmentStatus } from "@/domain/rules";
 import { AppointmentActions, type ApptAction } from "./appointment-forms";
 import { APPT_LABEL, fmtDateTime } from "./format";
@@ -33,16 +34,18 @@ export function allowedActions(status: AppointmentStatus): ApptAction[] {
   return out;
 }
 
-export function AppointmentList({ rows, tz, showPatient, empty }: { rows: ApptRow[]; tz: string; showPatient?: boolean; empty: string }) {
-  if (rows.length === 0) return <Card><EmptyState title={empty} /></Card>;
+export function AppointmentList({ rows, tz, showPatient, empty, photo }: { rows: ApptRow[]; tz: string; showPatient?: boolean; empty: string; photo?: PhotoName }) {
+  if (rows.length === 0) return <EmptyState title={empty} photo={photo} />;
   return (
-    <Card>
-      <ul className="stagger divide-y divide-line">
+    <div>
+      <ul className="stagger divide-y divide-line border-b border-line">
         {rows.map((a) => (
-          <li key={a.id} className="space-y-2 px-5 py-4 transition-colors hover:bg-surface2/60">
+          <li key={a.id} className="flex gap-4 py-4 pr-2 transition-colors hover:bg-surface2/60 sm:pl-2">
+            <DateLeaf date={a.startsAt} tz={tz} />
+            <div className="min-w-0 flex-1 space-y-2">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="font-medium">{a.title}</p>
+                <p className="text-base font-medium">{a.title}</p>
                 <p className="text-sm text-ink2">
                   {fmtDateTime(a.startsAt, tz)} to {new Intl.DateTimeFormat("en-GB", { timeStyle: "short", timeZone: tz }).format(a.endsAt)}
                   {a.location ? ` · ${a.location}` : ""}
@@ -57,9 +60,22 @@ export function AppointmentList({ rows, tz, showPatient, empty }: { rows: ApptRo
               <p className="rounded-md border border-line bg-surface px-3 py-2 text-sm"><span className="font-medium">Shared with the patient: </span>{a.sharedNotes}</p>
             )}
             <AppointmentActions id={a.id} title={a.title} tz={tz} actions={allowedActions(a.status)} />
+            </div>
           </li>
         ))}
       </ul>
-    </Card>
+    </div>
+  );
+}
+
+/** Day numeral and month, set like a calendar leaf. Decorative: the full date is in the row text. */
+function DateLeaf({ date, tz }: { date: Date; tz: string }) {
+  const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", timeZone: tz }).format(date);
+  const mon = new Intl.DateTimeFormat("en-GB", { month: "short", timeZone: tz }).format(date);
+  return (
+    <div aria-hidden className="hidden w-14 shrink-0 border-r border-line pr-4 text-right sm:block">
+      <p className="text-3xl font-semibold leading-none tabular-nums">{day}</p>
+      <p className="eyebrow mt-1">{mon}</p>
+    </div>
   );
 }

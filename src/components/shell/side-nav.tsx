@@ -15,38 +15,42 @@ function Items({ items, onNavigate, dark }: { items: NavItem[]; onNavigate?: () 
   const path = usePathname();
   const group = useId();
   return (
-    <nav aria-label="Main" className="flex-1 space-y-0.5 overflow-y-auto px-3 py-2">
-      {items.map((i) => {
-        const active = i.exact ? path === i.href : path === i.href || path.startsWith(`${i.href}/`);
-        const Icon = icons[i.icon];
-        return (
-          <Link
-            key={i.href}
-            href={i.href}
-            onClick={onNavigate}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              "group relative flex items-center gap-3 rounded-md px-3 py-2 text-[0.92rem]",
-              dark
-                ? active ? "font-medium text-white" : "text-nav-ink/85 hover:bg-white/8 hover:text-white"
-                : active ? "font-medium text-accent" : "text-ink2 hover:bg-surface2 hover:text-ink",
-            )}
-          >
-            {active && (
-              <motion.span
-                layoutId={`nav-active-${group}`}
-                aria-hidden
-                className={cn("absolute inset-0 rounded-md", dark ? "bg-white/10" : "bg-accent-soft")}
-                transition={{ type: "spring", stiffness: 500, damping: 40 }}
-              >
-                <span className="absolute inset-y-1.5 left-0 w-0.5 rounded-full bg-accent" />
-              </motion.span>
-            )}
-            <Icon className="relative size-[1.1rem] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
-            <span className="relative">{i.label}</span>
-          </Link>
-        );
-      })}
+    <nav aria-label="Main" className="flex-1 overflow-y-auto px-5 py-2">
+      <p aria-hidden className={cn("eyebrow pb-2", dark && "text-nav-ink/60!")}>
+        Menu
+      </p>
+      <div className="stagger">
+        {items.map((i) => {
+          const active = i.exact ? path === i.href : path === i.href || path.startsWith(`${i.href}/`);
+          const Icon = icons[i.icon];
+          return (
+            <Link
+              key={i.href}
+              href={i.href}
+              onClick={onNavigate}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "group relative flex items-center gap-3 border-t py-2.5 pl-3 text-[0.92rem]",
+                dark ? "border-white/10" : "border-line",
+                dark
+                  ? active ? "font-semibold text-white" : "text-nav-ink/80 hover:text-white"
+                  : active ? "font-semibold text-ink" : "text-ink2 hover:text-ink",
+              )}
+            >
+              {active && (
+                <motion.span
+                  layoutId={`nav-active-${group}`}
+                  aria-hidden
+                  className={cn("absolute -top-px bottom-0 left-0 w-0.5", dark ? "bg-white" : "bg-accent")}
+                  transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                />
+              )}
+              <Icon className={cn("size-4 shrink-0 transition-all duration-200 group-hover:translate-x-0.5", !active && "opacity-70 group-hover:opacity-100")} aria-hidden />
+              <span>{i.label}</span>
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 }
@@ -98,16 +102,16 @@ export function SideNav({
         aria-label={title}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between border-b border-line px-4 py-3">
-            <span className="font-semibold">{title}</span>
+          <div className="flex items-center justify-between border-b border-line px-5 py-4">
+            <span className="eyebrow text-ink2!">{title}</span>
             <button type="button" className="press inline-flex size-9 items-center justify-center rounded-md hover:bg-surface2" aria-label="Close menu" onClick={() => ref.current?.close()}>
               <X className="size-5" aria-hidden />
             </button>
           </div>
           <Items items={items} onNavigate={() => ref.current?.close()} />
-          <div className="flex items-center justify-between gap-2 border-t border-line p-4 text-sm">
+          <div className="flex items-center justify-between gap-2 border-t border-line px-5 py-4 text-sm">
             <div className="min-w-0">
-              <p className="mb-2 truncate font-medium">{name}</p>
+              <p className="mb-2 truncate text-base font-semibold tracking-tight">{name}</p>
               <form action={logout}>
                 <button className="press inline-flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface2">
                   <LogOut className="size-4" aria-hidden /> Sign out

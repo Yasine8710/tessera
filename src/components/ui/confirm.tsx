@@ -31,12 +31,13 @@ export function ConfirmButton({
         {label}
       </Button>
       <dialog ref={ref} aria-labelledby={titleId}>
-        <div className="p-6">
-          <h2 id={titleId} className="text-lg font-semibold">
+        <div className="p-7">
+          <span aria-hidden className="anim-grow-x mb-4 block h-px w-10 bg-danger" />
+          <h2 id={titleId} className="text-xl font-semibold tracking-tight">
             {title}
           </h2>
-          <p className="mt-2 text-ink2">{message}</p>
-          <div className="mt-6 flex justify-end gap-2">
+          <p className="mt-2.5 text-ink2">{message}</p>
+          <div className="mt-8 flex justify-end gap-2 border-t border-line pt-5">
             <Button type="button" variant="secondary" onClick={() => ref.current?.close()}>
               Cancel
             </Button>

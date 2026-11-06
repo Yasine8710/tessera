@@ -17,23 +17,24 @@ export async function SettingsView({ session }: { session: Session }) {
   };
   const role = session.role === "PATIENT" ? "Patient" : "Verified professional";
   return (
-    <div className="max-w-3xl space-y-6">
-      <PageHeader title="Settings" description="Your profile, time zone and notification choices." />
+    <div className="max-w-5xl">
+      <PageHeader eyebrow="Account" photo="walk-autumn" focal="center 60%" title="Settings" description="Your profile, time zone and notification choices." />
+      <div className="stagger space-y-6">
 
       <Card>
         <CardHeader title="Profile" />
         <dl className="grid gap-4 px-5 py-4 text-sm sm:grid-cols-3">
           <div>
-            <dt className="text-muted">Name</dt>
-            <dd className="mt-0.5 font-medium">{session.name}</dd>
+            <dt className="eyebrow">Name</dt>
+            <dd className="mt-1.5 font-medium">{session.name}</dd>
           </div>
           <div className="min-w-0">
-            <dt className="text-muted">Email</dt>
-            <dd className="mt-0.5 break-words font-medium">{session.email}</dd>
+            <dt className="eyebrow">Email</dt>
+            <dd className="mt-1.5 break-words font-medium">{session.email}</dd>
           </div>
           <div>
-            <dt className="text-muted">Account</dt>
-            <dd className="mt-0.5 flex flex-wrap items-center gap-2">
+            <dt className="eyebrow">Account</dt>
+            <dd className="mt-1.5 flex flex-wrap items-center gap-2">
               <Badge tone="accent">{role}</Badge>
               <Badge tone={session.emailVerified ? "ok" : "warn"}>{session.emailVerified ? "Email verified" : "Email not verified"}</Badge>
             </dd>
@@ -59,6 +60,7 @@ export async function SettingsView({ session }: { session: Session }) {
         <CardHeader title="Danger zone" description="Delete your account" />
         <DeleteAccount />
       </Card>
+      </div>
     </div>
   );
 }

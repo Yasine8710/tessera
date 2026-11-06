@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Terms of use", description: "The ter
 
 export default function TermsPage() {
   return (
-    <LegalPage
+    <LegalPage photo="meds-table" focal="50% 55%"
       title="Terms of use"
       updated="October 2026"
       intro="By creating an account you agree to these terms. They are written in plain language. The operator of this instance may add terms of their own."

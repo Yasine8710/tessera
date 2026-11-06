@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ScrollText } from "lucide-react";
 import { Pager } from "@/components/admin/pagination";
 import { formatDateTime } from "@/components/account/format";
 import { Button, LinkButton } from "@/components/ui/button";
@@ -19,7 +18,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
 
   return (
     <div>
-      <PageHeader title="Audit log" description="Security and administrative events. Metadata keys are listed, values are not shown." />
+      <PageHeader eyebrow="Administration" photo="clinician-tablet" focal="center 40%" title="Audit log" description="Security and administrative events. Metadata keys are listed, values are not shown." />
       <Card>
         <form method="get" action="/admin/audit" role="search" className="flex flex-wrap items-end gap-3 border-b border-line px-5 py-4">
           <div className="min-w-48 flex-1">
@@ -30,21 +29,21 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           {action && <LinkButton href="/admin/audit" variant="ghost">Clear</LinkButton>}
         </form>
         {rows.length === 0 ? (
-          <EmptyState icon={ScrollText} title="No events found">{action ? "No events match this prefix." : "Events will appear as people use the platform."}</EmptyState>
+          <EmptyState photo="blossom" title="No events found">{action ? "No events match this prefix." : "Events will appear as people use the platform."}</EmptyState>
         ) : (
           <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Scrollable table">
             <table className="w-full min-w-[46rem] text-left text-sm">
               <caption className="sr-only">Audit events, newest first</caption>
-              <thead className="border-b border-line bg-surface2 text-muted">
+              <thead className="border-b border-line2 text-muted [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-[0.12em]">
                 <tr>
-                  <th scope="col" className="px-5 py-2.5 font-medium">Time</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Who</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Action</th>
-                  <th scope="col" className="px-3 py-2.5 font-medium">Entity</th>
-                  <th scope="col" className="px-5 py-2.5 font-medium">Metadata keys</th>
+                  <th scope="col" className="px-5 py-3 font-medium">Time</th>
+                  <th scope="col" className="px-3 py-3 font-medium">Who</th>
+                  <th scope="col" className="px-3 py-3 font-medium">Action</th>
+                  <th scope="col" className="px-3 py-3 font-medium">Entity</th>
+                  <th scope="col" className="px-5 py-3 font-medium">Metadata keys</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line">
+              <tbody className="stagger divide-y divide-line">
                 {rows.map((r) => {
                   const keys = r.metadata && typeof r.metadata === "object" && !Array.isArray(r.metadata) ? Object.keys(r.metadata) : [];
                   return (

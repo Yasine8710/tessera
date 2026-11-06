@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Choose a new password", robots: { in
 export default async function ResetPasswordPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const { token } = await searchParams;
   return (
-    <AuthShell title="Choose a new password" description="Pick a password you do not use anywhere else.">
+    <AuthShell title="Choose a new password" photo="meds-table" focal="50% 55%" description="Pick a password you do not use anywhere else.">
       {token ? (
         <ResetPasswordForm token={token} />
       ) : (

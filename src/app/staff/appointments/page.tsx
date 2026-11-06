@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { AppointmentList, type ApptRow } from "@/components/staff/appointment-list";
-import { PageHeader } from "@/components/ui/card";
+import { Figure, Masthead } from "@/components/staff/editorial";
 import { listAppointments } from "@/server/services/patient";
 import { requireSession } from "@/server/session";
 
@@ -20,18 +20,29 @@ export default async function StaffAppointmentsPage() {
   const tz = session.timezone;
   return (
     <>
-      <PageHeader title="Appointments" description={`Times are shown in your timezone (${tz}). Patients are notified of every change. Schedule new appointments from a patient's profile.`} />
-      <div className="space-y-8">
+      <Masthead
+        eyebrow="Schedule"
+        title="Appointments"
+        description={`Times are shown in your timezone (${tz}). Patients are notified of every change. Schedule new appointments from a patient's profile.`}
+        photo="waiting-room"
+        focal="50% 55%"
+      />
+      <div className="stagger mb-10 grid gap-x-8 gap-y-5 sm:grid-cols-3">
+        <Figure size="sm" label="Needs action" value={needs.length} tone={needs.length ? "warn" : undefined} />
+        <Figure size="sm" label="Upcoming" value={upcoming.length} />
+        <Figure size="sm" label="Past and closed" value={past.length} />
+      </div>
+      <div className="space-y-10">
         <section aria-labelledby="needs">
-          <h2 id="needs" className="mb-3 text-lg font-semibold">Needs action ({needs.length})</h2>
+          <h2 id="needs" className="mb-3 border-t-2 border-ink pt-3 text-xl font-semibold tracking-tight">Needs action ({needs.length})</h2>
           <AppointmentList rows={needs} tz={tz} showPatient empty="Nothing needs your attention" />
         </section>
         <section aria-labelledby="up">
-          <h2 id="up" className="mb-3 text-lg font-semibold">Upcoming ({upcoming.length})</h2>
-          <AppointmentList rows={upcoming} tz={tz} showPatient empty="No upcoming confirmed appointments" />
+          <h2 id="up" className="mb-3 border-t-2 border-ink pt-3 text-xl font-semibold tracking-tight">Upcoming ({upcoming.length})</h2>
+          <AppointmentList rows={upcoming} tz={tz} showPatient empty="No upcoming confirmed appointments" photo="consult-smile" />
         </section>
         <section aria-labelledby="past">
-          <h2 id="past" className="mb-3 text-lg font-semibold">Past and closed ({past.length})</h2>
+          <h2 id="past" className="mb-3 border-t-2 border-ink pt-3 text-xl font-semibold tracking-tight">Past and closed ({past.length})</h2>
           <AppointmentList rows={past} tz={tz} showPatient empty="No past appointments" />
         </section>
       </div>

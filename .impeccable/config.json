@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "desktop/splash.html"
+        ],
+        "createdAt": "2026-11-06T14:19:54.668Z",
+        "reason": "assistant decided: the sliding element is a short indeterminate loading bar on the launch splash, not auto-scrolling content"
+      }
+    ]
+  }
+}

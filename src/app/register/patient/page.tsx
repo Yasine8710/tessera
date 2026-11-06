@@ -16,6 +16,8 @@ export default async function RegisterPatientPage() {
       title="Create a patient account"
       description="Free to use. Nothing is shared with anyone unless you choose to."
       wide
+      photo="walk-autumn"
+      focal="50% 45%"
       footer={
         <p>
           Medical professional?{" "}
