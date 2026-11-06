@@ -3,7 +3,7 @@ import { INVITATION_TTL_DAYS, dedupeKey, invitationUsable } from "@/domain/rules
 import { inviteSchema } from "@/lib/schemas";
 import { type Actor, requirePatient, requireProfessional } from "../access";
 import { audit } from "../audit";
-import { db } from "../db";
+import { db, type Tx } from "../db";
 import { conflict, forbidden, invalid, notFound } from "../errors";
 import { appUrl, sendMail } from "../mail";
 import { hashToken, newToken } from "../security";
@@ -13,7 +13,7 @@ export const CONSENT_TYPES: ConsentType[] = ["JOURNAL", "MEASUREMENTS", "ROUTINE
 export type ConsentChoice = Partial<Record<ConsentType, boolean>>;
 
 async function activateRelationship(
-  tx: Prisma.TransactionClient,
+  tx: Tx,
   patientId: string,
   professionalId: string,
   initiatedBy: "PATIENT" | "PROFESSIONAL",
@@ -292,7 +292,7 @@ export async function listPatients(actor: Actor, query: PatientListQuery = {}) {
     professionalId,
     status: "ACTIVE",
     ...(query.q
-      ? { patient: { user: { OR: [{ name: { contains: query.q, mode: "insensitive" } }, { email: { contains: query.q, mode: "insensitive" } }] } } }
+      ? { patient: { user: { OR: [{ name: { contains: query.q } }, { email: { contains: query.q } }] } } }
       : {}),
   };
   const [total, rows] = await Promise.all([

@@ -233,7 +233,7 @@ export async function teamReport(actor: Actor, days: number, now = new Date()) {
   });
   const symptomPatients = await consentedPatientIds(professionalId, "JOURNAL");
   const symptomEntries = symptomPatients.length
-    ? await db.journalEntry.count({ where: { patientId: { in: symptomPatients }, sharedWithTeam: true, recordedAt: { gte: from }, symptoms: { isEmpty: false } } })
+    ? (await db.journalEntry.findMany({ where: { patientId: { in: symptomPatients }, sharedWithTeam: true, recordedAt: { gte: from } }, select: { symptoms: true } })).filter((e) => e.symptoms.length > 0).length
     : 0;
   const routinePatients = await consentedPatientIds(professionalId, "ROUTINES");
   const completions = routinePatients.length

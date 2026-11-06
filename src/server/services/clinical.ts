@@ -10,14 +10,14 @@ import {
 } from "@/lib/schemas";
 import { type Actor, assertPatientAccess, requirePatient, requireProfessional } from "../access";
 import { audit } from "../audit";
-import { db } from "../db";
+import { db, createIntakesIfMissing, type Tx } from "../db";
 import { conflict, forbidden, invalid, notFound } from "../errors";
 import { notify } from "./notifications";
 
 const day = (s: string) => new Date(`${s}T00:00:00.000Z`);
 const dayStr = (d: Date) => d.toISOString().slice(0, 10);
 
-async function snapshot(tx: Prisma.TransactionClient, planId: string) {
+async function snapshot(tx: Tx, planId: string) {
   const p = await tx.carePlan.findUniqueOrThrow({
     where: { id: planId },
     include: { medications: { include: { medication: true } } },
@@ -39,7 +39,7 @@ async function snapshot(tx: Prisma.TransactionClient, planId: string) {
   };
 }
 
-async function bumpVersion(tx: Prisma.TransactionClient, planId: string, authorId: string, reason: string) {
+async function bumpVersion(tx: Tx, planId: string, authorId: string, reason: string) {
   const plan = await tx.carePlan.update({ where: { id: planId }, data: { version: { increment: 1 } } });
   await tx.carePlanVersion.create({
     data: { planId, version: plan.version, snapshot: await snapshot(tx, planId), reason, authorId },
@@ -205,8 +205,7 @@ export async function ensureIntakes(patientId: string, now = new Date()) {
       from,
       to,
     );
-    if (times.length)
-      await db.medicationIntake.createMany({ data: times.map((scheduledFor) => ({ planId: plan.id, scheduledFor })), skipDuplicates: true });
+    await createIntakesIfMissing(plan.id, times);
   }
 }
 

@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -173,7 +173,7 @@ model PatientProfile {
   id               String    @id @default(cuid())
   userId           String    @unique
   user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  dateOfBirth      DateTime? @db.Date
+  dateOfBirth      DateTime?
   phone            String?
   emergencyContact String?
   createdAt        DateTime  @default(now())
@@ -294,8 +294,8 @@ model CarePlan {
   professional   ProfessionalProfile @relation(fields: [professionalId], references: [id])
   title          String
   instructions   String
-  startDate      DateTime            @db.Date
-  endDate        DateTime?           @db.Date
+  startDate      DateTime           
+  endDate        DateTime?          
   status         PlanStatus          @default(ACTIVE)
   version        Int                 @default(1)
   createdAt      DateTime            @default(now())
@@ -333,10 +333,10 @@ model MedicationPlan {
   dose           String
   route          String?
   instructions   String?
-  timesOfDay     String[]
-  daysOfWeek     Int[]
-  startDate      DateTime       @db.Date
-  endDate        DateTime?      @db.Date
+  timesOfDay     Json     @default("[]")
+  daysOfWeek     Json     @default("[]")
+  startDate      DateTime      
+  endDate        DateTime?     
   status         PlanStatus     @default(ACTIVE)
   createdAt      DateTime       @default(now())
 
@@ -383,7 +383,7 @@ model RoutineDefinition {
   title            String
   kind             RoutineKind
   clinicianDefined Boolean        @default(false)
-  daysOfWeek       Int[]
+  daysOfWeek       Json @default("[]")
   timeOfDay        String?
   active           Boolean        @default(true)
   createdAt        DateTime       @default(now())
@@ -430,7 +430,7 @@ model JournalEntry {
   recordedAt     DateTime
   wellbeing      Int?
   painScore      Int?
-  symptoms       String[]
+  symptoms       Json     @default("[]")
   text           String?
   sharedWithTeam Boolean        @default(true)
   createdAt      DateTime       @default(now())

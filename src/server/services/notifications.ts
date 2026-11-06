@@ -2,7 +2,7 @@ import { Prisma, type NotificationType } from "@prisma/client";
 import { dedupeKey, effectiveIntakeStatus } from "@/domain/rules";
 import { expandSchedule, localDateString } from "@/domain/schedule";
 import type { Actor } from "../access";
-import { db } from "../db";
+import { db, createIntakesIfMissing } from "../db";
 
 const PREF_FIELD: Partial<Record<NotificationType, "doseReminders" | "missedAlerts" | "routineReminders" | "appointmentAlerts" | "messageAlerts">> = {
   DOSE_DUE: "doseReminders",
@@ -101,12 +101,7 @@ export async function runReminderJob(now = new Date()) {
       lookback,
       horizon,
     );
-    if (times.length) {
-      await db.medicationIntake.createMany({
-        data: times.map((scheduledFor) => ({ planId: plan.id, scheduledFor })),
-        skipDuplicates: true,
-      });
-    }
+    await createIntakesIfMissing(plan.id, times);
     const intakes = await db.medicationIntake.findMany({ where: { planId: plan.id, scheduledFor: { gte: lookback, lt: horizon } } });
     for (const it of intakes) {
       if (it.status !== "SCHEDULED") continue;

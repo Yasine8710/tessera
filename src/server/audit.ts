@@ -1,7 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { db } from "./db";
-
-type Tx = Prisma.TransactionClient | typeof db;
+import { db, type Tx } from "./db";
 
 /**
  * Records who did what and when. Callers must pass identifiers and

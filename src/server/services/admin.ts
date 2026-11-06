@@ -18,7 +18,7 @@ export async function listUsers(actor: Actor, opts: { q?: string; status?: Accou
   const where = {
     deletedAt: null,
     ...(opts.status ? { status: opts.status } : {}),
-    ...(opts.q ? { OR: [{ name: { contains: opts.q, mode: "insensitive" as const } }, { email: { contains: opts.q, mode: "insensitive" as const } }] } : {}),
+    ...(opts.q ? { OR: [{ name: { contains: opts.q } }, { email: { contains: opts.q } }] } : {}),
   };
   const [total, rows] = await Promise.all([
     db.user.count({ where }),
