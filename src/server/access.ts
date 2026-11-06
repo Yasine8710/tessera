@@ -8,6 +8,7 @@ export type Actor = {
   timezone: string;
   patientId?: string; // PatientProfile.id
   professionalId?: string; // ProfessionalProfile.id (only set when verified + ACTIVE)
+  isDemo?: boolean; // shared public demo account: read-only and limited to demo data
 };
 
 export function requirePatient(actor: Actor): string {
@@ -23,6 +24,12 @@ export function requireProfessional(actor: Actor): string {
 
 export function requireAdmin(actor: Actor): void {
   if (actor.role !== "ADMIN") throw forbidden("Administrator access required.");
+}
+
+/** For every administrator action that changes something. The public demo administrator can only look. */
+export function requireWritableAdmin(actor: Actor): void {
+  requireAdmin(actor);
+  if (actor.isDemo) throw forbidden("The demo administrator is read-only.");
 }
 
 /**

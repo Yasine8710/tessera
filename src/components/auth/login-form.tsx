@@ -48,7 +48,7 @@ export function LoginForm({ demo }: { demo: boolean }) {
             Try the demo
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Sign in to a shared demo account. All data in it is synthetic and for illustration only. Do not enter real personal or health information.
+            Sign in to a shared demo account for each role. All data in it is synthetic and for illustration only, and the demo administrator can only look, not change anything. Do not enter real personal or health information.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button type="button" variant="secondary" disabled={pending} onClick={() => run(() => demoLoginAction("patient"))}>
@@ -56,6 +56,9 @@ export function LoginForm({ demo }: { demo: boolean }) {
             </Button>
             <Button type="button" variant="secondary" disabled={pending} onClick={() => run(() => demoLoginAction("staff"))}>
               Demo as medical staff
+            </Button>
+            <Button type="button" variant="secondary" disabled={pending} onClick={() => run(() => demoLoginAction("admin"))}>
+              Demo as administrator
             </Button>
           </div>
         </section>

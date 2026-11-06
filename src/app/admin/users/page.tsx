@@ -65,7 +65,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
               </thead>
               <tbody className="divide-y divide-line">
                 {rows.map((u) => {
-                  const canToggle = u.role !== "ADMIN" && u.id !== session.userId && u.status !== "PENDING_APPROVAL";
+                  const canToggle = !session.isDemo && u.role !== "ADMIN" && u.id !== session.userId && u.status !== "PENDING_APPROVAL";
                   return (
                     <tr key={u.id} className="transition-colors hover:bg-surface2/60">
                       <td className="px-5 py-3">

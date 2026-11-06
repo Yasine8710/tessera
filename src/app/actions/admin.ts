@@ -29,6 +29,10 @@ export async function addOrgMemberAction(orgId: string, email: string, title?: s
   return act((s) => admin.addOrgMember(s, orgId, email.trim(), title?.trim() || undefined));
 }
 
+export async function setDemoEnabledAction(enabled: boolean): Promise<ActionResult> {
+  return act((s) => admin.setSetting(s, "demoEnabled", enabled));
+}
+
 export async function setStaleDaysAction(days: number): Promise<ActionResult> {
   return act((s) => admin.setSetting(s, "staleDays", days));
 }

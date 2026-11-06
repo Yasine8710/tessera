@@ -5,6 +5,7 @@ import { AuthShell } from "@/components/auth/auth-shell";
 import { inlineLink } from "@/components/auth/link-styles";
 import { LoginForm } from "@/components/auth/login-form";
 import { isDesktop } from "@/server/desktop";
+import { demoAvailable } from "@/server/services/demo";
 import { adminExists } from "@/server/services/auth";
 import { getSession, homeFor } from "@/server/session";
 
@@ -14,7 +15,7 @@ export default async function LoginPage() {
   if (isDesktop() && !(await adminExists())) redirect("/setup");
   const session = await getSession();
   if (session) redirect(homeFor(session.role));
-  const demo = process.env.DEMO_MODE === "true";
+  const demo = await demoAvailable();
   return (
     <AuthShell
       title="Sign in"

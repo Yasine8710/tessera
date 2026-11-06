@@ -1,5 +1,5 @@
 import type { AccountStatus } from "@prisma/client";
-import { type Actor, requireAdmin } from "../access";
+import { type Actor, requireAdmin, requireWritableAdmin } from "../access";
 import { audit } from "../audit";
 import { db } from "../db";
 import { conflict, forbidden, invalid, notFound } from "../errors";
@@ -18,6 +18,7 @@ export async function listUsers(actor: Actor, opts: { q?: string; status?: Accou
   const page = Math.max(opts.page ?? 1, 1);
   const where = {
     deletedAt: null,
+    ...(actor.isDemo ? { isDemo: true } : {}),
     ...(opts.status ? { status: opts.status } : {}),
     ...(opts.q ? { OR: [{ name: { contains: opts.q } }, { email: { contains: opts.q } }] } : {}),
   };
@@ -37,14 +38,14 @@ export async function listUsers(actor: Actor, opts: { q?: string; status?: Accou
 export async function pendingProfessionals(actor: Actor) {
   requireAdmin(actor);
   return db.user.findMany({
-    where: { role: "PROFESSIONAL", status: "PENDING_APPROVAL", deletedAt: null },
+    where: { role: "PROFESSIONAL", status: "PENDING_APPROVAL", deletedAt: null, ...(actor.isDemo ? { isDemo: true } : {}) },
     orderBy: { createdAt: "asc" },
     select: { id: true, name: true, email: true, createdAt: true, emailVerifiedAt: true, professionalProfile: true },
   });
 }
 
 export async function approveProfessional(actor: Actor, userId: string) {
-  requireAdmin(actor);
+  requireWritableAdmin(actor);
   const u = await db.user.findFirst({ where: { id: userId, role: "PROFESSIONAL" }, include: { professionalProfile: true } });
   if (!u?.professionalProfile) throw notFound();
   if (u.status !== "PENDING_APPROVAL") throw conflict("This account is not awaiting approval.");
@@ -57,7 +58,7 @@ export async function approveProfessional(actor: Actor, userId: string) {
 }
 
 export async function rejectProfessional(actor: Actor, userId: string) {
-  requireAdmin(actor);
+  requireWritableAdmin(actor);
   const u = await db.user.findFirst({ where: { id: userId, role: "PROFESSIONAL", status: "PENDING_APPROVAL" } });
   if (!u) throw notFound();
   await db.user.update({ where: { id: userId }, data: { status: "SUSPENDED" } });
@@ -65,7 +66,7 @@ export async function rejectProfessional(actor: Actor, userId: string) {
 }
 
 export async function setUserStatus(actor: Actor, userId: string, status: "ACTIVE" | "SUSPENDED") {
-  requireAdmin(actor);
+  requireWritableAdmin(actor);
   if (userId === actor.userId) throw invalid("You cannot change your own status.");
   const u = await db.user.findUnique({ where: { id: userId } });
   if (!u) throw notFound();
@@ -85,7 +86,7 @@ export async function listAudit(actor: Actor, opts: { action?: string; page?: nu
   requireAdmin(actor);
   const pageSize = 50;
   const page = Math.max(opts.page ?? 1, 1);
-  const where = opts.action ? { action: { startsWith: opts.action } } : {};
+  const where = { ...(opts.action ? { action: { startsWith: opts.action } } : {}), ...(actor.isDemo ? { actor: { isDemo: true } } : {}) };
   const [total, rows] = await Promise.all([
     db.auditEvent.count({ where }),
     db.auditEvent.findMany({ where, orderBy: { createdAt: "desc" }, skip: (page - 1) * pageSize, take: pageSize, include: { actor: { select: { name: true, role: true } } } }),
@@ -95,13 +96,14 @@ export async function listAudit(actor: Actor, opts: { action?: string; page?: nu
 
 export async function platformMetrics(actor: Actor) {
   requireAdmin(actor);
+  const demo = actor.isDemo ? { isDemo: true } : {};
   const [users, byRole, pending, suspended, activeSessions, failedLogins24h] = await Promise.all([
-    db.user.count({ where: { deletedAt: null } }),
-    db.user.groupBy({ by: ["role"], where: { deletedAt: null }, _count: true }),
-    db.user.count({ where: { status: "PENDING_APPROVAL" } }),
-    db.user.count({ where: { status: "SUSPENDED" } }),
-    db.session.count({ where: { expiresAt: { gt: new Date() } } }),
-    db.auditEvent.count({ where: { action: "auth.login_failed", createdAt: { gt: new Date(Date.now() - 86400_000) } } }),
+    db.user.count({ where: { deletedAt: null, ...demo } }),
+    db.user.groupBy({ by: ["role"], where: { deletedAt: null, ...demo }, _count: true }),
+    db.user.count({ where: { status: "PENDING_APPROVAL", ...demo } }),
+    db.user.count({ where: { status: "SUSPENDED", ...demo } }),
+    db.session.count({ where: { expiresAt: { gt: new Date() }, ...(actor.isDemo ? { user: { isDemo: true } } : {}) } }),
+    actor.isDemo ? Promise.resolve(0) : db.auditEvent.count({ where: { action: "auth.login_failed", createdAt: { gt: new Date(Date.now() - 86400_000) } } }),
   ]);
   return { users, byRole: Object.fromEntries(byRole.map((r) => [r.role, r._count])), pending, suspended, activeSessions, failedLogins24h };
 }
@@ -112,15 +114,16 @@ export async function getSettings(actor: Actor) {
   return Object.fromEntries(rows.map((r) => [r.key, r.value]));
 }
 
-export async function setSetting(actor: Actor, key: "staleDays" | "supportEmail", value: string | number) {
-  requireAdmin(actor);
+export async function setSetting(actor: Actor, key: "staleDays" | "supportEmail" | "demoEnabled", value: string | number | boolean) {
+  requireWritableAdmin(actor);
   if (key === "staleDays" && !(typeof value === "number" && value >= 1 && value <= 30)) throw invalid("Stale days must be 1–30.");
+  if (key === "demoEnabled" && typeof value !== "boolean") throw invalid("Demo setting must be on or off.");
   await db.appSetting.upsert({ where: { key }, create: { key, value }, update: { value } });
   await audit(actor.userId, "admin.setting_changed", "AppSetting", key);
 }
 
 export async function createOrganization(actor: Actor, name: string) {
-  requireAdmin(actor);
+  requireWritableAdmin(actor);
   if (name.trim().length < 2) throw invalid("Enter a name.");
   const o = await db.organization.create({ data: { name: name.trim() } });
   await audit(actor.userId, "admin.org_created", "Organization", o.id);
@@ -128,7 +131,7 @@ export async function createOrganization(actor: Actor, name: string) {
 }
 
 export async function addOrgMember(actor: Actor, orgId: string, userEmail: string, title?: string) {
-  requireAdmin(actor);
+  requireWritableAdmin(actor);
   const u = await db.user.findFirst({ where: { email: userEmail.toLowerCase(), role: "PROFESSIONAL" } });
   if (!u) throw notFound("No professional with that email.");
   await db.orgMembership.upsert({ where: { orgId_userId: { orgId, userId: u.id } }, create: { orgId, userId: u.id, title }, update: { title } });
@@ -137,12 +140,13 @@ export async function addOrgMember(actor: Actor, orgId: string, userEmail: strin
 
 export async function listOrganizations(actor: Actor) {
   requireAdmin(actor);
+  if (actor.isDemo) return [];
   return db.organization.findMany({ include: { members: { include: { user: { select: { name: true, email: true } } } } }, orderBy: { name: "asc" } });
 }
 
 /** Desktop (no email): lets an administrator hand a user a one-time reset link. Never for other admins. */
 export async function issueUserResetLink(actor: Actor, userId: string) {
-  requireAdmin(actor);
+  requireWritableAdmin(actor);
   const target = await db.user.findUnique({ where: { id: userId } });
   if (!target || target.deletedAt) throw notFound("User not found.");
   if (target.role === "ADMIN") throw forbidden("Administrator passwords cannot be reset from here.");

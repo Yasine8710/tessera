@@ -72,6 +72,7 @@ The `desktop` branch ships Tessera as a self-contained Windows app: no Docker, n
 - **Backup / restore:** File menu. A pre-update or pre-restore copy is kept in `%APPDATA%\Tesseraackups`.
 - **No email:** accounts are verified automatically, and administrators create one-time password reset links (Administration, Users, Reset password). An administrator who forgot their password uses Help, Reset administrator password.
 - **Reminders:** the app checks every 5 minutes while it runs (closing the window keeps it in the tray). Windows toasts are generic ("You have a new notification") so nothing clinical shows on a lock screen. The app signs out after 15 minutes idle and when Windows locks.
+- **Demo accounts:** the sign-in screen has Demo as patient, medical staff and administrator buttons (synthetic data). The demo administrator is read-only and sees demo accounts only. An administrator can hide them in Administration, Settings.
 - **Scope:** local only. Several PCs do not share data; one install is one clinic.
 
 Developing it:

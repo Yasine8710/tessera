@@ -162,6 +162,7 @@ export async function actorFromSession(token: string): Promise<(Actor & { name: 
     emailVerified: !!u.emailVerifiedAt,
     patientId: u.patientProfile?.id,
     professionalId: verifiedPro ? u.professionalProfile!.id : undefined,
+    isDemo: u.isDemo,
   };
 }
 
@@ -206,7 +207,7 @@ export async function resetPassword(raw: unknown) {
 }
 
 export async function adminExists() {
-  return (await db.user.count({ where: { role: "ADMIN", deletedAt: null } })) > 0;
+  return (await db.user.count({ where: { role: "ADMIN", deletedAt: null, isDemo: false } })) > 0;
 }
 
 /** First-run only: creates the initial administrator. Refuses once any administrator exists. */
@@ -218,7 +219,7 @@ export async function setupFirstAdmin(raw: { name?: string; email?: string; pass
   if (!/^\S+@\S+\.\S+$/.test(email)) throw invalid("Enter a valid email address.");
   if (password.length < 14) throw invalid("Use a password of at least 14 characters.");
   const user = await db.$transaction(async (tx) => {
-    if ((await tx.user.count({ where: { role: "ADMIN" } })) > 0) throw new AppError("FORBIDDEN", "Setup is already complete.");
+    if ((await tx.user.count({ where: { role: "ADMIN", isDemo: false } })) > 0) throw new AppError("FORBIDDEN", "Setup is already complete.");
     return tx.user.create({
       data: { email, name, passwordHash: await hashPassword(password), role: "ADMIN", status: "ACTIVE", emailVerifiedAt: new Date(), notificationPref: { create: {} } },
     });

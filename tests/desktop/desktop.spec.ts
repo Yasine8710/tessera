@@ -166,6 +166,43 @@ test("admin issues a one-time reset link that works once", async () => {
   await expect(page.getByText(/invalid or has expired/i).first()).toBeVisible();
 });
 
+test("demo accounts exist for all three roles; the demo administrator is read-only", async () => {
+  const demos = [
+    ["Demo as patient", /127\.0\.0\.1:\d+\/patient$/],
+    ["Demo as medical staff", /127\.0\.0\.1:\d+\/staff$/],
+    ["Demo as administrator", /127\.0\.0\.1:\d+\/admin$/],
+  ] as const;
+  for (const [label, home] of demos) {
+    await page.goto(origin() + "/login");
+    await page.getByRole("button", { name: label }).click();
+    await page.waitForURL(home);
+    if (label.endsWith("administrator")) {
+      await page.goto(origin() + "/admin/users");
+      await expect(page.getByText("demo.patient@tessera.invalid")).toBeVisible();
+      await expect(page.getByText("pat@desk.invalid")).toHaveCount(0); // real accounts stay hidden
+      await expect(page.getByRole("button", { name: /Suspend|Reset password/ })).toHaveCount(0);
+    }
+    await signOut();
+  }
+});
+
+test("a real administrator can hide and show the demo accounts", async () => {
+  await signIn(ADMIN.email, ADMIN.password);
+  await page.waitForURL("**/admin");
+  await page.goto(origin() + "/admin/settings");
+  await page.getByRole("button", { name: "Hide demo accounts" }).click();
+  await expect(page.getByRole("button", { name: "Show demo accounts" })).toBeVisible();
+  await signOut();
+  await expect(page.getByRole("button", { name: "Demo as patient" })).toHaveCount(0);
+  await signIn(ADMIN.email, ADMIN.password);
+  await page.waitForURL("**/admin");
+  await page.goto(origin() + "/admin/settings");
+  await page.getByRole("button", { name: "Show demo accounts" }).click();
+  await expect(page.getByRole("button", { name: "Hide demo accounts" })).toBeVisible();
+  await signOut();
+  await expect(page.getByRole("button", { name: "Demo as administrator" })).toBeVisible();
+});
+
 test("backup, change data, restore brings the backup back", async () => {
   const backup = path.join(dataDir, "manual-backup.db");
   await app.evaluate(({ dialog }, f) => {

@@ -8,6 +8,7 @@ import { hashPassword } from "../security";
  */
 export const DEMO_PASSWORD = "DemoPassw0rd!";
 export const DEMO_ACCOUNTS = {
+  admin: { email: "demo.admin@tessera.invalid", password: DEMO_PASSWORD },
   patient: { email: "demo.patient@tessera.invalid", password: DEMO_PASSWORD },
   staff: { email: "demo.clinician@tessera.invalid", password: DEMO_PASSWORD },
 };
@@ -35,7 +36,36 @@ const PATIENTS: PatientSeed[] = [
   ] },
 ];
 
-export async function ensureDemoData(now = new Date()) {
+/** The shared demo administrator: sees demo accounts only and cannot change anything (see requireWritableAdmin). */
+async function ensureDemoAdmin(now: Date) {
+  if (await db.user.findUnique({ where: { email: DEMO_ACCOUNTS.admin.email } })) return;
+  await db.user.create({
+    data: {
+      email: DEMO_ACCOUNTS.admin.email, name: "Morgan Hale (demo)", passwordHash: await hashPassword(DEMO_PASSWORD), role: "ADMIN", status: "ACTIVE",
+      emailVerifiedAt: now, timezone: TZ, isDemo: true, notificationPref: { create: {} },
+    },
+  });
+}
+
+/** Whether the sign-in screen offers demo accounts. Web: DEMO_MODE env. Desktop: on unless an administrator turned it off. */
+export async function demoAvailable() {
+  if (process.env.TESSERA_DESKTOP !== "1") return process.env.DEMO_MODE === "true";
+  const row = await db.appSetting.findUnique({ where: { key: "demoEnabled" } });
+  return row?.value !== false;
+}
+
+let seeding: Promise<void> | null = null;
+
+/** Seeds once; concurrent callers (double-click on a demo button) share the same run. */
+export function ensureDemoData(now = new Date()): Promise<void> {
+  seeding ??= seedDemoData(now).finally(() => {
+    seeding = null;
+  });
+  return seeding;
+}
+
+async function seedDemoData(now: Date) {
+  await ensureDemoAdmin(now);
   if (await db.user.findUnique({ where: { email: DEMO_ACCOUNTS.staff.email } })) return;
   const passwordHash = await hashPassword(DEMO_PASSWORD);
   const rand = rng(42);

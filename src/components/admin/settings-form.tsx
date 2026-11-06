@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { setStaleDaysAction, setSupportEmailAction } from "@/app/actions/admin";
+import { setDemoEnabledAction, setStaleDaysAction, setSupportEmailAction } from "@/app/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
 import { useAction } from "@/components/ui/use-action";
 
-export function SettingsForm({ staleDays, supportEmail }: { staleDays: number; supportEmail: string }) {
+export function SettingsForm({ staleDays, supportEmail, demoEnabled }: { staleDays: number; supportEmail: string; demoEnabled?: boolean }) {
   const [days, setDays] = useState(String(staleDays));
   const [email, setEmail] = useState(supportEmail);
   const a1 = useAction();
   const a2 = useAction();
+  const a3 = useAction();
   const n = Number(days);
   const daysValid = Number.isInteger(n) && n >= 1 && n <= 30;
 
@@ -44,6 +45,21 @@ export function SettingsForm({ staleDays, supportEmail }: { staleDays: number; s
           Save
         </Button>
       </form>
+      {demoEnabled !== undefined && (
+        <div className="space-y-1.5 border-t border-line pt-5">
+          <p className="text-sm font-medium text-ink">Demo accounts</p>
+          <p className="text-sm text-muted">
+            The sign-in screen offers a demo patient, clinician and administrator with synthetic data. The demo administrator is read-only and sees demo accounts only.
+          </p>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-ink2" aria-live="polite">{demoEnabled ? "Shown on the sign-in screen" : "Hidden"}</span>
+            <Button variant="secondary" loading={a3.pending} onClick={() => void a3.run(() => setDemoEnabledAction(!demoEnabled), demoEnabled ? "Demo accounts hidden" : "Demo accounts shown")}>
+              {demoEnabled ? "Hide demo accounts" : "Show demo accounts"}
+            </Button>
+          </div>
+          {a3.error && <p role="alert" className="text-sm text-danger">{a3.error}</p>}
+        </div>
+      )}
     </div>
   );
 }

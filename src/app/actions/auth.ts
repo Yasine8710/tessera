@@ -6,7 +6,7 @@ import { AppError } from "@/server/errors";
 import { actPublic, type ActionResult } from "@/server/action";
 import { clearSessionCookie, clientIp, homeFor, readSessionToken, setSessionCookie } from "@/server/session";
 import * as auth from "@/server/services/auth";
-import { DEMO_ACCOUNTS, ensureDemoData } from "@/server/services/demo";
+import { DEMO_ACCOUNTS, demoAvailable, ensureDemoData } from "@/server/services/demo";
 
 export async function registerPatientAction(input: unknown): Promise<ActionResult> {
   return actPublic(async () => {
@@ -62,9 +62,9 @@ export async function verifyEmailAction(token: string): Promise<ActionResult> {
 }
 
 /** Demo mode: synthetic accounts only, and only when DEMO_MODE=true. */
-export async function demoLoginAction(kind: "patient" | "staff"): Promise<ActionResult> {
+export async function demoLoginAction(kind: "patient" | "staff" | "admin"): Promise<ActionResult> {
   return actPublic(async () => {
-    if (process.env.DEMO_MODE !== "true") throw new AppError("FORBIDDEN", "Demo mode is disabled.");
+    if (!(await demoAvailable())) throw new AppError("FORBIDDEN", "Demo mode is disabled.");
     await ensureDemoData();
     const acct = DEMO_ACCOUNTS[kind];
     const s = await auth.login({ email: acct.email, password: acct.password }, await clientIp());
