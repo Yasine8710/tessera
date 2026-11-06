@@ -1,5 +1,5 @@
 "use strict";
-const { app, BrowserWindow, Menu, Tray, Notification, dialog, shell, session, ipcMain, nativeImage, powerMonitor, clipboard } = require("electron");
+const { app, BrowserWindow, Menu, Tray, nativeTheme, Notification, dialog, shell, session, ipcMain, nativeImage, powerMonitor, clipboard } = require("electron");
 const { spawn } = require("node:child_process");
 const crypto = require("node:crypto");
 const fs = require("node:fs");
@@ -219,11 +219,16 @@ async function onEngineCrash(code) {
 }
 
 // ---------- window ----------
-const LOADING =
-  "data:text/html;charset=utf-8," +
-  encodeURIComponent(
-    `<meta charset=utf-8><style>html,body{height:100%;margin:0;background:#0f2a33;color:#e6f6f5;font:16px 'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center}</style><div>Starting Tessera...</div>`,
-  );
+const splashFile = path.join(__dirname, "splash.html");
+const SPLASH_MS = 1800; // long enough for the logo animation to play once
+let splashAt = 0;
+const showSplash = () => {
+  splashAt = Date.now();
+  return win.loadFile(splashFile);
+};
+const afterSplash = () => new Promise((r) => setTimeout(r, Math.max(0, SPLASH_MS - (Date.now() - splashAt))));
+
+const overlay = (dark) => ({ color: dark ? "#161b23" : "#ffffff", symbolColor: dark ? "#e8ebf0" : "#151a22", height: 36 });
 
 function createWindow() {
   win = new BrowserWindow({
@@ -232,9 +237,14 @@ function createWindow() {
     minWidth: 960,
     minHeight: 640,
     show: false,
-    backgroundColor: "#0f2a33",
+    backgroundColor: nativeTheme.shouldUseDarkColors ? "#0e1218" : "#f4f5f7",
     title: "Tessera",
     icon: iconPath,
+    // Kiosk style: no Windows menu bar or title bar. The page draws its own bar and Windows keeps the small
+    // minimise / maximise / close overlay, which follows the app theme.
+    titleBarStyle: "hidden",
+    titleBarOverlay: overlay(nativeTheme.shouldUseDarkColors),
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -245,8 +255,10 @@ function createWindow() {
       devTools: !packaged,
     },
   });
+  win.setMenuBarVisibility(false);
+  win.maximize();
   win.once("ready-to-show", () => win.show());
-  win.loadURL(LOADING);
+  showSplash();
 
   win.webContents.on("will-navigate", (e, url) => {
     if (!url.startsWith(base() + "/") && !url.startsWith("data:text/html")) {
@@ -314,7 +326,7 @@ function buildMenu() {
           { label: "Quit", accelerator: "Ctrl+Q", click: () => app.quit() },
         ],
       },
-      { label: "&View", submenu: [{ role: "reload" }, { role: "resetZoom" }, { role: "zoomIn" }, { role: "zoomOut" }, { role: "togglefullscreen" }] },
+      { label: "&View", submenu: [{ role: "reload" }, { role: "resetZoom" }, { role: "zoomIn" }, { role: "zoomOut" }, { role: "togglefullscreen", accelerator: "F11" }] },
       {
         label: "&Help",
         submenu: [
@@ -397,7 +409,7 @@ async function restoreData() {
 
   restarting = true;
   try {
-    win.loadURL(LOADING);
+    showSplash();
     await stopServer();
     fs.mkdirSync(backupDir, { recursive: true });
     const cur = store.open(serverDir, dbFile, keys.dbKey);
@@ -461,6 +473,17 @@ function startScheduler() {
   reminderTimer = setInterval(tick, REMINDER_MS);
 }
 
+const fromApp = (e) => win && !win.isDestroyed() && e.sender === win.webContents && e.senderFrame.url.startsWith(base() + "/");
+
+ipcMain.on("cs:menu", (e) => {
+  if (fromApp(e)) Menu.getApplicationMenu()?.popup({ window: win });
+});
+
+ipcMain.on("cs:theme", (e, mode) => {
+  if (!fromApp(e) || (mode !== "dark" && mode !== "light")) return;
+  win.setTitleBarOverlay(overlay(mode === "dark"));
+});
+
 ipcMain.on("cs:notify", (e, count) => {
   if (!win || e.sender !== win.webContents || !e.senderFrame.url.startsWith(base() + "/")) return;
   if (!Notification.isSupported() || !(count > 0)) return;
@@ -503,6 +526,7 @@ app.whenReady().then(async () => {
 
     await prepareData();
     await startServer();
+    await afterSplash();
     await win.loadURL(base());
     startScheduler();
     powerMonitor.on("lock-screen", () => win && !win.isDestroyed() && win.webContents.send("cs:lock"));

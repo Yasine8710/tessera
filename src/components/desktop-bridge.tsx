@@ -6,7 +6,7 @@ import { logoutAction } from "@/app/actions/auth";
 
 declare global {
   interface Window {
-    tesseraDesktop?: { notify(count: number): void; onLock(cb: () => void): void };
+    tesseraDesktop?: { notify(count: number): void; onLock(cb: () => void): void; showMenu(): void; setTheme(mode: "dark" | "light"): void };
   }
 }
 

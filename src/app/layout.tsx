@@ -1,9 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { DesktopBridge } from "@/components/desktop-bridge";
+import { DesktopTitleBar } from "@/components/desktop-chrome";
 import { isDesktop } from "@/server/desktop";
 import { themeInitScript } from "@/components/theme";
 import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
+
+// Desktop vs web chrome is decided per request, so no page may be prerendered without it.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
@@ -24,11 +28,12 @@ export const viewport: Viewport = { themeColor: [{ media: "(prefers-color-scheme
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-desktop={isDesktop() ? "" : undefined}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
+        {isDesktop() && <DesktopTitleBar />}
         <a href="#main" className="skip-link">
           Skip to main content
         </a>

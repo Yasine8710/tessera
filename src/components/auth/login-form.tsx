@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
-import { demoLoginAction, loginAction } from "@/app/actions/auth";
+import { loginAction } from "@/app/actions/auth";
+import { DemoPanel } from "./demo-panel";
 import { Alert } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
@@ -42,27 +43,7 @@ export function LoginForm({ demo }: { demo: boolean }) {
         </p>
       </form>
 
-      {demo && (
-        <section aria-labelledby="demo-h" className="anim-up rounded-lg border border-line bg-surface2 p-4">
-          <h2 id="demo-h" className="text-sm font-semibold">
-            Try the demo
-          </h2>
-          <p className="mt-1 text-sm text-muted">
-            Sign in to a shared demo account for each role. All data in it is synthetic and for illustration only, and the demo administrator can only look, not change anything. Do not enter real personal or health information.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Button type="button" variant="secondary" disabled={pending} onClick={() => run(() => demoLoginAction("patient"))}>
-              Demo as patient
-            </Button>
-            <Button type="button" variant="secondary" disabled={pending} onClick={() => run(() => demoLoginAction("staff"))}>
-              Demo as medical staff
-            </Button>
-            <Button type="button" variant="secondary" disabled={pending} onClick={() => run(() => demoLoginAction("admin"))}>
-              Demo as administrator
-            </Button>
-          </div>
-        </section>
-      )}
+      {demo && <DemoPanel />}
     </div>
   );
 }

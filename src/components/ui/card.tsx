@@ -1,4 +1,6 @@
 import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
+import { Photo } from "./photo";
+import type { PhotoName } from "@/lib/photos";
 import { cn } from "@/lib/cn";
 
 export function Card({ className, ...p }: React.HTMLAttributes<HTMLDivElement>) {
@@ -45,7 +47,31 @@ export function Alert({ tone = "info", title, children, className }: { tone?: "i
   );
 }
 
-export function EmptyState({ icon: Icon, title, children, action }: { icon?: React.ComponentType<{ className?: string }>; title: string; children?: React.ReactNode; action?: React.ReactNode }) {
+export function EmptyState({
+  icon: Icon,
+  title,
+  children,
+  action,
+  photo,
+}: {
+  icon?: React.ComponentType<{ className?: string }>;
+  title: string;
+  children?: React.ReactNode;
+  action?: React.ReactNode;
+  photo?: PhotoName;
+}) {
+  if (photo) {
+    return (
+      <div className="group anim-up grid items-stretch gap-0 overflow-hidden sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <Photo name={photo} className="h-44 sm:h-auto sm:min-h-56" sizes="(min-width: 640px) 30vw, 100vw" />
+        <div className="flex flex-col justify-center px-6 py-8 sm:px-8">
+          <p className="text-lg font-semibold">{title}</p>
+          {children && <p className="mt-1.5 max-w-md text-muted">{children}</p>}
+          {action && <div className="mt-5">{action}</div>}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="anim-up flex flex-col items-center px-6 py-10 text-center">
       {Icon && <Icon className="mb-3 size-8 text-muted" />}
@@ -70,14 +96,34 @@ export function Stat({ label, value, hint, tone }: { label: string; value: React
   );
 }
 
-export function PageHeader({ title, description, action }: { title: string; description?: string; action?: React.ReactNode }) {
+/** `photo` adds a wide image strip under the title: used on portal home pages to fill the space. */
+export function PageHeader({
+  title,
+  description,
+  action,
+  photo,
+  focal,
+}: {
+  title: string;
+  description?: string;
+  action?: React.ReactNode;
+  photo?: PhotoName;
+  focal?: string;
+}) {
   return (
-    <div className="anim-up mb-6 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 className="text-2xl font-semibold sm:text-[1.75rem]">{title}</h1>
-        {description && <p className="mt-1 max-w-2xl text-muted">{description}</p>}
+    <div className="mb-6">
+      <div className="anim-up flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold sm:text-[1.75rem]">{title}</h1>
+          {description && <p className="mt-1 max-w-2xl text-muted">{description}</p>}
+        </div>
+        {action}
       </div>
-      {action}
+      {photo && (
+        <div className="group anim-up mt-5 overflow-hidden rounded-lg border border-line" style={{ animationDelay: "90ms" }}>
+          <Photo name={photo} focal={focal} className="h-36 sm:h-44 lg:h-52" sizes="(min-width: 1024px) 70vw, 100vw" />
+        </div>
+      )}
     </div>
   );
 }
