@@ -29,9 +29,9 @@ export default async function InvitationsPage() {
           {incoming.length === 0 ? (
             <EmptyState icon={Inbox} title="No pending requests" />
           ) : (
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {incoming.map((r) => (
-                <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3">
+                <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 transition-colors hover:bg-surface2">
                   <div className="min-w-0">
                     <p className="font-medium">{r.patient.user.name}</p>
                     <p className="truncate text-sm text-muted">{r.patient.user.email} · requested {fmtDateTime(r.createdAt, tz)}</p>
@@ -48,11 +48,11 @@ export default async function InvitationsPage() {
           {sent.length === 0 ? (
             <EmptyState icon={Send} title="No invitations sent yet" />
           ) : (
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {sent.map((i) => {
                 const expired = i.status === "PENDING" && i.expiresAt.getTime() < now;
                 return (
-                  <li key={i.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3">
+                  <li key={i.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 transition-colors hover:bg-surface2">
                     <div className="min-w-0">
                       <p className="truncate font-medium">{i.patientEmail}</p>
                       <p className="text-sm text-muted">Sent {fmtDateTime(i.createdAt, tz)} · {expired ? "expired" : `expires ${fmtDateTime(i.expiresAt, tz)}`}</p>

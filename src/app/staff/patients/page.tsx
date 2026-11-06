@@ -32,7 +32,7 @@ export default async function PatientsPage({ searchParams }: { searchParams: SP 
   return (
     <>
       <PageHeader title="Patients" description="Patients with an active care relationship with you. You only see what each patient has chosen to share." />
-      <Card className="mb-4 p-4">
+      <Card className="anim-fade mb-4 p-4">
         <form role="search" className="flex flex-wrap items-center gap-2">
           <label htmlFor="q" className="sr-only">Search by name or email</label>
           <div className="relative min-w-56 flex-1">
@@ -46,7 +46,7 @@ export default async function PatientsPage({ searchParams }: { searchParams: SP 
         <p className="mt-3 flex items-center gap-2 text-sm text-muted">
           Sort:
           {(["name", "recent"] as const).map((s) => (
-            <Link key={s} href={href(1, s)} aria-current={sort === s ? "true" : undefined} className={cn("rounded-md px-2 py-1 hover:bg-surface2", sort === s && "bg-accent-soft font-medium text-accent-hover")}>
+            <Link key={s} href={href(1, s)} aria-current={sort === s ? "true" : undefined} className={cn("rounded-md px-2 py-1 transition-colors hover:bg-surface2", sort === s && "bg-accent-soft font-medium text-accent-hover")}>
               {s === "name" ? "Name" : "Most recently connected"}
             </Link>
           ))}
@@ -59,23 +59,34 @@ export default async function PatientsPage({ searchParams }: { searchParams: SP 
             {q ? "Check the spelling or clear the search." : "Invite a patient, or accept a connection request, to see them here."}
           </EmptyState>
         ) : (
-          <ul className="divide-y divide-line">
-            {rows.map((r) => (
-              <li key={r.id}>
-                <Link href={`/staff/patients/${r.patientId}`} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3.5 hover:bg-surface2">
-                  <span className="min-w-0">
-                    <span className="block font-medium">{r.patient.user.name}</span>
-                    <span className="block truncate text-sm text-muted">{r.patient.user.email}</span>
-                  </span>
-                  <span className="flex items-center gap-3 text-sm text-ink2">
-                    <Badge tone="ok">Active</Badge>
-                    {r.startedAt && <span>Since {fmtDay(r.startedAt, session.timezone)}</span>}
-                    <ChevronRight className="size-4 text-muted" aria-hidden />
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <caption className="sr-only">Patients with an active care relationship</caption>
+              <thead className="border-b border-line bg-surface2 text-xs uppercase tracking-wide text-muted">
+                <tr>
+                  <th scope="col" className="px-5 py-2.5 font-semibold">Patient</th>
+                  <th scope="col" className="hidden px-3 py-2.5 font-semibold sm:table-cell">Email</th>
+                  <th scope="col" className="px-3 py-2.5 font-semibold">Status</th>
+                  <th scope="col" className="hidden px-3 py-2.5 font-semibold md:table-cell">Connected</th>
+                  <th scope="col" className="w-10 py-2.5 pr-5"><span className="sr-only">Open</span></th>
+                </tr>
+              </thead>
+              <tbody className="stagger divide-y divide-line">
+                {rows.map((r) => (
+                  <tr key={r.id} className="group transition-colors hover:bg-surface2">
+                    <td className="px-5 py-3">
+                      <Link href={`/staff/patients/${r.patientId}`} className="font-medium text-ink group-hover:text-accent-hover">{r.patient.user.name}</Link>
+                      <span className="block truncate text-muted sm:hidden">{r.patient.user.email}</span>
+                    </td>
+                    <td className="hidden max-w-64 truncate px-3 py-3 text-muted sm:table-cell">{r.patient.user.email}</td>
+                    <td className="px-3 py-3"><Badge tone="ok">Active</Badge></td>
+                    <td className="hidden px-3 py-3 tabular-nums text-ink2 md:table-cell">{r.startedAt ? fmtDay(r.startedAt, session.timezone) : ""}</td>
+                    <td className="py-3 pr-5"><ChevronRight className="size-4 text-muted transition-transform group-hover:translate-x-0.5" aria-hidden /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
 

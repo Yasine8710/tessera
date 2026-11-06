@@ -81,7 +81,7 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
             Your entries will be listed here, newest first.
           </EmptyState>
         ) : (
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {journal.rows.map((e) => (
               <li key={e.id} className="space-y-2 px-5 py-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">

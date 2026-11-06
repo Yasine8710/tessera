@@ -17,7 +17,7 @@ export function VerifyEmailButton({ token }: { token: string }) {
   if (done) {
     return (
       <div className="space-y-4">
-        <Alert tone="ok" title="Email verified">
+        <Alert tone="ok" title="Email verified" className="anim-scale">
           Thank you. Your email address is now confirmed.
         </Alert>
         <LinkButton href="/login">Continue to sign in</LinkButton>
@@ -26,7 +26,7 @@ export function VerifyEmailButton({ token }: { token: string }) {
   }
   return (
     <div className="space-y-4">
-      {error && <Alert tone="danger">{error}</Alert>}
+      {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
       <Button type="button" loading={pending} onClick={() => run(() => verifyEmailAction(token), "Email verified", () => setDone(true))}>
         Confirm my email address
       </Button>

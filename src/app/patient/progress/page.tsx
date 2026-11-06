@@ -3,6 +3,7 @@ import { AdherenceChart, TrendChart } from "@/components/patient/charts";
 import { ChartTable } from "@/components/patient/chart-table";
 import { fmtDateTime, fmtLocalDateLabel, fmtShortDay, fmtTime, SELF_REPORT_NOTE } from "@/components/patient/format";
 import { isScheduledOn } from "@/components/patient/format";
+import { CountUp } from "@/components/patient/motion";
 import { PeriodTabs } from "@/components/patient/period-tabs";
 import { SelfReportNote } from "@/components/patient/self-report-note";
 import { AppointmentStatusBadge, DoseStatusBadge, type ApptStatus } from "@/components/patient/status";
@@ -64,7 +65,7 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
   const doseRows = [...doses].reverse();
 
   return (
-    <div className="space-y-6">
+    <div className="stagger space-y-6">
       <PageHeader title="Progress" description="Trends from what you recorded in Tessera." action={<PeriodTabs current={days} options={PERIODS} />} />
       <SelfReportNote>
         {SELF_REPORT_NOTE} These charts are not a clinical assessment. Talk to your care team about what they mean for you.
@@ -74,11 +75,11 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
         <Card>
           <CardHeader title="Medication reports" description={`Last ${days} days. A dose with no report counts as missed after a grace period.`} />
           <div className="space-y-4 p-5">
-            <div className="grid gap-3 sm:grid-cols-4">
-              <Stat label="Taken rate" value={t.rate === null ? "-" : `${t.rate}%`} hint={t.rate === null ? "No doses were due" : undefined} />
-              <Stat label="Taken" value={t.taken} />
-              <Stat label="Skipped" value={t.skipped} />
-              <Stat label="Missed" value={t.missed} />
+            <div className="stagger grid gap-3 sm:grid-cols-4">
+              <Stat label="Taken rate" value={t.rate === null ? "-" : <CountUp value={t.rate} suffix="%" />} hint={t.rate === null ? "No doses were due" : undefined} />
+              <Stat label="Taken" value={<CountUp value={t.taken} />} />
+              <Stat label="Skipped" value={<CountUp value={t.skipped} />} />
+              <Stat label="Missed" value={<CountUp value={t.missed} />} />
             </div>
             {adherenceData.length === 0 ? (
               <EmptyState title="No doses in this period">Once doses are scheduled by your care team, daily counts appear here.</EmptyState>
@@ -106,7 +107,7 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
                 <p className="mb-3 text-sm text-ink2">{routineAvg === null ? "No routines were planned in this period." : `Average: ${routineAvg}% of planned routines marked done.`}</p>
                 <TrendChart
                   data={routineData.map((d) => ({ label: fmtLocalDateLabel(d.date), pct: d.pct }))}
-                  series={[{ key: "pct", name: "Routines done (%)", color: "#0d7673" }]}
+                  series={[{ key: "pct", name: "Routines done (%)", color: "var(--c-accent)" }]}
                   summary={routineAvg === null ? "No routine data" : `Routine completion over ${routineDays} days, average ${routineAvg} percent.`}
                   unit="%"
                   domain={[0, 100]}
@@ -129,8 +130,8 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
                 <TrendChart
                   data={bpData}
                   series={[
-                    { key: "systolic", name: "Systolic", color: "#0d7673" },
-                    { key: "diastolic", name: "Diastolic", color: "#3d5159" },
+                    { key: "systolic", name: "Systolic", color: "var(--c-accent)" },
+                    { key: "diastolic", name: "Diastolic", color: "var(--c-warn)" },
                   ]}
                   summary={`${bpData.length} blood pressure readings. Latest ${bpData[bpData.length - 1].systolic}/${bpData[bpData.length - 1].diastolic} mmHg.`}
                 />
@@ -148,7 +149,7 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
               <>
                 <TrendChart
                   data={weightData}
-                  series={[{ key: "weight", name: "Weight (kg)", color: "#0d7673" }]}
+                  series={[{ key: "weight", name: "Weight (kg)", color: "var(--c-accent)" }]}
                   summary={`${weightData.length} weight readings. Latest ${weightData[weightData.length - 1].weight} kg.`}
                 />
                 <ChartTable caption="Weight readings" columns={["When", "Weight (kg)"]} rows={weight.map((m) => [fmtDateTime(m.recordedAt, tz), m.value])} />

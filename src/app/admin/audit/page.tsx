@@ -48,7 +48,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
                 {rows.map((r) => {
                   const keys = r.metadata && typeof r.metadata === "object" && !Array.isArray(r.metadata) ? Object.keys(r.metadata) : [];
                   return (
-                    <tr key={r.id}>
+                    <tr key={r.id} className="transition-colors hover:bg-surface2/60">
                       <td className="whitespace-nowrap px-5 py-2.5 text-muted">{formatDateTime(r.createdAt, session.timezone)}</td>
                       <td className="px-3 py-2.5">{r.actor ? `${r.actor.name}` : "System"}{r.actor && <span className="block text-xs text-muted">{r.actor.role.toLowerCase()}</span>}</td>
                       <td className="px-3 py-2.5 font-mono text-xs">{r.action}</td>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { isDesktop } from "@/server/desktop";
 import { AuthShell } from "@/components/auth/auth-shell";
+import { inlineLink } from "@/components/auth/link-styles";
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export const metadata: Metadata = { title: "Reset your password" };
@@ -16,7 +17,7 @@ export default function ForgotPasswordPage() {
         title="Forgot your password?"
         description="Tessera on this computer has no email. Ask your administrator to create a one-time reset link for you (Administration, Users, Reset password)."
         footer={
-          <Link href="/login" className="font-medium text-accent hover:underline">
+          <Link href="/login" className={inlineLink}>
             Back to sign in
           </Link>
         }
@@ -30,7 +31,7 @@ export default function ForgotPasswordPage() {
       title="Reset your password"
       description="Enter the email you registered with. If an account exists, we will send a link to choose a new password."
       footer={
-        <Link href="/login" className="font-medium text-accent hover:underline">
+        <Link href="/login" className={inlineLink}>
           Back to sign in
         </Link>
       }

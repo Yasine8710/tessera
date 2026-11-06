@@ -9,6 +9,7 @@ import { Alert } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
 import { useAction } from "@/components/ui/use-action";
+import { inlineLink } from "@/components/auth/link-styles";
 import { loginSchema } from "@/lib/schemas";
 
 type Values = z.input<typeof loginSchema>;
@@ -23,8 +24,8 @@ export function LoginForm({ demo }: { demo: boolean }) {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit((v) => run(() => loginAction(v)))} className="space-y-4" noValidate>
-        {error && <Alert tone="danger">{error}</Alert>}
+      <form onSubmit={handleSubmit((v) => run(() => loginAction(v)))} className="stagger space-y-4" noValidate>
+        {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
         <Field label="Email" error={errors.email?.message}>
           {(a) => <Input type="email" autoComplete="email" inputMode="email" {...a} {...register("email")} />}
         </Field>
@@ -35,14 +36,14 @@ export function LoginForm({ demo }: { demo: boolean }) {
           Sign in
         </Button>
         <p className="text-sm">
-          <Link href="/forgot-password" className="text-accent underline underline-offset-2 hover:no-underline">
+          <Link href="/forgot-password" className={inlineLink}>
             Forgot your password?
           </Link>
         </p>
       </form>
 
       {demo && (
-        <section aria-labelledby="demo-h" className="rounded-lg border border-line bg-surface2 p-4">
+        <section aria-labelledby="demo-h" className="anim-up rounded-lg border border-line bg-surface2 p-4">
           <h2 id="demo-h" className="text-sm font-semibold">
             Try the demo
           </h2>

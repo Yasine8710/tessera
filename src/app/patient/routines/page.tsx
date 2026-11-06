@@ -45,7 +45,7 @@ export default async function RoutinesPage() {
             Add your own routine below. Routines from your care team will appear here too.
           </EmptyState>
         ) : (
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {active.map((r) => (
               <RoutineItem key={r.id} routine={r} />
             ))}
@@ -56,7 +56,7 @@ export default async function RoutinesPage() {
       {paused.length > 0 && (
         <Card>
           <CardHeader title="Paused" description="Paused routines do not count toward today." />
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {paused.map((r) => (
               <RoutineItem key={r.id} routine={r} />
             ))}

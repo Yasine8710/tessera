@@ -32,9 +32,9 @@ export default async function MonitoringPage() {
           if (!items.length) return null;
           const m = FLAG_META[kind];
           return (
-            <Card key={kind}>
+            <Card key={kind} className="anim-up" style={{ animationDelay: `${FLAG_ORDER.indexOf(kind) * 70}ms` }}>
               <CardHeader title={`${m.title} (${items.length})`} description={m.explain} />
-              <ul className="divide-y divide-line">{items.map((f, i) => <FlagRow key={`${f.patientId}${i}`} flag={f} />)}</ul>
+              <ul className="stagger divide-y divide-line">{items.map((f, i) => <FlagRow key={`${f.patientId}${i}`} flag={f} />)}</ul>
             </Card>
           );
         })}
@@ -44,13 +44,13 @@ export default async function MonitoringPage() {
           {open.length === 0 ? (
             <EmptyState icon={ListChecks} title="No open tasks" />
           ) : (
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {open.map((t) => (
-                <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3">
+                <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 transition-colors hover:bg-surface2">
                   <div className="min-w-0">
                     <p className="font-medium">{t.title}</p>
                     <p className="text-sm text-ink2">
-                      <Link href={`/staff/patients/${t.patientId}?tab=tasks`} className="text-accent underline underline-offset-2 hover:no-underline">{t.patient.user.name}</Link>
+                      <Link href={`/staff/patients/${t.patientId}?tab=tasks`} className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{t.patient.user.name}</Link>
                       {" · due "}{fmtDateTime(t.dueAt, tz)} {t.dueAt.getTime() < now && <Badge tone="danger">Overdue</Badge>}
                     </p>
                   </div>

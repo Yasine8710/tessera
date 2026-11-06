@@ -37,9 +37,9 @@ export function AppointmentList({ rows, tz, showPatient, empty }: { rows: ApptRo
   if (rows.length === 0) return <Card><EmptyState title={empty} /></Card>;
   return (
     <Card>
-      <ul className="divide-y divide-line">
+      <ul className="stagger divide-y divide-line">
         {rows.map((a) => (
-          <li key={a.id} className="space-y-2 px-5 py-4">
+          <li key={a.id} className="space-y-2 px-5 py-4 transition-colors hover:bg-surface2/60">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="font-medium">{a.title}</p>
@@ -48,13 +48,13 @@ export function AppointmentList({ rows, tz, showPatient, empty }: { rows: ApptRo
                   {a.location ? ` · ${a.location}` : ""}
                 </p>
                 {showPatient && a.patient && (
-                  <Link href={`/staff/patients/${a.patientId}`} className="text-sm text-accent underline underline-offset-2 hover:no-underline">{a.patient.user.name}</Link>
+                  <Link href={`/staff/patients/${a.patientId}`} className="text-sm text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{a.patient.user.name}</Link>
                 )}
               </div>
               <Badge tone={TONE[a.status]}>{APPT_LABEL[a.status]}</Badge>
             </div>
             {a.sharedNotes && (
-              <p className="rounded-md bg-surface2 px-3 py-2 text-sm"><span className="font-medium">Shared with the patient: </span>{a.sharedNotes}</p>
+              <p className="rounded-md border border-line bg-surface px-3 py-2 text-sm"><span className="font-medium">Shared with the patient: </span>{a.sharedNotes}</p>
             )}
             <AppointmentActions id={a.id} title={a.title} tz={tz} actions={allowedActions(a.status)} />
           </li>

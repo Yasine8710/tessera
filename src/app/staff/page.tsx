@@ -21,7 +21,7 @@ export default async function StaffOverviewPage() {
         description="A summary of the patients who have connected with you. Figures reflect only what patients have chosen to share."
         action={<LinkButton href="/staff/patients" variant="secondary">Open patient directory</LinkButton>}
       />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Stat label="Patients in your care" value={o.patientCount} hint="Active care relationships" />
         <Stat label="Patients with indicators" value={o.patientsFlagged} hint="See the list below" tone={o.patientsFlagged ? "warn" : undefined} />
         <Stat label="Upcoming appointments" value={o.upcoming.length >= 5 ? "5+" : o.upcoming.length} hint="Next five are listed below" />
@@ -30,7 +30,7 @@ export default async function StaffOverviewPage() {
         <Stat label="Pending connection requests" value={o.pendingRequests} hint={o.pendingRequests ? "Review in Invitations" : "None waiting"} tone={o.pendingRequests ? "info" : undefined} />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader
             title="Monitoring indicators"
@@ -40,7 +40,7 @@ export default async function StaffOverviewPage() {
           {o.flags.length === 0 ? (
             <EmptyState icon={Flag} title="Nothing to review">No indicators right now, based on the data patients share with you.</EmptyState>
           ) : (
-            <ul className="divide-y divide-line">{o.flags.slice(0, 8).map((f, i) => <FlagRow key={`${f.patientId}${f.kind}${i}`} flag={f} />)}</ul>
+            <ul className="stagger divide-y divide-line">{o.flags.slice(0, 8).map((f, i) => <FlagRow key={`${f.patientId}${f.kind}${i}`} flag={f} />)}</ul>
           )}
         </Card>
 
@@ -49,13 +49,13 @@ export default async function StaffOverviewPage() {
           {o.upcoming.length === 0 ? (
             <EmptyState title="No upcoming appointments" />
           ) : (
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {o.upcoming.map((a) => (
-                <li key={a.id} className="px-5 py-3">
+                <li key={a.id} className="px-5 py-3 transition-colors hover:bg-surface2">
                   <p className="font-medium">{a.title}</p>
                   <p className="text-sm text-ink2">
                     {fmtDateTime(a.startsAt, tz)} ·{" "}
-                    <Link href={`/staff/patients/${a.patientId}`} className="text-accent underline underline-offset-2 hover:no-underline">{a.patient.user.name}</Link>
+                    <Link href={`/staff/patients/${a.patientId}`} className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{a.patient.user.name}</Link>
                   </p>
                 </li>
               ))}

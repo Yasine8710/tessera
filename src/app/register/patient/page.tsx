@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth/auth-shell";
+import { inlineLink } from "@/components/auth/link-styles";
 import { RegisterPatientForm } from "@/components/auth/register-patient-form";
 import { getSession, homeFor } from "@/server/session";
 
@@ -18,11 +19,11 @@ export default async function RegisterPatientPage() {
       footer={
         <p>
           Medical professional?{" "}
-          <Link href="/register/professional" className="font-medium text-accent hover:underline">
+          <Link href="/register/professional" className={inlineLink}>
             Register here
           </Link>
           . Already registered?{" "}
-          <Link href="/login" className="font-medium text-accent hover:underline">
+          <Link href="/login" className={inlineLink}>
             Sign in
           </Link>
         </p>

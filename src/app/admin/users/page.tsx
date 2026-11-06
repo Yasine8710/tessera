@@ -67,7 +67,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                 {rows.map((u) => {
                   const canToggle = u.role !== "ADMIN" && u.id !== session.userId && u.status !== "PENDING_APPROVAL";
                   return (
-                    <tr key={u.id}>
+                    <tr key={u.id} className="transition-colors hover:bg-surface2/60">
                       <td className="px-5 py-3">
                         <p className="font-medium">{u.name}{u.isDemo && <Badge className="ml-2">Demo</Badge>}</p>
                         <p className="break-all text-muted">{u.email}</p>

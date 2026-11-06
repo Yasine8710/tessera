@@ -12,16 +12,16 @@ export async function TasksTab({ session, patientId }: TabProps) {
   const done = tasks.filter((t) => t.status === "DONE");
   const now = Date.now();
   return (
-    <div className="space-y-6">
+    <div className="stagger space-y-6">
       <StaffOnlyBanner />
       <Card>
         <CardHeader title="Open follow-up tasks" />
         {open.length === 0 ? (
           <EmptyState icon={ListChecks} title="No open tasks for this patient" />
         ) : (
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {open.map((t) => (
-              <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3">
+              <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 transition-colors hover:bg-surface2">
                 <div>
                   <p className="font-medium">{t.title}</p>
                   <p className="text-sm text-ink2">
@@ -44,7 +44,7 @@ export async function TasksTab({ session, patientId }: TabProps) {
         {done.length === 0 ? (
           <p className="px-5 py-4 text-sm text-muted">Nothing completed yet.</p>
         ) : (
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {done.map((t) => (
               <li key={t.id} className="px-5 py-3 text-sm">
                 <p className="font-medium">{t.title}</p>

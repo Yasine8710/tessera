@@ -2,8 +2,8 @@
 export function ChartTable({ caption, columns, rows }: { caption: string; columns: string[]; rows: (string | number)[][] }) {
   return (
     <details className="mt-3 text-sm">
-      <summary className="cursor-pointer rounded-sm py-1 font-medium text-accent">View as table</summary>
-      <div className="mt-2 max-h-72 overflow-auto rounded-md border border-line">
+      <summary className="cursor-pointer rounded-sm py-1 font-medium text-accent hover:text-accent-hover">View as table</summary>
+      <div className="anim-up mt-2 max-h-72 overflow-auto rounded-md border border-line">
         <table className="w-full text-left">
           <caption className="sr-only">{caption}</caption>
           <thead className="sticky top-0 border-b border-line bg-surface2 text-muted">
@@ -17,7 +17,7 @@ export function ChartTable({ caption, columns, rows }: { caption: string; column
           </thead>
           <tbody className="divide-y divide-line">
             {rows.map((r, i) => (
-              <tr key={i}>
+              <tr key={i} className="hover:bg-surface2">
                 {r.map((v, j) => (
                   <td key={j} className="px-3 py-1.5 tabular-nums">
                     {v}

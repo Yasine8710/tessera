@@ -12,7 +12,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 export function PlanCard({ plan, mine, tz, today }: { plan: Plan; mine: boolean; tz: string; today: string }) {
   const versions = [...plan.versions].sort((a, b) => a.version - b.version);
   return (
-    <Card>
+    <Card className="anim-up">
       <div className="flex flex-wrap items-start justify-between gap-2 border-b border-line px-5 py-3.5">
         <div>
           <h3 className="text-base font-semibold">{plan.title}</h3>
@@ -34,9 +34,9 @@ export function PlanCard({ plan, mine, tz, today }: { plan: Plan; mine: boolean;
           {plan.medications.length === 0 ? (
             <p className="mt-1 text-sm text-muted">No medications on this plan.</p>
           ) : (
-            <ul className="mt-2 divide-y divide-line rounded-md border border-line">
+            <ul className="stagger mt-2 divide-y divide-line rounded-md border border-line">
               {plan.medications.map((m) => (
-                <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5">
+                <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 transition-colors hover:bg-surface2">
                   <div className="min-w-0">
                     <p className="font-medium">
                       {m.medication.name} <span className="font-normal text-ink2">{m.dose}{m.route ? `, ${m.route}` : ""}</span>{" "}
@@ -58,12 +58,12 @@ export function PlanCard({ plan, mine, tz, today }: { plan: Plan; mine: boolean;
         {mine && plan.status === "ACTIVE" ? (
           <div className="space-y-2">
             <details className="rounded-md border border-line">
-              <summary className="cursor-pointer px-3 py-2 text-sm font-medium">Add a medication schedule</summary>
-              <div className="border-t border-line p-4"><AddMedicationForm planId={plan.id} today={today} /></div>
+              <summary className="cursor-pointer px-3 py-2 text-sm font-medium transition-colors hover:bg-surface2">Add a medication schedule</summary>
+              <div className="anim-fade border-t border-line p-4"><AddMedicationForm planId={plan.id} today={today} /></div>
             </details>
             <details className="rounded-md border border-line">
-              <summary className="cursor-pointer px-3 py-2 text-sm font-medium">Edit plan (creates a new version)</summary>
-              <div className="border-t border-line p-4">
+              <summary className="cursor-pointer px-3 py-2 text-sm font-medium transition-colors hover:bg-surface2">Edit plan (creates a new version)</summary>
+              <div className="anim-fade border-t border-line p-4">
                 <EditPlanForm
                   planId={plan.id}
                   initial={{ title: plan.title, instructions: plan.instructions, startDate: iso(plan.startDate), endDate: plan.endDate ? iso(plan.endDate) : "" }}
@@ -80,8 +80,8 @@ export function PlanCard({ plan, mine, tz, today }: { plan: Plan; mine: boolean;
         )}
 
         <details className="rounded-md border border-line">
-          <summary className="cursor-pointer px-3 py-2 text-sm font-medium">Version history ({versions.length})</summary>
-          <ol className="divide-y divide-line border-t border-line">
+          <summary className="cursor-pointer px-3 py-2 text-sm font-medium transition-colors hover:bg-surface2">Version history ({versions.length})</summary>
+          <ol className="stagger divide-y divide-line border-t border-line">
             {[...versions].reverse().map((v) => {
               const idx = versions.findIndex((x) => x.id === v.id);
               const changes = summarizeDiff(asSnap(versions[idx - 1]?.snapshot), asSnap(v.snapshot));

@@ -21,15 +21,15 @@ export function ForgotPasswordForm() {
 
   if (sent) {
     return (
-      <Alert tone="ok" title="Check your email">
+      <Alert tone="ok" title="Check your email" className="anim-scale">
         If an account exists for that address, a reset link has been sent. The link works once and expires after 60 minutes. If this server has no email delivery configured, the operator can find the link in the server console.
       </Alert>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit((v) => run(() => forgotPasswordAction(v), undefined, () => setSent(true)))} className="space-y-4" noValidate>
-      {error && <Alert tone="danger">{error}</Alert>}
+    <form onSubmit={handleSubmit((v) => run(() => forgotPasswordAction(v), undefined, () => setSent(true)))} className="stagger space-y-4" noValidate>
+      {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
       <Field label="Email" error={errors.email?.message}>
         {(a) => <Input type="email" autoComplete="email" inputMode="email" {...a} {...register("email")} />}
       </Field>

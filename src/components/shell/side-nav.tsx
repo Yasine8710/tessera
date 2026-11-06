@@ -1,9 +1,11 @@
 "use client";
 
 import { LogOut, Menu, X } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { ThemeToggle } from "@/components/theme";
 import { icons, type IconName } from "./icons";
 import { cn } from "@/lib/cn";
 
@@ -11,6 +13,7 @@ export type NavItem = { href: string; label: string; icon: IconName; exact?: boo
 
 function Items({ items, onNavigate, dark }: { items: NavItem[]; onNavigate?: () => void; dark?: boolean }) {
   const path = usePathname();
+  const group = useId();
   return (
     <nav aria-label="Main" className="flex-1 space-y-0.5 overflow-y-auto px-3 py-2">
       {items.map((i) => {
@@ -23,14 +26,24 @@ function Items({ items, onNavigate, dark }: { items: NavItem[]; onNavigate?: () 
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex items-center gap-3 rounded-md px-3 py-2 text-[0.92rem] transition-colors",
+              "group relative flex items-center gap-3 rounded-md px-3 py-2 text-[0.92rem]",
               dark
-                ? active ? "bg-white/12 font-medium text-white" : "text-nav-ink/85 hover:bg-white/8 hover:text-white"
-                : active ? "bg-accent-soft font-medium text-accent-hover" : "text-ink2 hover:bg-surface2",
+                ? active ? "font-medium text-white" : "text-nav-ink/85 hover:bg-white/8 hover:text-white"
+                : active ? "font-medium text-accent" : "text-ink2 hover:bg-surface2 hover:text-ink",
             )}
           >
-            <Icon className="size-[1.1rem] shrink-0" aria-hidden />
-            {i.label}
+            {active && (
+              <motion.span
+                layoutId={`nav-active-${group}`}
+                aria-hidden
+                className={cn("absolute inset-0 rounded-md", dark ? "bg-white/10" : "bg-accent-soft")}
+                transition={{ type: "spring", stiffness: 500, damping: 40 }}
+              >
+                <span className="absolute inset-y-1.5 left-0 w-0.5 rounded-full bg-accent" />
+              </motion.span>
+            )}
+            <Icon className="relative size-[1.1rem] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+            <span className="relative">{i.label}</span>
           </Link>
         );
       })}
@@ -65,7 +78,7 @@ export function SideNav({
     <>
       <button
         type="button"
-        className="inline-flex size-10 items-center justify-center rounded-md hover:bg-surface2"
+        className="press inline-flex size-10 items-center justify-center rounded-md hover:bg-surface2"
         aria-label="Open menu"
         aria-expanded={open}
         onClick={() => {
@@ -75,22 +88,33 @@ export function SideNav({
       >
         <Menu className="size-5" aria-hidden />
       </button>
-      <dialog ref={ref} onClose={() => setOpen(false)} className="m-0 h-dvh max-h-dvh w-72 max-w-[85vw] rounded-none border-0 p-0" aria-label={title}>
+      <dialog
+        ref={ref}
+        onClose={() => setOpen(false)}
+        onClick={(e) => {
+          if (e.target === ref.current) ref.current?.close();
+        }}
+        className="m-0 h-dvh max-h-dvh w-72 max-w-[85vw] rounded-none border-0 border-r p-0 transition-transform duration-300 [animation:none] starting:-translate-x-full"
+        aria-label={title}
+      >
         <div className="flex h-full flex-col">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <span className="font-semibold">{title}</span>
-            <button type="button" className="inline-flex size-9 items-center justify-center rounded-md hover:bg-surface2" aria-label="Close menu" onClick={() => ref.current?.close()}>
+            <button type="button" className="press inline-flex size-9 items-center justify-center rounded-md hover:bg-surface2" aria-label="Close menu" onClick={() => ref.current?.close()}>
               <X className="size-5" aria-hidden />
             </button>
           </div>
           <Items items={items} onNavigate={() => ref.current?.close()} />
-          <div className="border-t border-line p-4 text-sm">
-            <p className="mb-2 truncate font-medium">{name}</p>
-            <form action={logout}>
-              <button className="inline-flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface2">
-                <LogOut className="size-4" aria-hidden /> Sign out
-              </button>
-            </form>
+          <div className="flex items-center justify-between gap-2 border-t border-line p-4 text-sm">
+            <div className="min-w-0">
+              <p className="mb-2 truncate font-medium">{name}</p>
+              <form action={logout}>
+                <button className="press inline-flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface2">
+                  <LogOut className="size-4" aria-hidden /> Sign out
+                </button>
+              </form>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </dialog>

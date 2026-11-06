@@ -1,6 +1,7 @@
 import { BookOpen, CalendarPlus, CheckCircle2, Gauge, MessageSquare, Pill, ShieldAlert, Stethoscope, UserPlus } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CountUp, ProgressBar, ProgressRing } from "@/components/patient/motion";
 import { DoseRow } from "@/components/patient/dose-row";
 import { toDoseView } from "@/components/patient/doses";
 import { fmtDateTime, fmtDateTimeYear, fmtMeasurement, isScheduledOn, MEASUREMENT_NAMES } from "@/components/patient/format";
@@ -18,15 +19,6 @@ import { listJournal, listMeasurements, listRoutines } from "@/server/services/p
 export const metadata: Metadata = { title: "Overview" };
 
 const OPEN_APPT = ["REQUESTED", "CONFIRMED", "RESCHEDULE_REQUESTED", "CANCEL_REQUESTED"];
-
-function Progress({ value, max, label }: { value: number; max: number; label: string }) {
-  const pct = max ? Math.round((value / max) * 100) : 0;
-  return (
-    <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} className="h-2 overflow-hidden rounded-full bg-surface2">
-      <div className="h-full bg-accent" style={{ width: `${pct}%` }} />
-    </div>
-  );
-}
 
 export default async function PatientOverview() {
   const s = await requireSession("PATIENT");
@@ -60,14 +52,14 @@ export default async function PatientOverview() {
     <div className="space-y-6">
       <PageHeader title={`Welcome, ${firstName}`} description="Here is what is planned for today, based on your care plan and what you have recorded." />
 
-      <section aria-label="Quick actions" className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <section aria-label="Quick actions" className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
         {[
           { href: "/patient/medications", label: "Record a dose", icon: Pill },
           { href: "/patient/journal#entry", label: "Log a symptom", icon: BookOpen },
           { href: "/patient/journal#measurement", label: "Add a measurement", icon: Gauge },
           { href: "/patient/appointments#request", label: "Request appointment", icon: CalendarPlus },
         ].map((a) => (
-          <Link key={a.href} href={a.href} className="flex items-center gap-3 rounded-lg border border-line bg-surface px-4 py-3 text-sm font-medium shadow-sm hover:border-accent hover:bg-accent-soft">
+          <Link key={a.href} href={a.href} className="flex items-center gap-3 rounded-lg border border-line bg-surface px-4 py-3 text-sm font-medium press hover-lift hover:border-accent hover:bg-accent-soft">
             <a.icon className="size-5 shrink-0 text-accent" aria-hidden />
             {a.label}
           </Link>
@@ -75,7 +67,7 @@ export default async function PatientOverview() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
+        <div className="stagger space-y-6 lg:col-span-2">
           <Card>
             <CardHeader
               title="Today's medications"
@@ -92,10 +84,15 @@ export default async function PatientOverview() {
               </EmptyState>
             ) : (
               <>
-                <div className="px-5 pt-4">
-                  <Progress value={recorded} max={todayDoses.length} label="Doses recorded today" />
+                <div className="flex items-center gap-4 px-5 py-4">
+                  <ProgressRing value={recorded} max={todayDoses.length} label="Doses recorded today">
+                    {recorded}/{todayDoses.length}
+                  </ProgressRing>
+                  <p className="text-sm text-ink2">
+                    <span className="text-2xl font-semibold tabular-nums text-ink">{Math.round((recorded / todayDoses.length) * 100)}%</span> recorded today
+                  </p>
                 </div>
-                <ul className="mt-2 divide-y divide-line">
+                <ul className="stagger divide-y divide-line border-t border-line">
                   {todayDoses.map((d) => (
                     <DoseRow key={d.id} dose={toDoseView(d)} tz={tz} nowIso={nowIso} compact />
                   ))}
@@ -116,7 +113,7 @@ export default async function PatientOverview() {
             {upcomingAppts.length === 0 ? (
               <EmptyState icon={CalendarPlus} title="No upcoming appointments" action={<LinkButton href="/patient/appointments#request" variant="secondary" size="sm">Request one</LinkButton>} />
             ) : (
-              <ul className="divide-y divide-line">
+              <ul className="stagger divide-y divide-line">
                 {upcomingAppts.map((a) => (
                   <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3">
                     <div>
@@ -147,7 +144,7 @@ export default async function PatientOverview() {
                 Notes and readings you add in your journal show up here.
               </EmptyState>
             ) : (
-              <ul className="divide-y divide-line text-sm">
+              <ul className="stagger divide-y divide-line text-sm">
                 {measurements.map((m) => (
                   <li key={m.id} className="flex flex-wrap justify-between gap-2 px-5 py-2.5">
                     <span>
@@ -183,9 +180,9 @@ export default async function PatientOverview() {
               ) : (
                 <>
                   <p className="text-sm">
-                    <span className="text-2xl font-semibold tabular-nums">{doneRoutines}</span> of {dueRoutines.length} done
+                    <CountUp value={doneRoutines} className="text-2xl font-semibold" /> of {dueRoutines.length} done
                   </p>
-                  <Progress value={doneRoutines} max={dueRoutines.length} label="Routines done today" />
+                  <ProgressBar value={doneRoutines} max={dueRoutines.length} label="Routines done today" />
                 </>
               )}
               <LinkButton href="/patient/routines" variant="secondary" size="sm">

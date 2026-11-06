@@ -29,7 +29,7 @@ export default async function CareTeamPage() {
       {invitations.length > 0 && (
         <Card className="border-accent/40">
           <CardHeader title="Invitations waiting for you" description="Nothing is shared until you accept and choose what to share." />
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {invitations.map((inv) => (
               <li key={inv.id} className="space-y-3 px-5 py-4">
                 <div>
@@ -84,7 +84,7 @@ export default async function CareTeamPage() {
       {requested.length > 0 && (
         <Card>
           <CardHeader title="Requests you sent" description="Waiting for the professional to accept. They cannot see anything until they do." />
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {requested.map((r) => (
               <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
                 <div>

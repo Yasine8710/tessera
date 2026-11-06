@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox, Field, Input } from "@/components/ui/form";
 import { useAction } from "@/components/ui/use-action";
 import { registerPatientSchema, type RegisterPatientInput } from "@/lib/schemas";
+import { inlineLink } from "@/components/auth/link-styles";
 import { PASSWORD_HINT } from "./password-hint";
 import { TimezoneField } from "./timezone-field";
 
@@ -22,8 +23,8 @@ export function RegisterPatientForm() {
   } = useForm<RegisterPatientInput>({ resolver: zodResolver(registerPatientSchema), defaultValues: { timezone: "UTC", dateOfBirth: "" } });
 
   return (
-    <form onSubmit={handleSubmit((v) => run(() => registerPatientAction(v)))} className="space-y-4" noValidate>
-      {error && <Alert tone="danger">{error}</Alert>}
+    <form onSubmit={handleSubmit((v) => run(() => registerPatientAction(v)))} className="stagger space-y-4" noValidate>
+      {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
       <Field label="Full name" error={errors.name?.message}>
         {(a) => <Input autoComplete="name" {...a} {...register("name")} />}
       </Field>
@@ -49,16 +50,16 @@ export function RegisterPatientForm() {
           {...register("acceptTerms")}
         />
         <p className="ml-6.5 mt-1 text-sm">
-          <Link href="/terms" target="_blank" className="text-accent hover:underline">
+          <Link href="/terms" target="_blank" className={inlineLink}>
             Terms
           </Link>
           {" · "}
-          <Link href="/privacy" target="_blank" className="text-accent hover:underline">
+          <Link href="/privacy" target="_blank" className={inlineLink}>
             Privacy notice
           </Link>
         </p>
         {errors.acceptTerms && (
-          <p role="alert" className="mt-1 ml-6.5 text-sm text-danger">
+          <p role="alert" className="anim-up mt-1 ml-6.5 text-sm text-danger">
             {errors.acceptTerms.message}
           </p>
         )}

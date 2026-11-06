@@ -11,7 +11,7 @@ export function PeriodTabs({ current, options }: { current: number; options: num
           href={`/patient/progress?days=${d}`}
           scroll={false}
           aria-current={d === current ? "true" : undefined}
-          className={cn("rounded px-3 py-1.5 text-sm", d === current ? "bg-accent font-medium text-white" : "text-ink2 hover:bg-surface2")}
+          className={cn("press rounded-sm px-3 py-1.5 text-sm", d === current ? "bg-accent font-medium text-onaccent" : "text-ink2 hover:bg-surface2")}
         >
           {d} days
         </Link>

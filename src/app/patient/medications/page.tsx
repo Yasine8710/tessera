@@ -59,7 +59,7 @@ export default async function MedicationsPage({ searchParams }: { searchParams: 
         <section>
           <Card>
             <CardHeader title="Your questions about medications" description="Replies come from your care team." />
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {requests.map((r) => (
                 <li key={r.id} className="space-y-1 px-5 py-3 text-sm">
                   <div className="flex flex-wrap items-center gap-2">
@@ -95,7 +95,7 @@ export default async function MedicationsPage({ searchParams }: { searchParams: 
         {upcoming.length > 0 && (
           <Card>
             <CardHeader title="Upcoming" />
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {upcoming.map((d) => (
                 <DoseRow key={d.id} dose={toDoseView(d)} tz={tz} nowIso={nowIso} showDate />
               ))}
@@ -105,7 +105,7 @@ export default async function MedicationsPage({ searchParams }: { searchParams: 
         {recent.length > 0 && (
           <Card>
             <CardHeader title="Last 2 days" description="Record whether you took or skipped a dose. You can report doses up to 14 days back." />
-            <ul className="divide-y divide-line">
+            <ul className="stagger divide-y divide-line">
               {recent.map((d) => (
                 <DoseRow key={d.id} dose={toDoseView(d)} tz={tz} nowIso={nowIso} showDate />
               ))}

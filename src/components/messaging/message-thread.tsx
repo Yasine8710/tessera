@@ -74,10 +74,10 @@ export function MessageThread({ conversationId, withName, initial, timezone }: {
             <div key={m.id}>
               {header && <p className="my-2 text-center text-xs font-medium text-muted">{formatDay(m.createdAt, timezone)}</p>}
               <div className={cn("flex", m.mine ? "justify-end" : "justify-start")}>
-                <div className={cn("max-w-[85%] rounded-lg px-3.5 py-2 sm:max-w-[70%]", m.mine ? "bg-accent text-white" : "border border-line bg-surface2 text-ink")}>
-                  <p className={cn("text-xs font-semibold", m.mine ? "text-white/85" : "text-ink2")}>{m.mine ? "You" : m.senderName}</p>
+                <div className={cn("anim-scale max-w-[85%] rounded-lg px-3.5 py-2 sm:max-w-[70%]", m.mine ? "bg-accent text-onaccent" : "border border-line bg-surface2 text-ink")}>
+                  <p className={cn("text-xs font-semibold", m.mine ? "text-onaccent/85" : "text-ink2")}>{m.mine ? "You" : m.senderName}</p>
                   <p className="whitespace-pre-wrap break-words text-[0.95rem]">{m.body}</p>
-                  <time dateTime={m.createdAt} className={cn("mt-0.5 block text-right text-xs", m.mine ? "text-white/80" : "text-muted")}>
+                  <time dateTime={m.createdAt} className={cn("mt-0.5 block text-right text-xs", m.mine ? "text-onaccent/80" : "text-muted")}>
                     {formatTime(m.createdAt, timezone)}
                   </time>
                 </div>

@@ -6,6 +6,7 @@ import { reportIntakeAction } from "@/app/actions/patient";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/form";
 import { useAction } from "@/components/ui/use-action";
+import { cn } from "@/lib/cn";
 import { DialogButton } from "./dialog-button";
 import { fmtDateTime, fmtTime, localInputToIso, toLocalInput } from "./format";
 import { DoseStatusBadge } from "./status";
@@ -84,7 +85,14 @@ export function DoseRow({ dose, tz, nowIso, compact, showDate }: { dose: DoseVie
   const reported = dose.status === "TAKEN" || dose.status === "SKIPPED";
 
   return (
-    <li className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
+    <li
+      className={cn(
+        "flex flex-wrap items-center gap-x-4 gap-y-2 border-l-2 px-5 py-3 transition-[background-color,border-color] duration-[var(--t-slow)] ease-[var(--ease)] hover:bg-surface2/60",
+        dose.status === "TAKEN" && "border-l-ok bg-ok-soft/30",
+        dose.status === "MISSED" && "border-l-warn",
+        dose.status !== "TAKEN" && dose.status !== "MISSED" && "border-l-transparent",
+      )}
+    >
       <div className="w-24 shrink-0 text-sm font-medium tabular-nums">{showDate ? fmtDateTime(dose.scheduledFor, tz) : fmtTime(dose.scheduledFor, tz)}</div>
       <div className="min-w-0 flex-1 basis-48">
         <p className="font-medium">{dose.name}</p>
@@ -93,16 +101,18 @@ export function DoseRow({ dose, tz, nowIso, compact, showDate }: { dose: DoseVie
           {dose.route ? `, ${dose.route}` : ""}
         </p>
         {reported && (
-          <p className="text-sm text-muted">
+          <p className="anim-up text-sm text-muted">
             Reported by you{dose.status === "TAKEN" && dose.takenAt ? ` - taken ${fmtDateTime(dose.takenAt, tz)}` : ""}
             {dose.note ? ` - "${dose.note}"` : ""}
           </p>
         )}
         {dose.status === "MISSED" && <p className="text-sm text-muted">No report was recorded for this dose.</p>}
       </div>
-      <DoseStatusBadge status={dose.status} />
+      <span key={dose.status} className="anim-scale inline-flex">
+        <DoseStatusBadge status={dose.status} />
+      </span>
       {reportable && (
-        <div className="flex gap-2">
+        <div className="anim-fade flex gap-2">
           {compact ? (
             <Button
               size="sm"

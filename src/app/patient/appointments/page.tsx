@@ -72,7 +72,7 @@ export default async function AppointmentsPage() {
             Request one below.
           </EmptyState>
         ) : (
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {upcoming.map((a) => (
               <ApptItem key={a.id} a={a} tz={tz} />
             ))}
@@ -97,7 +97,7 @@ export default async function AppointmentsPage() {
       {past.length > 0 && (
         <Card>
           <CardHeader title="Past and closed" />
-          <ul className="divide-y divide-line">
+          <ul className="stagger divide-y divide-line">
             {past.map((a) => (
               <ApptItem key={a.id} a={a} tz={tz} />
             ))}

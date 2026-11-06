@@ -4,7 +4,8 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 
 export type DayPoint = { date: string; taken: number; skipped: number; missed: number; scheduled: number; rate: number | null };
 
-const COLORS = { taken: "#276a45", skipped: "#8a5a0b", missed: "#a8392a" };
+const COLORS = { taken: "var(--c-ok)", skipped: "var(--c-warn)", missed: "var(--c-danger)" };
+const tick = { fontSize: 12, fill: "var(--c-muted)" };
 
 export function AdherenceChart({ series }: { series: DayPoint[] }) {
   return (
@@ -12,20 +13,20 @@ export function AdherenceChart({ series }: { series: DayPoint[] }) {
       <div role="img" aria-label="Stacked bar chart of patient-reported doses per day: taken, skipped and missed. The same data is in the table below." className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={series} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
-            <CartesianGrid vertical={false} stroke="#e4dfd5" />
-            <XAxis dataKey="date" tickFormatter={(d: string) => d.slice(5)} tick={{ fontSize: 12 }} />
-            <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="taken" name="Taken" stackId="a" fill={COLORS.taken} isAnimationActive={false} />
-            <Bar dataKey="skipped" name="Skipped" stackId="a" fill={COLORS.skipped} isAnimationActive={false} />
-            <Bar dataKey="missed" name="Missed (not reported)" stackId="a" fill={COLORS.missed} isAnimationActive={false} />
+            <CartesianGrid vertical={false} stroke="var(--c-border)" />
+            <XAxis dataKey="date" tickFormatter={(d: string) => d.slice(5)} tick={tick} stroke="var(--c-border-strong)" tickLine={false} />
+            <YAxis allowDecimals={false} tick={tick} stroke="var(--c-border-strong)" tickLine={false} axisLine={false} />
+            <Tooltip cursor={{ fill: "var(--c-surface-2)" }} contentStyle={{ background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: 6, color: "var(--c-ink)", fontSize: 13, boxShadow: "var(--shadow-md)" }} labelStyle={{ color: "var(--c-ink)", fontWeight: 600 }} itemStyle={{ color: "var(--c-ink-2)" }} />
+            <Legend wrapperStyle={{ fontSize: 12, color: "var(--c-ink-2)" }} iconType="square" iconSize={10} />
+            <Bar dataKey="taken" name="Taken" stackId="a" fill={COLORS.taken} animationDuration={700} animationEasing="ease-out" />
+            <Bar dataKey="skipped" name="Skipped" stackId="a" fill={COLORS.skipped} animationDuration={700} animationEasing="ease-out" />
+            <Bar dataKey="missed" name="Missed (not reported)" stackId="a" fill={COLORS.missed} animationDuration={700} animationEasing="ease-out" />
           </BarChart>
         </ResponsiveContainer>
       </div>
       <details className="mt-3">
-        <summary className="cursor-pointer text-sm font-medium">View as table</summary>
-        <div className="mt-2 overflow-x-auto" tabIndex={0} role="region" aria-label="Scrollable table">
+        <summary className="cursor-pointer text-sm font-medium text-ink2 transition-colors hover:text-ink">View as table</summary>
+        <div className="anim-fade mt-2 overflow-x-auto" tabIndex={0} role="region" aria-label="Scrollable table">
           <table className="w-full min-w-96 text-left text-sm tabular-nums">
             <caption className="sr-only">Patient-reported doses per day</caption>
             <thead className="text-muted">

@@ -30,7 +30,7 @@ function Switch({ label, hint, checked, onChange }: { label: string; hint: strin
         role="switch"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="relative mt-0.5 h-6 w-11 shrink-0 cursor-pointer appearance-none rounded-full bg-line2 transition-colors before:absolute before:left-0.5 before:top-0.5 before:size-5 before:rounded-full before:bg-white before:shadow-sm before:transition-transform checked:bg-accent checked:before:translate-x-5 motion-reduce:transition-none motion-reduce:before:transition-none"
+        className="relative mt-0.5 h-6 w-11 shrink-0 cursor-pointer appearance-none rounded-full bg-line2 transition-colors before:absolute before:left-0.5 before:top-0.5 before:size-5 before:rounded-full before:bg-surface before:shadow-sm before:transition-transform checked:bg-accent checked:before:translate-x-5 motion-reduce:transition-none motion-reduce:before:transition-none"
       />
     </div>
   );

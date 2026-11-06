@@ -17,11 +17,11 @@ export function ConversationList({ items, activeId, basePath, timezone, emptyHin
   return (
     <ul aria-label="Conversations" className="divide-y divide-line">
       {items.map((c) => (
-        <li key={c.id}>
+        <li key={c.id} className="anim-fade">
           <Link
             href={`${basePath}?c=${encodeURIComponent(c.id)}`}
             aria-current={c.id === activeId ? "page" : undefined}
-            className={cn("block px-4 py-3 hover:bg-surface2", c.id === activeId && "bg-accent-soft")}
+            className={cn("block px-4 py-3 hover:bg-surface2 transition-colors", c.id === activeId && "bg-accent-soft")}
           >
             <span className="flex items-baseline justify-between gap-2">
               <span className={cn("truncate", c.unread > 0 ? "font-semibold" : "font-medium")}>{c.withName}</span>
@@ -32,7 +32,7 @@ export function ConversationList({ items, activeId, basePath, timezone, emptyHin
             <span className="mt-0.5 flex items-center justify-between gap-2">
               <span className="truncate text-sm text-muted">{c.preview}</span>
               {c.unread > 0 && (
-                <span className="shrink-0 rounded-full bg-accent px-1.5 text-xs font-bold leading-5 text-white">
+                <span className="shrink-0 rounded-full bg-accent px-1.5 text-xs font-bold leading-5 text-onaccent">
                   {c.unread}
                   <span className="sr-only"> unread</span>
                 </span>

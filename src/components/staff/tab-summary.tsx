@@ -9,12 +9,12 @@ export async function SummaryTab({ session, patientId, consents }: TabProps) {
   const open = requests.filter((r) => r.status === "OPEN");
   const tz = session.timezone;
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="stagger grid items-start gap-6 lg:grid-cols-2">
       <Card>
         <CardHeader title="Shared with you" description="The patient controls this and can change it at any time." />
         <ul className="divide-y divide-line">
           {Object.entries(CONSENT_LABEL).map(([type, label]) => (
-            <li key={type} className="flex items-center justify-between px-5 py-3 text-sm">
+            <li key={type} className="flex items-center justify-between px-5 py-3 text-sm transition-colors hover:bg-surface2">
               <span>{label}</span>
               <span className="inline-flex items-center gap-1.5 text-ink2">
                 <ConsentIcon granted={!!consents[type]} /> {consents[type] ? "Shared" : "Not shared"}
@@ -45,8 +45,8 @@ export async function SummaryTab({ session, patientId, consents }: TabProps) {
         )}
         {requests.length > open.length && (
           <details className="border-t border-line px-5 py-3 text-sm">
-            <summary className="cursor-pointer font-medium">Resolved ({requests.length - open.length})</summary>
-            <ul className="mt-2 space-y-3">
+            <summary className="cursor-pointer font-medium transition-colors hover:text-accent-hover">Resolved ({requests.length - open.length})</summary>
+            <ul className="anim-fade mt-2 space-y-3">
               {requests.filter((r) => r.status === "RESOLVED").map((r) => (
                 <li key={r.id}>
                   <p>{r.plan.medication.name}: &ldquo;{r.message}&rdquo;</p>

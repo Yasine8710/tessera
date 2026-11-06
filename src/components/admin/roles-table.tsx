@@ -30,7 +30,7 @@ export function RolesTable() {
         </thead>
         <tbody className="divide-y divide-line align-top">
           {ROLES.map((r) => (
-            <tr key={r.role}>
+            <tr key={r.role} className="transition-colors hover:bg-surface2/60">
               <th scope="row" className="px-5 py-3 font-semibold">{r.role}</th>
               <td className="px-5 py-3 text-ink2">{r.can}</td>
               <td className="px-5 py-3 text-ink2">{r.cannot}</td>

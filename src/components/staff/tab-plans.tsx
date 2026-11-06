@@ -10,7 +10,7 @@ export async function PlansTab({ session, patientId }: TabProps) {
   const plans = await listCarePlans(session, patientId);
   const today = localDateString(new Date(), session.timezone);
   return (
-    <div className="space-y-6">
+    <div className="stagger space-y-6">
       {plans.length === 0 ? (
         <Card><EmptyState icon={FileText} title="No care plans yet">Create the first plan below. The patient sees it straight away.</EmptyState></Card>
       ) : (

@@ -30,7 +30,7 @@ export function InvitationResponse({ token, invitationId, professionalName }: { 
         <p className="mb-3 text-sm text-muted">
           You choose. Everything is off by default. What you record stays visible to you either way, and you can change these at any time from your care team page.
         </p>
-        <div className="space-y-3">
+        <div className="stagger space-y-3">
           {CONSENTS.map((c) => (
             <Checkbox
               key={c.key}
@@ -43,7 +43,7 @@ export function InvitationResponse({ token, invitationId, professionalName }: { 
         </div>
       </fieldset>
 
-      {error && <Alert tone="danger">{error}</Alert>}
+      {error && <Alert tone="danger" className="anim-up">{error}</Alert>}
 
       <div className="flex flex-wrap gap-2">
         <Button type="button" loading={pending} onClick={() => run(() => acceptInvitationAction({ token }, choice), "Connected to your care team", () => router.push("/patient/care-team"))}>

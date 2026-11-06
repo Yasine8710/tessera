@@ -27,7 +27,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
   if (done) {
     return (
       <div className="space-y-4">
-        <Alert tone="ok" title="Password updated">
+        <Alert tone="ok" title="Password updated" className="anim-scale">
           You have been signed out of all devices. Sign in with your new password.
         </Alert>
         <LinkButton href="/login" className="w-full">
@@ -40,9 +40,9 @@ export function ResetPasswordForm({ token }: { token: string }) {
   return (
     <form onSubmit={handleSubmit((v) => run(() => resetPasswordAction(v), "Password updated", () => setDone(true)))} className="space-y-4" noValidate>
       {error && (
-        <Alert tone="danger">
+        <Alert tone="danger" className="anim-up">
           {error}{" "}
-          <Link href="/forgot-password" className="underline">
+          <Link href="/forgot-password" className="font-medium underline underline-offset-2 hover:no-underline">
             Request a new link
           </Link>
         </Alert>

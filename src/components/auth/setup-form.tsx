@@ -23,8 +23,8 @@ export function SetupForm() {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-4" noValidate>
-      {(local || error) && <Alert tone="danger">{local ?? error}</Alert>}
+    <form onSubmit={submit} className="stagger space-y-4" noValidate>
+      {(local || error) && <Alert tone="danger" className="anim-up">{local ?? error}</Alert>}
       <Field label="Your name">{(a) => <Input autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} {...a} />}</Field>
       <Field label="Email">{(a) => <Input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} {...a} />}</Field>
       <Field label="Password" hint="At least 14 characters. A short phrase of several words works well.">

@@ -332,3 +332,11 @@ dialog[open]::backdrop {
     scroll-behavior: auto !important;
   }
 }
+
+/* Loading placeholder: a soft sweep over the surface colour. */
+.skeleton {
+  background: linear-gradient(90deg, var(--c-surface-2) 25%, var(--c-border) 50%, var(--c-surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: var(--r-md);
+}

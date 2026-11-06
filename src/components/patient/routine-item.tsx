@@ -36,8 +36,13 @@ export function WeekDots({ week }: { week: RoutineView["week"] }) {
   const done = week.filter((d) => d.done).length;
   return (
     <div role="img" aria-label={`Last 7 days: ${done} of 7 done. ${week.map((d) => `${fmtLocalDateLabel(d.date)} ${d.done ? "done" : "not done"}`).join(", ")}`} className="flex gap-1">
-      {week.map((d) => (
-        <span key={d.date} title={`${fmtLocalDateLabel(d.date)}: ${d.done ? "done" : "not done"}`} className={cn("size-3 rounded-full border", d.done ? "border-accent bg-accent" : "border-line2 bg-surface")} />
+      {week.map((d, i) => (
+        <span
+          key={d.date}
+          title={`${fmtLocalDateLabel(d.date)}: ${d.done ? "done" : "not done"}`}
+          style={{ animationDelay: `${i * 50}ms` }}
+          className={cn("anim-grow-y inline-block h-5 w-2.5 rounded-sm border transition-colors", d.done ? "border-accent bg-accent" : "border-line2 bg-surface")}
+        />
       ))}
     </div>
   );
@@ -46,7 +51,7 @@ export function WeekDots({ week }: { week: RoutineView["week"] }) {
 export function RoutineItem({ routine: r }: { routine: RoutineView }) {
   const { run, pending } = useAction();
   return (
-    <li className={cn("flex flex-wrap items-center gap-x-4 gap-y-3 px-5 py-4", !r.active && "bg-surface2/60")}>
+    <li className={cn("flex flex-wrap items-center gap-x-4 gap-y-3 px-5 py-4 transition-colors duration-[var(--t-slow)] hover:bg-surface2/60", !r.active && "bg-surface2/60", r.active && r.doneToday && "bg-ok-soft/30")}>
       <div className="min-w-0 flex-1 basis-56">
         <Checkbox
           label={r.title}

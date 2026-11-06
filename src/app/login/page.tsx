@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth/auth-shell";
+import { inlineLink } from "@/components/auth/link-styles";
 import { LoginForm } from "@/components/auth/login-form";
 import { isDesktop } from "@/server/desktop";
 import { adminExists } from "@/server/services/auth";
@@ -21,7 +22,7 @@ export default async function LoginPage() {
       footer={
         <p>
           New to Tessera?{" "}
-          <Link href="/register" className="font-medium text-accent hover:underline">
+          <Link href="/register" className={inlineLink}>
             Create an account
           </Link>
         </p>

@@ -4,7 +4,7 @@ import { useId } from "react";
 import { cn } from "@/lib/cn";
 
 const control =
-  "w-full rounded-md border border-line2 bg-surface px-3 text-[0.95rem] text-ink placeholder:text-muted/80 transition-colors focus:border-accent disabled:bg-surface2 aria-[invalid=true]:border-danger";
+  "w-full rounded-md border border-line2 bg-surface px-3 text-[0.95rem] text-ink placeholder:text-muted/80 hover:border-ink/40 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:bg-surface2 disabled:text-muted aria-[invalid=true]:border-danger aria-[invalid=true]:focus:ring-danger/30";
 
 export const Input = ({ className, ...p }: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input className={cn(control, "h-10", className)} {...p} />
@@ -39,7 +39,7 @@ export function Field({
       </label>
       {children({ id, "aria-describedby": desc, "aria-invalid": error ? true : undefined })}
       {error ? (
-        <p id={`${id}-e`} role="alert" className="text-sm text-danger">
+        <p id={`${id}-e`} role="alert" className="anim-up text-sm text-danger">
           {error}
         </p>
       ) : hint ? (

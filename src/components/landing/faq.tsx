@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 
 const FAQ = [
@@ -15,21 +15,23 @@ const FAQ = [
 export function Faq() {
   return (
     <section id="faq" className="border-b border-line bg-surface2">
-      <div className="mx-auto max-w-3xl px-4 py-[var(--space-section)] sm:px-6">
-        <Reveal>
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-[var(--space-section)] sm:px-6 lg:grid-cols-[1fr_1.7fr] lg:gap-16">
+        <Reveal className="lg:sticky lg:top-28 lg:self-start">
           <h2 className="text-3xl font-semibold sm:text-4xl">Frequently asked questions</h2>
         </Reveal>
-        <div className="mt-8 divide-y divide-line rounded-lg border border-line bg-surface">
-          {FAQ.map((f) => (
-            <details key={f.q} className="group px-5">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-medium [&::-webkit-details-marker]:hidden">
-                {f.q}
-                <ChevronDown className="size-4 shrink-0 text-muted transition-transform group-open:rotate-180" aria-hidden />
-              </summary>
-              <p className="pb-4 text-ink2">{f.a}</p>
-            </details>
-          ))}
-        </div>
+        <Reveal delay={0.05}>
+          <div className="border-t border-line2">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group border-b border-line">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-medium transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <Plus className="size-4 shrink-0 text-muted transition-transform duration-300 group-open:rotate-45 group-open:text-accent" aria-hidden />
+                </summary>
+                <p className="animate-[fade-up_320ms_var(--ease)_both] pb-5 pr-8 text-ink2">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );

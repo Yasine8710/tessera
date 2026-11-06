@@ -32,11 +32,20 @@ export const FLAG_META: Record<MonitoringFlag["kind"], { title: string; tone: To
 
 export const FLAG_ORDER: MonitoringFlag["kind"][] = ["dose_exceptions", "new_symptoms", "routines_incomplete", "overdue_task", "stale"];
 
+const EDGE: Record<Tone, string> = {
+  neutral: "border-l-line2",
+  accent: "border-l-accent",
+  ok: "border-l-ok",
+  warn: "border-l-warn",
+  danger: "border-l-danger",
+  info: "border-l-info",
+};
+
 export function FlagRow({ flag }: { flag: MonitoringFlag }) {
   return (
-    <li className="flex flex-wrap items-center justify-between gap-2 px-5 py-3">
+    <li className={`flex flex-wrap items-center justify-between gap-2 border-l-[3px] px-5 py-3 transition-colors hover:bg-surface2 ${EDGE[FLAG_META[flag.kind].tone]}`}>
       <div className="min-w-0">
-        <Link href={`/staff/patients/${flag.patientId}`} className="font-medium text-accent underline underline-offset-2 hover:no-underline">
+        <Link href={`/staff/patients/${flag.patientId}`} className="font-medium text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">
           {flag.patientName}
         </Link>
         <p className="text-sm text-ink2">{flag.detail}</p>

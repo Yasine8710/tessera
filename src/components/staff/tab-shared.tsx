@@ -1,7 +1,7 @@
 import { Check, Eye, Lock, X } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/cn";
 import type { Session } from "@/server/session";
+import { TabNavClient } from "./tab-nav";
 
 export type TabProps = { session: Session; patientId: string; consents: Record<string, boolean> };
 
@@ -18,25 +18,16 @@ export const TABS = [
 export type TabId = (typeof TABS)[number]["id"];
 
 export function TabNav({ patientId, active }: { patientId: string; active: TabId }) {
+  return <TabNavClient patientId={patientId} active={active} tabs={TABS} />;
+}
+
+/** Thin horizontal meter that grows in. Decorative: the value is always printed next to it. */
+export function RateBar({ value, className }: { value: number; className?: string }) {
+  const v = Math.max(0, Math.min(100, value));
   return (
-    <nav aria-label="Patient sections" className="-mx-4 mb-6 overflow-x-auto border-b border-line px-4 sm:mx-0 sm:px-0">
-      <ul className="flex min-w-max gap-1">
-        {TABS.map((t) => (
-          <li key={t.id}>
-            <Link
-              href={`/staff/patients/${patientId}?tab=${t.id}`}
-              aria-current={active === t.id ? "page" : undefined}
-              className={cn(
-                "inline-block whitespace-nowrap border-b-2 px-3 py-2.5 text-sm",
-                active === t.id ? "border-accent font-medium text-accent-hover" : "border-transparent text-ink2 hover:text-ink",
-              )}
-            >
-              {t.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className={cn("h-1.5 w-full overflow-hidden rounded-sm bg-surface2", className)} aria-hidden>
+      <div className="anim-grow-x h-full bg-accent" style={{ width: `${v}%` }} />
+    </div>
   );
 }
 
