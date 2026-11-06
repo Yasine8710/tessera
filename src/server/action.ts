@@ -33,6 +33,6 @@ function toMessage(e: unknown): string {
   if (e instanceof ZodError) return e.issues[0]?.message ?? "Check the form and try again.";
   // Next.js redirect/not-found signals must propagate.
   if (e && typeof e === "object" && "digest" in e) throw e;
-  console.error("[action:error]", e instanceof Error ? e.name : "unknown");
+  console.error("[action:error]", e instanceof Error ? e.name : "unknown", (e as { code?: string }).code ?? "");
   return "Something went wrong. Please try again.";
 }

@@ -62,7 +62,30 @@ UI (`src/app`, `src/components`) → server actions / REST v1 → **services** (
 - Node.js 20+ (developed on 22) and npm
 - Docker (for the local PostgreSQL), or any PostgreSQL 14+ you point `DATABASE_URL` at
 
-## Setup
+## Desktop app (Windows)
+
+The `desktop` branch ships CareSync as a self-contained Windows app: no Docker, no PostgreSQL, no browser.
+
+- **Install:** run `CareSync Setup 0.1.0.exe` (per-user, no admin rights). It adds a **CareSync** icon to the desktop and Start menu.
+- **First run:** create the administrator for that computer. Patients and staff then register or are approved inside the same app (sign out to switch accounts).
+- **Data:** one SQLite file, `%APPDATA%\CareSync\caresync.db`, encrypted with SQLCipher (AES-256). The key is generated at first run and kept with Windows DPAPI, bound to the Windows user. **File, Show recovery key** reveals it; store it offline. Without that key a backup cannot be opened on another PC or Windows account.
+- **Backup / restore:** File menu. A pre-update or pre-restore copy is kept in `%APPDATA%\CareSyncackups`.
+- **No email:** accounts are verified automatically, and administrators create one-time password reset links (Administration, Users, Reset password). An administrator who forgot their password uses Help, Reset administrator password.
+- **Reminders:** the app checks every 5 minutes while it runs (closing the window keeps it in the tray). Windows toasts are generic ("You have a new notification") so nothing clinical shows on a lock screen. The app signs out after 15 minutes idle and when Windows locks.
+- **Scope:** local only. Several PCs do not share data; one install is one clinic.
+
+Developing it:
+
+```bash
+npm run desktop:prepare   # build the Next.js standalone engine
+npm run desktop           # run in Electron
+npm run desktop:dist      # build dist-desktop/CareSync Setup <version>.exe
+npx playwright test -c playwright.desktop.config.ts   # drives the real Electron app (CS_EXE=path to test a packaged exe)
+```
+
+The installer is **not code-signed**, so Windows SmartScreen shows "unknown publisher" (More info, Run anyway). Local database encryption protects the file at rest; anyone signed in to the same unlocked Windows account can still open the app.
+
+## Setup (web)
 
 ```bash
 git clone https://github.com/Yasine8710/caresync-healthcare-platform.git

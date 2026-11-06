@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { db, type Tx } from "./db";
 
 /**

@@ -21,7 +21,7 @@ export function ResetLinkButton({ userId, name }: { userId: string; name: string
 
   return (
     <div className="space-y-1">
-      <Button variant="ghost" size="sm" loading={pending} onClick={() => void issue()} aria-label={`Create password reset link for ${name}`}>
+      <Button variant="ghost" size="sm" loading={pending} onClick={() => void issue()} aria-label={`Reset password for ${name}`}>
         Reset password
       </Button>
       {link && (

@@ -1,3 +1,4 @@
+import path from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3";
 
@@ -20,8 +21,14 @@ class EncryptedFactory extends PrismaBetterSQLite3 {
 /** SQLite has no scalar lists: they are stored as JSON and typed back here. */
 const asList = <T>(v: unknown) => (Array.isArray(v) ? (v as T[]) : []);
 
+/** Prisma's CLI resolves relative sqlite paths against prisma/; do the same so CLI and app share one file. */
+function resolveUrl(url: string) {
+  const p = url.replace(/^file:/, "");
+  return path.isAbsolute(p) ? url : "file:" + path.resolve(process.cwd(), "prisma", p);
+}
+
 function create() {
-  const url = process.env.DATABASE_URL ?? "file:./dev.db";
+  const url = resolveUrl(process.env.DATABASE_URL ?? "file:./dev.db");
   return new PrismaClient({ adapter: new EncryptedFactory({ url }) }).$extends({
     result: {
       medicationPlan: {

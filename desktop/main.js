@@ -491,16 +491,18 @@ app.whenReady().then(async () => {
     session.defaultSession.setPermissionCheckHandler(() => false);
     await session.defaultSession.clearStorageData({ storages: ["cookies"] });
 
+    // The port changes whenever the engine restarts, so match any loopback port and only add the token for the live engine.
+    session.defaultSession.webRequest.onBeforeSendHeaders({ urls: ["http://127.0.0.1/*"] }, (details, cb) => {
+      if (port && details.url.startsWith(base() + "/")) details.requestHeaders["x-caresync-token"] = launchToken;
+      cb({ requestHeaders: details.requestHeaders });
+    });
+
     createWindow();
     createTray();
     buildMenu();
 
     await prepareData();
     await startServer();
-    session.defaultSession.webRequest.onBeforeSendHeaders({ urls: [`${base()}/*`] }, (details, cb) => {
-      details.requestHeaders["x-caresync-token"] = launchToken;
-      cb({ requestHeaders: details.requestHeaders });
-    });
     await win.loadURL(base());
     startScheduler();
     powerMonitor.on("lock-screen", () => win && !win.isDestroyed() && win.webContents.send("cs:lock"));

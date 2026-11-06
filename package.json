@@ -84,10 +84,6 @@
     ],
     "extraResources": [
       {
-        "from": ".next/standalone",
-        "to": "server"
-      },
-      {
         "from": "prisma/migrations",
         "to": "migrations"
       },
@@ -116,7 +112,9 @@
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false
     },
-    "asar": true
+    "asar": true,
+    "npmRebuild": false,
+    "afterPack": "desktop/after-pack.js"
   },
   "overrides": {
     "better-sqlite3": "$better-sqlite3"

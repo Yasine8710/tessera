@@ -1,4 +1,3 @@
-import type { Prisma } from "@prisma/client";
 import { canReportIntake, dedupeKey, effectiveIntakeStatus, planChanged, type PlanSnapshot } from "@/domain/rules";
 import { addDaysToLocalDate, expandSchedule, localDateString } from "@/domain/schedule";
 import {
